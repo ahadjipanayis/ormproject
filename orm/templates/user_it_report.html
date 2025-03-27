@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,8 +38,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 20px;
       flex-wrap: wrap;
+      gap: 20px;
       margin-top: 20px;
     }
     .modal {
@@ -112,14 +111,14 @@
       setTimeout(() => toast.classList.remove("show"), 3000);
     }
 
-    async function submitFormFetch(form, reportType) {
+    async function submitFormFetch(form, portfolioName) {
       const modal = document.getElementById("loadingModal");
       const loadingText = document.getElementById("loadingText");
       const spinner = document.getElementById("spinner");
       const timerText = document.getElementById("timerText");
 
       modal.style.display = "block";
-      loadingText.textContent = `Preparing ${reportType} Report...`;
+      loadingText.textContent = `Preparing ${portfolioName} Report...`;
       spinner.classList.remove("stopped");
       timerText.textContent = "Elapsed time: 0 seconds";
 
@@ -149,7 +148,7 @@
         const disposition = response.headers.get("Content-Disposition");
         const filename = disposition && disposition.includes("filename=")
           ? disposition.split("filename=")[1].replace(/["']/g, "").trim()
-          : "report.zip";
+          : `${portfolioName}-report.zip`;
 
         a.download = filename;
         document.body.appendChild(a);
@@ -172,7 +171,7 @@
   </script>
 </head>
 <body>
-  <h2>Reporting t </h2>
+  <h2>Reporting</h2>
 
   <div id="loadingModal" class="modal">
     <div class="modal-content">
@@ -184,9 +183,18 @@
 
   <div id="toast" class="toast">Download complete!</div>
 
-  <form method="post" action="{% url 'generate_project_risk_report' %}" onsubmit="event.preventDefault(); submitFormFetch(this, 'Portfolio')">
-    {% csrf_token %}
-    <button type="submit" class="button"><i class="fas fa-file-download"></i> Download Report</button>
-  </form>
+  <div class="button-container">
+    {% for portfolio in portfolios %}
+      <form method="post" action="{% url 'generate_project_risk_report' %}" onsubmit="event.preventDefault(); submitFormFetch(this, '{{ portfolio.name }}')">
+        {% csrf_token %}
+        <input type="hidden" name="portfolio_id" value="{{ portfolio.id }}">
+        <button type="submit" class="button">
+          <i class="fas fa-file-download"></i> {{ portfolio.name }}
+        </button>
+      </form>
+    {% empty %}
+      <p>No portfolios available.</p>
+    {% endfor %}
+  </div>
 </body>
 </html>
