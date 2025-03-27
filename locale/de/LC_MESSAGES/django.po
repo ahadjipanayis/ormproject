@@ -1,0 +1,1178 @@
+# German translation for ormproject
+# Copyright (C) 2025 AVAX
+# This file is distributed under the same license as the ormproject package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#: orm/templates/frontend.html:281 orm/templates/frontend.html:291
+#: orm/templates/frontend.html:309 orm/templates/frontend.html:332
+#: orm/templates/frontend.html:365 orm/templates/frontend.html:377
+#: orm/templates/frontend.html:415 orm/templates/risk_list_new.html:82
+msgid ""
+msgstr ""
+"Project-Id-Version: ormproject 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-17 14:41+0200\n"
+"PO-Revision-Date: 2025-03-03 12:00+0200\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: German <de@li.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: media/documents/frontend.html:8 orm/templates/frontend.html:8
+msgid "Enterprise Risk Management - AVAX"
+msgstr "Unternehmensrisikomanagement - AVAX"
+
+#: media/documents/frontend.html:266 orm/templates/frontend.html:271
+msgid "AVAX Logo"
+msgstr "AVAX-Logo"
+
+#: media/documents/frontend.html:270 orm/templates/frontend.html:275
+msgid "Calendar"
+msgstr "Kalender"
+
+#: media/documents/frontend.html:270 orm/templates/frontend.html:275
+msgid "View Calendar"
+msgstr "Kalender anzeigen"
+
+#: media/documents/frontend.html:275 media/documents/frontend.html:276
+#: media/documents/frontend.html:340 orm/templates/frontend.html:280
+#: orm/templates/frontend.html:313 orm/templates/risk_detail.html:1102
+#: orm/templates/risk_detail.html:2427
+msgid "Procedures"
+msgstr "Verfahren"
+
+#: media/documents/frontend.html:275 orm/templates/frontend.html:280
+msgid "View Procedures"
+msgstr "Verfahren anzeigen"
+
+#: media/documents/frontend.html:280 orm/templates/frontend.html:285
+msgid "Documents"
+msgstr "Dokumente"
+
+#: media/documents/frontend.html:280 orm/templates/frontend.html:285
+msgid "View Documents"
+msgstr "Dokumente anzeigen"
+
+#: media/documents/frontend.html:285 media/documents/frontend.html:286
+#: orm/templates/frontend.html:290
+msgid "Counterparties"
+msgstr "Vertragspartner"
+
+#: media/documents/frontend.html:285 orm/templates/frontend.html:290
+msgid "View Counterparties"
+msgstr "Vertragspartner anzeigen"
+
+#: media/documents/frontend.html:290 media/documents/frontend.html:291
+#: orm/templates/frontend.html:295 orm/templates/frontend.html:296
+#: orm/templates/risk_detail.html:1097
+msgid "Incidents"
+msgstr "Vorfälle"
+
+#: media/documents/frontend.html:290 orm/templates/frontend.html:295
+msgid "View Incidents"
+msgstr "Vorfälle anzeigen"
+
+#: media/documents/frontend.html:295 media/documents/frontend.html:296
+#: media/documents/risk_list_new.html:7 media/documents/risk_list_new.html:76
+#: orm/templates/frontend.html:300 orm/templates/frontend.html:301
+#: orm/templates/risk_list_new.html:7 orm/templates/risk_list_new.html:79
+msgid "Risk Registry"
+msgstr "Risikoregister"
+
+#: media/documents/frontend.html:295 orm/templates/frontend.html:300
+msgid "View Risk Registry"
+msgstr "Risikoregister anzeigen"
+
+#: media/documents/frontend.html:300 media/documents/frontend.html:301
+#: orm/templates/frontend.html:339 orm/templates/frontend.html:340
+msgid "KPIs/KRIs"
+msgstr "KPIs/KRIs"
+
+#: media/documents/frontend.html:300 orm/templates/frontend.html:339
+msgid "View KPIs/KRIs"
+msgstr "KPIs/KRIs anzeigen"
+
+#: media/documents/frontend.html:305 media/documents/frontend.html:306
+#: media/documents/frontend.html:343 orm/templates/frontend.html:316
+#: orm/templates/frontend.html:344 orm/templates/frontend.html:345
+#: orm/templates/risk_detail.html:1087 orm/templates/risk_detail.html:1486
+msgid "Actions"
+msgstr "Aktionen"
+
+#: media/documents/frontend.html:305 orm/templates/frontend.html:344
+msgid "View Actions"
+msgstr "Aktionen anzeigen"
+
+#: media/documents/frontend.html:312 orm/templates/frontend.html:351
+msgid "IT Options"
+msgstr "IT-Optionen"
+
+#: media/documents/frontend.html:312 orm/templates/frontend.html:351
+msgid "IT"
+msgstr "IT"
+
+#: media/documents/frontend.html:314 orm/templates/frontend.html:353
+msgid "Risk per IT Asset"
+msgstr "Risiko pro IT-Asset"
+
+#: media/documents/frontend.html:315 orm/templates/frontend.html:354
+#: orm/templates/risk_detail.html:1107 orm/templates/risk_detail.html:2225
+msgid "IT Assets"
+msgstr "IT-Assets"
+
+#: media/documents/frontend.html:316 orm/templates/frontend.html:355
+msgid "IT Threats"
+msgstr "IT-Bedrohungen"
+
+#: media/documents/frontend.html:317 orm/templates/frontend.html:356
+#: orm/templates/itassets_with_risks.html:184
+msgid "Vulnerabilities"
+msgstr "Schwachstellen"
+
+#: media/documents/frontend.html:318 media/documents/frontend.html:398
+#: orm/templates/frontend.html:357 orm/templates/frontend.html:421
+msgid "Network Tools"
+msgstr "Netzwerk-Tools"
+
+#: media/documents/frontend.html:326 orm/templates/frontend.html:365
+msgid "Audit Options"
+msgstr "Audit-Optionen"
+
+#: media/documents/frontend.html:326
+msgid "Audit"
+msgstr "Audit"
+
+#: media/documents/frontend.html:328 orm/templates/frontend.html:367
+msgid "S O A"
+msgstr "S O A"
+
+#: media/documents/frontend.html:329 orm/templates/frontend.html:368
+msgid "Assessments"
+msgstr "Bewertungen"
+
+#: media/documents/frontend.html:336 orm/templates/frontend.html:309
+msgid "Tools Options"
+msgstr "Werkzeug-Optionen"
+
+#: media/documents/frontend.html:336
+msgid "Tools"
+msgstr "Werkzeuge"
+
+#: media/documents/frontend.html:338 media/documents/frontend.html:376
+#: orm/templates/frontend.html:311 orm/templates/frontend.html:399
+#: orm/templates/frontend.html:437
+msgid "Open AI"
+msgstr "Open AI"
+
+#: media/documents/frontend.html:339 orm/templates/frontend.html:312
+msgid "User Input"
+msgstr "Benutzereingabe"
+
+#: media/documents/frontend.html:341 orm/templates/frontend.html:314
+msgid "Flow Charts"
+msgstr "Flussdiagramme"
+
+#: media/documents/frontend.html:342 orm/templates/frontend.html:315
+#: orm/templates/risk_detail.html:1067 orm/templates/risk_detail.html:1280
+msgid "Mitigations"
+msgstr "Mitigierungsmaßnahmen"
+
+#: media/documents/frontend.html:344 orm/templates/frontend.html:317
+#: orm/templates/risk_detail.html:1092 orm/templates/risk_detail.html:1709
+msgid "Indicators"
+msgstr "Indikatoren"
+
+#: media/documents/frontend.html:345 orm/templates/frontend.html:318
+#: orm/templates/frontend.html:331 orm/templates/risk_detail.html:1077
+msgid "Opportunities"
+msgstr "Chancen"
+
+#: media/documents/frontend.html:346 orm/templates/frontend.html:319
+#: orm/templates/itassets_with_risks.html:185
+#: orm/templates/risk_detail.html:1082
+msgid "Threats"
+msgstr "Bedrohungen"
+
+#: media/documents/frontend.html:347 orm/templates/frontend.html:320
+msgid "Categories"
+msgstr "Kategorien"
+
+#: media/documents/frontend.html:348 media/documents/risk_list_new.html:130
+#: orm/templates/frontend.html:321 orm/templates/risk_list_new.html:131
+msgid "Portfolios"
+msgstr "Portfolios"
+
+#: media/documents/frontend.html:354 orm/templates/frontend.html:377
+msgid "Reports Options"
+msgstr "Berichtsoptionen"
+
+#: media/documents/frontend.html:354
+msgid "Reports"
+msgstr "Berichte"
+
+#: media/documents/frontend.html:356 orm/templates/frontend.html:379
+msgid "Portfolio Reports"
+msgstr "Portfolio-Berichte"
+
+#: media/documents/frontend.html:357 orm/templates/frontend.html:380
+msgid "Heatmaps"
+msgstr "Heatmaps"
+
+#: media/documents/frontend.html:358 orm/templates/frontend.html:381
+msgid "Risk Per Owner"
+msgstr "Risiko pro Eigentümer"
+
+#: media/documents/frontend.html:359 orm/templates/frontend.html:382
+msgid "Risk Per Category"
+msgstr "Risiko pro Kategorie"
+
+#: media/documents/frontend.html:360 orm/templates/frontend.html:383
+msgid "Risk Per Portfolio"
+msgstr "Risiko pro Portfolio"
+
+#: media/documents/frontend.html:361 orm/templates/frontend.html:384
+msgid "Pivots"
+msgstr "Pivot-Tabellen"
+
+#: media/documents/frontend.html:362 orm/templates/frontend.html:385
+msgid "IMF Reports"
+msgstr "IMF-Berichte"
+
+#: media/documents/frontend.html:364 orm/templates/frontend.html:387
+msgid "Ranking"
+msgstr "Rangliste"
+
+#: media/documents/frontend.html:365 orm/templates/frontend.html:388
+msgid "Ranking per Portfolio"
+msgstr "Rangliste pro Portfolio"
+
+#: media/documents/frontend.html:366 orm/templates/frontend.html:389
+msgid "Risk Appetite"
+msgstr "Risikobereitschaft"
+
+#: media/documents/frontend.html:367 orm/templates/frontend.html:390
+msgid "Admin Pivots"
+msgstr "Admin-Pivot-Tabellen"
+
+#: media/documents/frontend.html:368 orm/templates/frontend.html:391
+msgid "Admin Reports"
+msgstr "Admin-Berichte"
+
+#: media/documents/frontend.html:370 orm/templates/frontend.html:393
+msgid "Risk Network"
+msgstr "Risikonetzwerk"
+
+#: media/documents/frontend.html:372 orm/templates/frontend.html:395
+msgid "Open Metabase"
+msgstr "Metabase öffnen"
+
+#: media/documents/frontend.html:373 orm/templates/frontend.html:396
+msgid "Metabase"
+msgstr "Metabase"
+
+#: media/documents/frontend.html:375 orm/templates/frontend.html:398
+#: orm/templates/frontend.html:436
+msgid "Open AI Chat"
+msgstr "Open AI Chat"
+
+#: media/documents/frontend.html:378 orm/templates/frontend.html:401
+msgid "XAI Chat"
+msgstr "XAI Chat"
+
+#: media/documents/frontend.html:379 orm/templates/frontend.html:402
+msgid "XAI"
+msgstr "XAI"
+
+#: media/documents/frontend.html:385 orm/templates/frontend.html:408
+#: orm/templates/risk_detail.html:679
+msgid "Approve"
+msgstr "Genehmigen"
+
+#: media/documents/frontend.html:385 orm/templates/frontend.html:408
+msgid "View Approvals"
+msgstr "Genehmigungen anzeigen"
+
+#: media/documents/frontend.html:392 orm/templates/frontend.html:415
+msgid "Admin Tools"
+msgstr "Admin-Tools"
+
+#: media/documents/frontend.html:394 orm/templates/frontend.html:417
+msgid "Admin Panel"
+msgstr "Admin-Panel"
+
+#: media/documents/frontend.html:395 orm/templates/frontend.html:418
+msgid "Profiles"
+msgstr "Profile"
+
+#: media/documents/frontend.html:396 orm/templates/frontend.html:419
+msgid "Run Approvals"
+msgstr "Genehmigungen ausführen"
+
+#: media/documents/frontend.html:397 orm/templates/frontend.html:420
+msgid "Status Per User"
+msgstr "Status pro Benutzer"
+
+#: media/documents/frontend.html:399 orm/templates/frontend.html:422
+msgid "User Activity"
+msgstr "Benutzeraktivität"
+
+#: media/documents/frontend.html:400 orm/templates/frontend.html:423
+msgid "Email Tracking"
+msgstr "E-Mail-Verfolgung"
+
+#: media/documents/frontend.html:401 orm/templates/frontend.html:424
+msgid "Setup Session"
+msgstr "Sitzung einrichten"
+
+#: media/documents/frontend.html:408 orm/templates/frontend.html:441
+msgid "User Options"
+msgstr "Benutzeroptionen"
+
+#: media/documents/frontend.html:410 orm/templates/frontend.html:443
+#: orm/templates/registration/password_change.html:8
+#: orm/templates/registration/password_change.html:184
+msgid "Change Password"
+msgstr "Passwort ändern"
+
+#: media/documents/frontend.html:411 orm/templates/frontend.html:444
+msgid "ERM Manual"
+msgstr "ERM-Handbuch"
+
+#: media/documents/frontend.html:415 media/documents/frontend.html:436
+#: orm/templates/frontend.html:448 orm/templates/frontend.html:476
+msgid "Select Language"
+msgstr "Sprache auswählen"
+
+#: media/documents/frontend.html:427 orm/templates/frontend.html:467
+msgid "Logout"
+msgstr "Abmelden"
+
+#: media/documents/frontend.html:447 orm/templates/frontend.html:487
+msgid "Toggle Menu"
+msgstr "Menü umschalten"
+
+#: media/documents/risk_list_new.html:76 orm/templates/risk_list_new.html:79
+msgid "Total Risks"
+msgstr "Gesamtzahl der Risiken"
+
+#: media/documents/risk_list_new.html:78 orm/templates/risk_list_new.html:77
+msgid "New Risk"
+msgstr "Neues Risiko"
+
+#: media/documents/risk_list_new.html:81
+#: orm/templates/itassets_with_risks.html:173
+msgid "Refresh"
+msgstr "Aktualisieren"
+
+#: media/documents/risk_list_new.html:83 orm/templates/risk_list_new.html:84
+msgid "Search risks by title..."
+msgstr "Risiken nach Titel suchen..."
+
+#: media/documents/risk_list_new.html:87 orm/templates/risk_list_new.html:88
+msgid "Filters"
+msgstr "Filter"
+
+#: media/documents/risk_list_new.html:94 orm/templates/risk_detail.html:635
+#: orm/templates/risk_list_new.html:95
+msgid "Portfolio"
+msgstr "Portfolio"
+
+#: media/documents/risk_list_new.html:96 media/documents/risk_list_new.html:105
+#: media/documents/risk_list_new.html:114 orm/templates/risk_list_new.html:97
+#: orm/templates/risk_list_new.html:106 orm/templates/risk_list_new.html:115
+msgid "Select All"
+msgstr "Alle auswählen"
+
+#: media/documents/risk_list_new.html:103
+#: media/documents/risk_list_new.html:140 orm/templates/risk_detail.html:622
+#: orm/templates/risk_list_new.html:104 orm/templates/risk_list_new.html:141
+msgid "Category"
+msgstr "Kategorie"
+
+#: media/documents/risk_list_new.html:112 orm/templates/calendar_view.html:355
+#: orm/templates/risk_list_new.html:113
+msgid "Owner"
+msgstr "Eigentümer"
+
+#: media/documents/risk_list_new.html:122 orm/templates/risk_list_new.html:123
+msgid "Apply Filters"
+msgstr "Filter anwenden"
+
+#: media/documents/risk_list_new.html:127
+#: media/documents/risk_list_new.html:274
+#: media/documents/risk_list_new.html:287 orm/templates/risk_list_new.html:128
+#: orm/templates/risk_list_new.html:275 orm/templates/risk_list_new.html:288
+msgid "Expand All"
+msgstr "Alle erweitern"
+
+#: media/documents/risk_list_new.html:134 orm/templates/risk_list_new.html:135
+msgid "Risks"
+msgstr "Risiken"
+
+#: media/documents/risk_list_new.html:139 orm/templates/risk_list_new.html:140
+msgid "Title"
+msgstr "Titel"
+
+#: media/documents/risk_list_new.html:141 orm/templates/risk_detail.html:2002
+#: orm/templates/risk_list_new.html:142
+msgid "Inherent Score"
+msgstr "Inhärenter Score"
+
+#: media/documents/risk_list_new.html:142 orm/templates/risk_detail.html:2003
+#: orm/templates/risk_list_new.html:143
+msgid "Residual Score"
+msgstr "Residualer Score"
+
+#: media/documents/risk_list_new.html:143 orm/templates/risk_detail.html:2004
+#: orm/templates/risk_list_new.html:144
+msgid "Targeted Score"
+msgstr "Ziel-Score"
+
+#: media/documents/risk_list_new.html:144 orm/templates/risk_list_new.html:145
+msgid "Owners & Approvals"
+msgstr "Eigentümer & Genehmigungen"
+
+#: media/documents/risk_list_new.html:159 orm/templates/risk_list_new.html:160
+msgid "Open in new tab"
+msgstr "In neuem Tab öffnen"
+
+#: media/documents/risk_list_new.html:175 orm/templates/risk_list_new.html:176
+msgid "No approvals"
+msgstr "Keine Genehmigungen"
+
+#: media/documents/risk_list_new.html:191 orm/templates/risk_list_new.html:192
+msgid "Risk Details"
+msgstr "Risikodetails"
+
+#: media/documents/risk_list_new.html:191 orm/templates/calendar_view.html:340
+#: orm/templates/itassets_with_risks.html:271
+#: orm/templates/risk_detail.html:1324 orm/templates/risk_detail.html:1346
+#: orm/templates/risk_detail.html:1352 orm/templates/risk_detail.html:1569
+#: orm/templates/risk_detail.html:1797 orm/templates/risk_detail.html:2269
+#: orm/templates/risk_detail.html:2291 orm/templates/risk_detail.html:2297
+#: orm/templates/risk_detail.html:2471 orm/templates/risk_detail.html:2493
+#: orm/templates/risk_detail.html:2499 orm/templates/risk_list_new.html:192
+msgid "Close"
+msgstr "Schließen"
+
+#: media/documents/risk_list_new.html:287 orm/templates/risk_list_new.html:288
+msgid "Collapse All"
+msgstr "Alle einklappen"
+
+#: orm/templates/actions/action_list.html:144
+msgid "Actions List"
+msgstr "Aktionsliste"
+
+#: orm/templates/calendar_view.html:9
+msgid "Risk Calendar - AVAX S.A."
+msgstr "Risikokalender - AVAX S.A."
+
+#: orm/templates/calendar_view.html:339
+msgid "Task Details"
+msgstr "Aufgabendetails"
+
+#: orm/templates/calendar_view.html:351
+msgid "Task Overview - AVAX S.A."
+msgstr "Aufgabenübersicht - AVAX S.A."
+
+#: orm/templates/calendar_view.html:362
+msgid "Performer"
+msgstr "Ausführender"
+
+#: orm/templates/calendar_view.html:369
+msgid "Approvals"
+msgstr "Genehmigungen"
+
+#: orm/templates/calendar_view.html:412
+msgid "Error fetching events. Please try again."
+msgstr "Fehler beim Abrufen von Ereignissen. Bitte versuchen Sie es erneut."
+
+#: orm/templates/calendar_view.html:428
+msgid "No owner tasks."
+msgstr "Keine Aufgaben des Eigentümers."
+
+#: orm/templates/calendar_view.html:429
+msgid "No performer tasks."
+msgstr "Keine Aufgaben des Ausführenden."
+
+#: orm/templates/calendar_view.html:430
+msgid "No approvals."
+msgstr "Keine Genehmigungen."
+
+#: orm/templates/calendar_view.html:486 orm/templates/risk_detail.html:697
+msgid "days"
+msgstr "Tage"
+
+#: orm/templates/frontend.html:331
+msgid "View Opportunities"
+msgstr "Chancen anzeigen"
+
+#: orm/templates/frontend.html:426
+msgid "Photo Verification"
+msgstr "Fotoverifizierung"
+
+#: orm/templates/frontend.html:427
+msgid "Loan"
+msgstr "Darlehen"
+
+#: orm/templates/frontend.html:429
+msgid "AGENT"
+msgstr "AGENT"
+
+#: orm/templates/itassets_with_risks.html:7
+msgid "IT Assets, Risks, Threats & Vulnerabilities"
+msgstr "IT-Assets, Risiken, Bedrohungen & Schwachstellen"
+
+#: orm/templates/itassets_with_risks.html:174
+msgid "IT Assets Overview"
+msgstr "Übersicht der IT-Assets"
+
+#: orm/templates/itassets_with_risks.html:180
+msgid "IT Asset"
+msgstr "IT-Asset"
+
+#: orm/templates/itassets_with_risks.html:181
+msgid "CIA"
+msgstr "CIA"
+
+#: orm/templates/itassets_with_risks.html:182
+msgid "Criticality"
+msgstr "Kritikalität"
+
+#: orm/templates/itassets_with_risks.html:183
+msgid "Risk"
+msgstr "Risiko"
+
+#: orm/templates/itassets_with_risks.html:222
+msgid "No risks"
+msgstr "Keine Risiken"
+
+#: orm/templates/itassets_with_risks.html:237
+msgid "No vulnerabilities"
+msgstr "Keine Schwachstellen"
+
+#: orm/templates/itassets_with_risks.html:252
+msgid "No threats"
+msgstr "Keine Bedrohungen"
+
+#: orm/templates/itassets_with_risks.html:259
+msgid "No IT assets registered."
+msgstr "Keine IT-Assets registriert."
+
+#: orm/templates/itassets_with_risks.html:270
+msgid "Details"
+msgstr "Details"
+
+#: orm/templates/registration/password_change.html:160
+msgid "Change Your Password"
+msgstr "Passwort ändern"
+
+#: orm/templates/registration/password_change.html:162
+msgid ""
+"Keeping your account secure is important to us. Update your password "
+"regularly to protect your data and maintain access to ermapp.avax.gr."
+msgstr ""
+"Die Sicherheit Ihres Kontos ist uns wichtig. Aktualisieren Sie Ihr Passwort "
+"regelmäßig, um Ihre Daten zu schützen und den Zugriff auf ermapp.avax.gr "
+"aufrechtzuerhalten."
+
+#: orm/templates/registration/password_change.html:165
+msgid "Tips for a Strong Password:"
+msgstr "Tipps für ein sicheres Passwort:"
+
+#: orm/templates/registration/password_change.html:167
+msgid "Use at least 12 characters."
+msgstr "Verwenden Sie mindestens 12 Zeichen."
+
+#: orm/templates/registration/password_change.html:168
+msgid "Mix letters (upper and lower case), numbers, and symbols."
+msgstr "Mischen Sie Buchstaben (Groß- und Kleinbuchstaben), Zahlen und Symbole."
+
+#: orm/templates/registration/password_change.html:169
+msgid "Avoid common words or personal info (e.g., your name or birthday)."
+msgstr ""
+"Vermeiden Sie gängige Wörter oder persönliche Informationen (z. B. Ihren Namen "
+"oder Geburtstag)."
+
+#: orm/templates/registration/password_change.html:170
+msgid "Make it unique—don’t reuse passwords from other sites."
+msgstr "Machen Sie es einzigartig – verwenden Sie keine Passwörter von anderen Websites erneut."
+
+#: orm/templates/registration/password_change.html:187
+msgid "All rights reserved."
+msgstr "Alle Rechte vorbehalten."
+
+#: orm/templates/risk_detail.html:438
+msgid "Only owners or superusers can delete risks"
+msgstr "Nur Eigentümer oder Superuser können Risiken löschen"
+
+#: orm/templates/risk_detail.html:439
+msgid "Archive"
+msgstr "Archivieren"
+
+#: orm/templates/risk_detail.html:443
+msgid "Replicate Risk"
+msgstr "Risiko replizieren"
+
+#: orm/templates/risk_detail.html:504
+msgid "Inherent"
+msgstr "Inhärent"
+
+#: orm/templates/risk_detail.html:520
+msgid "Residual"
+msgstr "Residual"
+
+#: orm/templates/risk_detail.html:536
+msgid "Targeted"
+msgstr "Zielgerichtet"
+
+#: orm/templates/risk_detail.html:601
+msgid "Low"
+msgstr "Niedrig"
+
+#: orm/templates/risk_detail.html:604
+msgid "Medium"
+msgstr "Mittel"
+
+#: orm/templates/risk_detail.html:607
+msgid "High"
+msgstr "Hoch"
+
+#: orm/templates/risk_detail.html:648
+msgid "Approval Cycle"
+msgstr "Genehmigungszyklus"
+
+#: orm/templates/risk_detail.html:660
+msgid "Treatment Type"
+msgstr "Behandlungsart"
+
+#: orm/templates/risk_detail.html:683
+msgid "Unknown Role"
+msgstr "Unbekannte Rolle"
+
+#: orm/templates/risk_detail.html:684
+msgid "Unknown User"
+msgstr "Unbekannter Benutzer"
+
+#: orm/templates/risk_detail.html:686
+msgid "Due:"
+msgstr "Fällig:"
+
+#: orm/templates/risk_detail.html:693
+msgid "days remaining"
+msgstr "verbleibende Tage"
+
+#: orm/templates/risk_detail.html:695
+msgid "Due today"
+msgstr "Heute fällig"
+
+#: orm/templates/risk_detail.html:697
+msgid "Overdue by"
+msgstr "Überfällig um"
+
+#: orm/templates/risk_detail.html:705
+msgid "No approvals have been requested for this risk."
+msgstr "Für dieses Risiko wurden keine Genehmigungen angefordert."
+
+#: orm/templates/risk_detail.html:721 orm/templates/risk_detail.html:1312
+#: orm/templates/risk_detail.html:1530 orm/templates/risk_detail.html:1748
+#: orm/templates/risk_detail.html:2258 orm/templates/risk_detail.html:2460
+msgid "Only owners or superusers can save changes"
+msgstr "Nur Eigentümer oder Superuser können Änderungen speichern"
+
+#: orm/templates/risk_detail.html:722
+msgid "Save Changes in Risk"
+msgstr "Änderungen am Risiko speichern"
+
+#: orm/templates/risk_detail.html:873
+msgid "This search uses"
+msgstr "Diese Suche verwendet"
+
+#: orm/templates/risk_detail.html:874
+msgid "models."
+msgstr "Modelle."
+
+#: orm/templates/risk_detail.html:876
+msgid "Standard Mode: Uses GPT-4o static model, or"
+msgstr "Standardmodus: Verwendet das statische GPT-4o-Modell, oder"
+
+#: orm/templates/risk_detail.html:877
+msgid ""
+"Web Mode: Uses GPT-4o (Search Preview) for live web-enabled searches, "
+"selection is automatic."
+msgstr ""
+"Webmodus: Verwendet GPT-4o (Suchvorschau) für Live-Websuchen, die Auswahl erfolgt automatisch."
+
+#: orm/templates/risk_detail.html:878
+msgid ""
+"To force Web Mode, start your query with keywords such as 'web', 'search', "
+"'latest', 'live'."
+msgstr ""
+"Um den Webmodus zu erzwingen, beginnen Sie Ihre Anfrage mit Schlüsselwörtern wie 'web', 'search', 'latest', 'live'."
+
+#: orm/templates/risk_detail.html:882
+msgid "Enter search term"
+msgstr "Suchbegriff eingeben"
+
+#: orm/templates/risk_detail.html:883
+msgid "Search"
+msgstr "Suchen"
+
+#: orm/templates/risk_detail.html:887
+msgid "Disclaimer:"
+msgstr "Haftungsausschluss:"
+
+#: orm/templates/risk_detail.html:887
+msgid ""
+"AI and Web Mode results may not always reflect the latest risk data. Verify "
+"critical information from official sources."
+msgstr ""
+"Ergebnisse des KI- und Webmodus spiegeln nicht immer die neuesten Risikodaten wider. Überprüfen Sie kritische Informationen aus offiziellen Quellen."
+
+#: orm/templates/risk_detail.html:893
+msgid "Web Mode: ON (Using GPT-4o)"
+msgstr "Webmodus: AN (Verwendung von GPT-4o)"
+
+#: orm/templates/risk_detail.html:898
+msgid "Searching... Please wait."
+msgstr "Suche läuft... Bitte warten."
+
+#: orm/templates/risk_detail.html:903
+msgid "Search Results:"
+msgstr "Suchergebnisse:"
+
+#: orm/templates/risk_detail.html:931
+msgid "No results found."
+msgstr "Keine Ergebnisse gefunden."
+
+#: orm/templates/risk_detail.html:949
+msgid "Please enter a search term."
+msgstr "Bitte geben Sie einen Suchbegriff ein."
+
+#: orm/templates/risk_detail.html:973
+msgid "Search failed:"
+msgstr "Suche fehlgeschlagen:"
+
+#: orm/templates/risk_detail.html:973
+msgid "Unknown error"
+msgstr "Unbekannter Fehler"
+
+#: orm/templates/risk_detail.html:977
+msgid "An error occurred:"
+msgstr "Ein Fehler ist aufgetreten:"
+
+#: orm/templates/risk_detail.html:1057
+msgid "Description"
+msgstr "Beschreibung"
+
+#: orm/templates/risk_detail.html:1062
+msgid "Owners"
+msgstr "Eigentümer"
+
+#: orm/templates/risk_detail.html:1072 orm/templates/risk_detail.html:2205
+msgid "Scores"
+msgstr "Scores"
+
+#: orm/templates/risk_detail.html:1112
+msgid "History"
+msgstr "Verlauf"
+
+#: orm/templates/risk_detail.html:1127
+msgid "General Information"
+msgstr "Allgemeine Informationen"
+
+#: orm/templates/risk_detail.html:1162
+msgid "Ownership & Associations"
+msgstr "Eigentum & Verknüpfungen"
+
+#: orm/templates/risk_detail.html:1165
+msgid "Current Owners:"
+msgstr "Aktuelle Eigentümer:"
+
+#: orm/templates/risk_detail.html:1173 orm/templates/risk_detail.html:1508
+#: orm/templates/risk_detail.html:1723 orm/templates/risk_detail.html:2251
+#: orm/templates/risk_detail.html:2453
+msgid "Unlink"
+msgstr "Verknüpfung aufheben"
+
+#: orm/templates/risk_detail.html:1182
+msgid "Add Owner:"
+msgstr "Eigentümer hinzufügen:"
+
+#: orm/templates/risk_detail.html:1189
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: orm/templates/risk_detail.html:1297
+msgid "Link Existing Mitigation:"
+msgstr "Bestehende Mitigierungsmaßnahme verknüpfen:"
+
+#: orm/templates/risk_detail.html:1300
+msgid "-- Select Mitigation --"
+msgstr "-- Mitigierungsmaßnahme auswählen --"
+
+#: orm/templates/risk_detail.html:1306
+msgid "Link Mitigation"
+msgstr "Mitigierungsmaßnahme verknüpfen"
+
+#: orm/templates/risk_detail.html:1313 orm/templates/risk_detail.html:1323
+msgid "Add New Mitigation"
+msgstr "Neue Mitigierungsmaßnahme hinzufügen"
+
+#: orm/templates/risk_detail.html:1328
+msgid "Mitigation Title"
+msgstr "Titel der Mitigierungsmaßnahme"
+
+#: orm/templates/risk_detail.html:1329
+msgid "Enter Mitigation Title"
+msgstr "Titel der Mitigierungsmaßnahme eingeben"
+
+#: orm/templates/risk_detail.html:1333 orm/templates/risk_detail.html:1550
+#: orm/templates/risk_detail.html:1778 orm/templates/risk_detail.html:2278
+#: orm/templates/risk_detail.html:2480
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: orm/templates/risk_detail.html:1334
+msgid "Save Mitigation"
+msgstr "Mitigierungsmaßnahme speichern"
+
+#: orm/templates/risk_detail.html:1345
+msgid "Mitigation Details"
+msgstr "Details der Mitigierungsmaßnahme"
+
+#: orm/templates/risk_detail.html:1498
+msgid "Due"
+msgstr "Fällig"
+
+#: orm/templates/risk_detail.html:1500
+msgid "Completed"
+msgstr "Abgeschlossen"
+
+#: orm/templates/risk_detail.html:1502
+msgid "Overdue"
+msgstr "Überfällig"
+
+#: orm/templates/risk_detail.html:1504
+msgid "Pending"
+msgstr "Ausstehend"
+
+#: orm/templates/risk_detail.html:1511
+msgid "No linked actions."
+msgstr "Keine verknüpften Aktionen."
+
+#: orm/templates/risk_detail.html:1517
+msgid "Link an Existing Action"
+msgstr "Bestehende Aktion verknüpfen"
+
+#: orm/templates/risk_detail.html:1519
+msgid "Select an action"
+msgstr "Aktion auswählen"
+
+#: orm/templates/risk_detail.html:1525
+msgid "Link Action"
+msgstr "Aktion verknüpfen"
+
+#: orm/templates/risk_detail.html:1531
+msgid "Add Action"
+msgstr "Aktion hinzufügen"
+
+#: orm/templates/risk_detail.html:1540
+msgid "Add New Action"
+msgstr "Neue Aktion hinzufügen"
+
+#: orm/templates/risk_detail.html:1545
+msgid "Action Title"
+msgstr "Titel der Aktion"
+
+#: orm/templates/risk_detail.html:1546
+msgid "Enter Action Title"
+msgstr "Titel der Aktion eingeben"
+
+#: orm/templates/risk_detail.html:1551
+msgid "Save Action"
+msgstr "Aktion speichern"
+
+#: orm/templates/risk_detail.html:1562
+msgid "Action Details"
+msgstr "Details der Aktion"
+
+#: orm/templates/risk_detail.html:1718
+msgid "Value"
+msgstr "Wert"
+
+#: orm/templates/risk_detail.html:1719 orm/templates/risk_detail.html:2199
+msgid "Date"
+msgstr "Datum"
+
+#: orm/templates/risk_detail.html:1727
+msgid "No linked indicators."
+msgstr "Keine verknüpften Indikatoren."
+
+#: orm/templates/risk_detail.html:1733
+msgid "Link an Existing Indicator"
+msgstr "Bestehenden Indikator verknüpfen"
+
+#: orm/templates/risk_detail.html:1735
+msgid "Select an indicator"
+msgstr "Indikator auswählen"
+
+#: orm/templates/risk_detail.html:1742
+msgid "Link Indicator"
+msgstr "Indikator verknüpfen"
+
+#: orm/templates/risk_detail.html:1749
+msgid "Add Indicator"
+msgstr "Indikator hinzufügen"
+
+#: orm/templates/risk_detail.html:1758
+msgid "Add New Indicator"
+msgstr "Neuen Indikator hinzufügen"
+
+#: orm/templates/risk_detail.html:1763
+msgid "Indicator Title"
+msgstr "Titel des Indikators"
+
+#: orm/templates/risk_detail.html:1765
+msgid "Enter Indicator Title"
+msgstr "Titel des Indikators eingeben"
+
+#: orm/templates/risk_detail.html:1768
+msgid "Current Value"
+msgstr "Aktueller Wert"
+
+#: orm/templates/risk_detail.html:1770
+msgid "Enter Current Value"
+msgstr "Aktuellen Wert eingeben"
+
+#: orm/templates/risk_detail.html:1773
+msgid "Reporting Date"
+msgstr "Berichtsdatum"
+
+#: orm/templates/risk_detail.html:1779
+msgid "Save Indicator"
+msgstr "Indikator speichern"
+
+#: orm/templates/risk_detail.html:1790
+msgid "Indicator Details"
+msgstr "Details des Indikators"
+
+#: orm/templates/risk_detail.html:2005
+msgid "Score"
+msgstr "Score"
+
+#: orm/templates/risk_detail.html:2012
+msgid "Likelihood"
+msgstr "Wahrscheinlichkeit"
+
+#: orm/templates/risk_detail.html:2027
+msgid "Impact"
+msgstr "Auswirkung"
+
+#: orm/templates/risk_detail.html:2152
+msgid "Inherent Scores"
+msgstr "Inhärente Scores"
+
+#: orm/templates/risk_detail.html:2160
+msgid "Residual Scores"
+msgstr "Residuale Scores"
+
+#: orm/templates/risk_detail.html:2168
+msgid "Targeted Scores"
+msgstr "Zielgerichtete Scores"
+
+#: orm/templates/risk_detail.html:2229
+msgid "Link Existing IT Asset"
+msgstr "Bestehendes IT-Asset verknüpfen"
+
+#: orm/templates/risk_detail.html:2232
+msgid "-- Select IT Asset --"
+msgstr "-- IT-Asset auswählen --"
+
+#: orm/templates/risk_detail.html:2238
+msgid "Link IT Asset"
+msgstr "IT-Asset verknüpfen"
+
+#: orm/templates/risk_detail.html:2259 orm/templates/risk_detail.html:2268
+msgid "Add New IT Asset"
+msgstr "Neues IT-Asset hinzufügen"
+
+#: orm/templates/risk_detail.html:2273
+msgid "IT Asset Name"
+msgstr "Name des IT-Assets"
+
+#: orm/templates/risk_detail.html:2274
+msgid "Enter IT Asset Name"
+msgstr "Name des IT-Assets eingeben"
+
+#: orm/templates/risk_detail.html:2279
+msgid "Save IT Asset"
+msgstr "IT-Asset speichern"
+
+#: orm/templates/risk_detail.html:2290
+msgid "IT Asset Details"
+msgstr "Details des IT-Assets"
+
+#: orm/templates/risk_detail.html:2322
+msgid "IT Asset name is required!"
+msgstr "Der Name des IT-Assets ist erforderlich!"
+
+#: orm/templates/risk_detail.html:2341 orm/templates/risk_detail.html:2344
+#: orm/templates/risk_detail.html:2371 orm/templates/risk_detail.html:2374
+#: orm/templates/risk_detail.html:2395 orm/templates/risk_detail.html:2398
+#: orm/templates/risk_detail.html:2540 orm/templates/risk_detail.html:2543
+#: orm/templates/risk_detail.html:2567 orm/templates/risk_detail.html:2570
+#: orm/templates/risk_detail.html:2591 orm/templates/risk_detail.html:2594
+msgid "Error"
+msgstr "Fehler"
+
+#: orm/templates/risk_detail.html:2354
+msgid "Please select an IT Asset to link."
+msgstr "Bitte wählen Sie ein IT-Asset zum Verknüpfen aus."
+
+#: orm/templates/risk_detail.html:2431
+msgid "Link Existing Procedure"
+msgstr "Bestehendes Verfahren verknüpfen"
+
+#: orm/templates/risk_detail.html:2434
+msgid "-- Select Procedure --"
+msgstr "-- Verfahren auswählen --"
+
+#: orm/templates/risk_detail.html:2440
+msgid "Link Procedure"
+msgstr "Verfahren verknüpfen"
+
+#: orm/templates/risk_detail.html:2461 orm/templates/risk_detail.html:2470
+msgid "Add New Procedure"
+msgstr "Neues Verfahren hinzufügen"
+
+#: orm/templates/risk_detail.html:2475
+msgid "Procedure Title"
+msgstr "Titel des Verfahrens"
+
+#: orm/templates/risk_detail.html:2476
+msgid "Enter Procedure Title"
+msgstr "Titel des Verfahrens eingeben"
+
+#: orm/templates/risk_detail.html:2481
+msgid "Save Procedure"
+msgstr "Verfahren speichern"
+
+#: orm/templates/risk_detail.html:2492
+msgid "Procedure Details"
+msgstr "Details des Verfahrens"
+
+#: orm/templates/risk_detail.html:2523
+msgid "Title is required!"
+msgstr "Der Titel ist erforderlich!"
+
+#: orm/templates/risk_detail.html:2550
+msgid "Please select a Procedure to link."
+msgstr "Bitte wählen Sie ein Verfahren zum Verknüpfen aus."
+
+#: orm/templates/risk_detail.html
+msgid "Reported on"
+msgstr "Gemeldet am"
+
+#: orm/templates/risk_detail.html
+msgid "No incidents reported for this risk."
+msgstr "Für dieses Risiko wurden keine Vorfälle gemeldet."
+
+#: orm/templates/risk_detail.html
+msgid "Add Incident"
+msgstr "Vorfall hinzufügen"
+
+#: orm/templates/risk_detail.html
+msgid "Incident Details"
+msgstr "Details des Vorfalls"
+
+#: orm/templates/risk_detail.html
+msgid "Risk ID is missing or undefined."
+msgstr "Die Risiko-ID fehlt oder ist nicht definiert."
+
+#: orm/templates/risk_detail.html
+msgid "Iframe loaded successfully"
+msgstr "Iframe erfolgreich geladen"
+
+#: orm/templates/risk_detail.html
+msgid "Failed to access iframe content."
+msgstr "Zugriff auf Iframe-Inhalt fehlgeschlagen."
+
+#: orm/templates/risk_detail.html
+msgid "Save button clicked in iframe"
+msgstr "Speichern-Button im Iframe geklickt"
+
+#: orm/templates/risk_detail.html
+msgid "Save button not found in the iframe."
+msgstr "Speichern-Button im Iframe nicht gefunden."
+
+#: orm/templates/risk_detail.html
+msgid "Failed to load iframe content."
+msgstr "Laden des Iframe-Inhalts fehlgeschlagen."
+
+#: orm/templates/risk_detail.html
+msgid "Link Existing Opportunities"
+msgstr "Bestehende Chancen verknüpfen"
+
+#: orm/templates/risk_detail.html
+msgid "-- Select Opportunity --"
+msgstr "-- Chance auswählen --"
+
+#: orm/templates/risk_detail.html
+msgid "Link Opportunity"
+msgstr "Chance verknüpfen"
+
+#: orm/templates/risk_detail.html
+msgid "Add Opportunity"
+msgstr "Chance hinzufügen"
+
+#: orm/templates/risk_detail.html
+msgid "Opportunity Details"
+msgstr "Details der Chance"
+
+#: orm/templates/risk_detail.html
+msgid "Please select an opportunity to link."
+msgstr "Bitte wählen Sie eine Chance zum Verknüpfen aus."
+
+#: orm/templates/risk_detail.html
+msgid "Enter Opportunity Title:"
+msgstr "Titel der Chance eingeben:"
+
+#: orm/templates/risk_detail.html
+msgid "Error: Unable to link opportunity."
+msgstr "Fehler: Chance konnte nicht verknüpft werden."
+
+#: orm/templates/risk_detail.html
+msgid "Error: Unable to add opportunity."
+msgstr "Fehler: Chance konnte nicht hinzugefügt werden."
+
+#: orm/templates/risk_detail.html
+msgid "Error: Unable to unlink opportunity."
+msgstr "Fehler: Verknüpfung der Chance konnte nicht aufgehoben werden."
+
+#: orm/templates/risk_detail.html
+msgid "Link Existing Threat"
+msgstr "Bestehende Bedrohung verknüpfen"
+
+#: orm/templates/risk_detail.html
+msgid "-- Select Threat --"
+msgstr "-- Bedrohung auswählen --"
+
+#: orm/templates/risk_detail.html
+msgid "Link Threat"
+msgstr "Bedrohung verknüpfen"
+
+#: orm/templates/risk_detail.html
+msgid "Add Threat"
+msgstr "Bedrohung hinzufügen"
+
+#: orm/templates/risk_detail.html
+msgid "Threat Details"
+msgstr "Details der Bedrohung"
+
+#: orm/templates/risk_detail.html
+msgid "Please select a threat to link."
+msgstr "Bitte wählen Sie eine Bedrohung zum Verknüpfen aus."

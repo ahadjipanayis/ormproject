@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Calculator</title>
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg" fetchpriority="high">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+            background: #f5f6f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h2 {
+            text-align: center;
+            color: #003087;
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+        .loan-section {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #003087;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin: 12px 0 6px;
+            font-weight: 600;
+            color: #444;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        .submit-btn {
+            background: #003087;
+            color: white;
+            padding: 12px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1.1em;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover {
+            background: #00205b;
+        }
+        .save-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1.1em;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .save-btn:hover {
+            background: #218838;
+        }
+        .result {
+            padding: 15px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .result h4 {
+            color: #003087;
+            font-size: 1.3em;
+            margin: 0 0 10px 0;
+        }
+        .result p {
+            margin: 5px 0;
+            font-size: 1em;
+        }
+        .summary {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+        .summary h3 {
+            text-align: center;
+            color: #003087;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+        }
+        .offer-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1em;
+        }
+        .offer-table th, .offer-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .offer-table th {
+            background: #f0f4f8;
+            color: #003087;
+            font-weight: 600;
+        }
+        .offer-table td {
+            color: #333;
+        }
+        .offer-table tr:last-child td {
+            border-bottom: none;
+            font-weight: bold;
+            color: #003087;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Loan Calculator</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="loan-section">
+                <div class="input-group">
+                    <h3>Loan Option 1</h3>
+                    <label>Loan Amount (€)</label>
+                    <input type="text" name="amount1" value="{{ request.POST.amount1|default:'' }}" required placeholder="e.g., 10.000,00">
+                    <label>Interest Rate (% per year)</label>
+                    <input type="text" name="interest_rate1" value="{{ request.POST.interest_rate1|default:'' }}" required placeholder="e.g., 5,00">
+                    <label>Duration (months)</label>
+                    <input type="text" name="period1" value="{{ request.POST.period1|default:'' }}" required placeholder="e.g., 36">
+                </div>
+                {% if loan1_data %}
+                    <div class="result">
+                        <h4>Loan Option 1</h4>
+                        <p>Monthly Payment: {{ loan1_data.installment }}€</p>
+                        <p>Total Payment: {{ loan1_data.totals.payment }}€</p>
+                        <p>Total Interest: {{ loan1_data.totals.interest }}€</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="loan-section">
+                <div class="input-group">
+                    <h3>Loan Option 2 (Optional)</h3>
+                    <label>Loan Amount (€)</label>
+                    <input type="text" name="amount2" value="{{ request.POST.amount2|default:'' }}" placeholder="e.g., 12.000,00">
+                    <label>Interest Rate (% per year)</label>
+                    <input type="text" name="interest_rate2" value="{{ request.POST.interest_rate2|default:'' }}" placeholder="e.g., 4,50">
+                    <label>Duration (months)</label>
+                    <input type="text" name="period2" value="{{ request.POST.period2|default:'' }}" placeholder="e.g., 48">
+                    <button type="submit" class="submit-btn">Calculate Offers</button>
+                    <button type="submit" class="save-btn" name="save_loan1" value="1">Save Loan Option 1</button>
+                    <button type="submit" class="save-btn" name="save_loan2" value="1">Save Loan Option 2</button>
+                </div>
+                {% if loan2_data %}
+                    <div class="result">
+                        <h4>Loan Option 2</h4>
+                        <p>Monthly Payment: {{ loan2_data.installment }}€</p>
+                        <p>Total Payment: {{ loan2_data.totals.payment }}€</p>
+                        <p>Total Interest: {{ loan2_data.totals.interest }}€</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if loan1_data and loan2_data %}
+                <div class="summary">
+                    <h3>Your Loan Offers</h3>
+                    <table class="offer-table">
+                        <tr>
+                            <th>Offer</th>
+                            <th>Loan Amount</th>
+                            <th>Interest Rate</th>
+                            <th>Duration</th>
+                            <th>Monthly Payment</th>
+                            <th>Total Payment</th>
+                            <th>Total Interest Cost</th>
+                        </tr>
+                        <tr>
+                            <td>Option 1</td>
+                            <td>{{ loan1_data.amount }}€</td>
+                            <td>{{ loan1_data.interest_rate }}%</td>
+                            <td>{{ loan1_data.duration }} months</td>
+                            <td>{{ loan1_data.installment }}€</td>
+                            <td>{{ loan1_data.totals.payment }}€</td>
+                            <td>{{ loan1_data.totals.interest }}€</td>
+                        </tr>
+                        <tr>
+                            <td>Option 2</td>
+                            <td>{{ loan2_data.amount }}€</td>
+                            <td>{{ loan2_data.interest_rate }}%</td>
+                            <td>{{ loan2_data.duration }} months</td>
+                            <td>{{ loan2_data.installment }}€</td>
+                            <td>{{ loan2_data.totals.payment }}€</td>
+                            <td>{{ loan2_data.totals.interest }}€</td>
+                        </tr>
+                        <tr>
+                            <td>Difference</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>{{ loan2_data.duration_diff }} months</td>
+                            <td>{{ loan2_data.installment_diff }}€</td>
+                            <td>{{ loan2_data.totals.payment_diff }}€</td>
+                            <td>{{ loan2_data.totals.interest_diff }}€</td>
+                        </tr>
+                    </table>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>

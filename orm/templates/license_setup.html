@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>License Setup</title>
+</head>
+<body>
+    <h1>Set Up License</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="expiration_date">Expiration Date:</label>
+        <input type="date" id="expiration_date" name="expiration_date" required>
+        <button type="submit">Set License</button>
+    </form>
+</body>
+</html>
+

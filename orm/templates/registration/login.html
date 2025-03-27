@@ -1,0 +1,103 @@
+{% load static i18n %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Login" %}</title>
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Toolbar Style */
+        .toolbar {
+            width: 100%;
+            background: #2746c9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            color: white;
+            font-size: 1em;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .toolbar h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .login-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            padding: 5px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .button {
+            padding: 5px 10px;
+            background-color: #fff;
+            color: #007bff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 5px;
+        }
+
+        .button:hover {
+            background-color: #ddd;
+        }
+
+        /* Background with Image */
+        body {
+            font-family: Arial, sans-serif;
+            background: url("{% static 'images/background.png' %}") no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 60px; /* Ensures content does not overlap with fixed toolbar */
+        }
+
+        .language-switcher {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <h1>{% trans "Enterprise Risk Management Application" %}</h1>
+        <form method="post" action="{% url 'login' %}" class="login-form">
+            {% csrf_token %}
+            {{ form.username.label_tag }} {{ form.username }}
+            {{ form.password.label_tag }} {{ form.password }}
+            <button type="submit" class="button">{% trans "Login" %}</button>
+            <button type="button" class="button" onclick="window.location.href='{% url 'password_reset' %}'">
+                {% trans "Reset Password" %}
+            </button>        </form>
+    </div>
+
+ 
+</body>
+</html>

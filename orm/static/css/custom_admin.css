@@ -1,0 +1,18 @@
+
+.custom-title-field {
+    width: 10% !important;
+    max-width: 10% !important;
+    box-sizing: border-box;
+    resize: both;
+}
+
+/* Style to hide all breadcrumb items except the last one */
+.breadcrumb li:not(:last-child) {
+    display: none;
+}
+
+/* Optional: Style for the last breadcrumb item */
+.breadcrumb li:last-child {
+    font-weight: bold;
+    color: #000; /* Customize the color as needed */
+}

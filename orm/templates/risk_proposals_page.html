@@ -1,0 +1,356 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ermapp.avax.gr | Open AI interface</title>
+    <!-- Font Awesome CDN for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+
+    <style>
+        /* General styles for the page */
+        body {
+            font-family: 'Calibri', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        p {
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+        .disclaimer {
+            font-size: 1em;
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #e74c3c;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #ffe6e6;
+        }
+        .proposal-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #eef6ff;
+            border-radius: 5px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        .risk-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            text-align: center;
+            display: inline-block;
+            font-size: 1em;
+            margin: 10px 10px;
+            cursor: pointer;
+            border: none;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .button i {
+            margin-right: 8px;
+        }
+        .button-group {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 20px auto;
+            max-width: 150px;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- OpenAI Logo -->
+        <img src="{% static 'images/openai-lockup.svg' %}" alt="OpenAI Logo" class="logo">
+
+        
+
+        <p class="disclaimer">
+            <strong>Disclaimer:</strong> This report was generated using OpenAI's <strong>{{ selected_model }}</strong> model.
+            The information provided is based on the analysis of the input data and should not be relied upon automatically for decision-making.
+            Please verify the information independently before taking any action.
+        </p>
+        
+        <h2>Generated Risk Proposals</h2>
+        <p>This page displays risk proposals generated using the OpenAI model, providing insights and suggestions for risk management.</p>
+
+        <!-- Buttons to Create Mitigations, Risks, or Indicators -->
+        <div class="button-group">
+            <!-- Button to Create Mitigations -->
+            <button type="button" class="button" onclick="document.getElementById('mitigation-form').style.display='block';document.getElementById('risk-form').style.display='none';document.getElementById('indicator-form').style.display='none';">
+                <i class="fas fa-shield"></i> Create Mitigations
+            </button>
+
+            <!-- Button to Create New Risks -->
+            <button type="button" class="button" onclick="document.getElementById('risk-form').style.display='block';document.getElementById('mitigation-form').style.display='none';document.getElementById('indicator-form').style.display='none';">
+                <i class="fas fa-exclamation-circle"></i> Create New Risks
+            </button>
+
+            <!-- Button to Create Indicators -->
+            <button type="button" class="button" onclick="document.getElementById('indicator-form').style.display='block';document.getElementById('mitigation-form').style.display='none';document.getElementById('risk-form').style.display='none';">
+                <i class="fas fa-chart-line"></i> Create Indicators
+            </button>
+     
+        <!-- Button to Create Actions -->
+<button type="button" class="button" onclick="document.getElementById('action-form').style.display='block';document.getElementById('mitigation-form').style.display='none';document.getElementById('risk-form').style.display='none';document.getElementById('indicator-form').style.display='none';">
+    <i class="fas fa-tasks"></i> Create Actions
+</button>
+
+</div>
+
+
+<!-- Form to Create Actions -->
+
+
+
+        <!-- Form to Create Mitigations -->
+        <form method="post" id="mitigation-form" style="display:none;" action="{% url 'create_mitigations_from_proposals' %}">
+            <h3>Create Mitigations</h3>
+            {% csrf_token %}
+            {% if proposals_data %}
+                {% for risk_id, data in proposals_data.items %}
+                    <div class="risk-section">
+                        <button type="submit" class="button">
+                            <i class="fas fa-shield"></i> Create Mitigations
+                        </button>
+                        <h2>
+                            <a href="{% url 'admin:orm_risk_change' risk_id %}" target="_blank" style="text-decoration: none; color: #007bff;">
+                                {{ data.title|safe }}
+                            </a>
+                        </h2>
+                        <p>{{ data.description|safe }}</p>
+                        <h3>Proposals</h3>
+
+                        <input type="hidden" name="selected_risks" value="{{ risk_id }}">
+                        
+                        {% if data.proposals %}
+                            <div class="proposal-list">
+                                {% for proposal in data.proposals %}
+                                    <div class="proposal-item">
+                                        <input type="checkbox" id="proposal_{{ forloop.counter }}" name="selected_proposals" value="{{ proposal }}">
+                                        <label for="proposal_{{ forloop.counter }}">{{ proposal }}</label>
+                                    </div>
+                                {% endfor %}
+                                <button type="submit" class="button">
+                                    <i class="fas fa-shield"></i> Create Mitigations
+                                </button>
+                            </form>
+                    
+                            </div>
+                        {% else %}
+                            <p>No proposals were generated for this risk.</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No proposals to display.</p>
+            {% endif %}
+            
+         
+        <!-- Form to Create Related Risks -->
+        <form method="post" id="risk-form" style="display:none;" action="{% url 'create_related_risks_from_proposals' %}">
+            <h3>Create Related Risks</h3>
+            {% csrf_token %}
+            {% if proposals_data %}
+                {% for risk_id, data in proposals_data.items %}
+                    <div class="risk-section">
+                        <button type="submit" class="button">
+                            <i class="fas fa-exclamation-circle"></i> Create New Risks
+                        </button>
+                        <h2>
+                            <a href="/risk/{{ risk_id }}" target="_blank" style="text-decoration: none; color: #007bff;">
+                                {{ data.title|safe }}
+                            </a>
+                        </h2>
+                        <p>{{ data.description|safe }}</p>
+                        <h3>Proposals</h3>
+
+                        <input type="hidden" name="selected_risks" value="{{ risk_id }}">
+
+                        {% if data.proposals %}
+                            <div class="proposal-list">
+                                {% for proposal in data.proposals %}
+                                    <div class="proposal-item">
+                                        <input type="checkbox" id="proposal_{{ forloop.counter }}" name="selected_proposals" value="{{ proposal }}">
+                                        <label for="proposal_{{ forloop.counter }}">{{ proposal }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p>No proposals were generated for this risk.</p>
+                        {% endif %}
+                        <button type="submit" class="button">
+                            <i class="fas fa-exclamation-circle"></i> Create New Risks
+                        </button>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No proposals to display.</p>
+            {% endif %}
+            
+         
+        </form>
+
+        <!-- Form to Create Indicators -->
+        <form method="post" id="indicator-form" style="display:none;" action="{% url 'create_related_indicators_from_proposals' %}">
+            <h3>Create Indicators</h3>
+            {% csrf_token %}
+            {% if proposals_data %}
+                {% for risk_id, data in proposals_data.items %}
+                    <div class="risk-section">
+                        <button type="submit" class="button">
+                            <i class="fas fa-chart-line"></i> Create Indicators
+                        </button>
+                        <h2>
+                            <a href="{% url 'admin:orm_risk_change' risk_id %}" target="_blank" style="text-decoration: none; color: #007bff;">
+                                {{ data.title|safe }}
+                            </a>
+                        </h2>
+                        <p>{{ data.description|safe }}</p>
+                        <h3>Proposals</h3>
+
+                        <input type="hidden" name="selected_risks" value="{{ risk_id }}">
+
+                        {% if data.proposals %}
+                            <div class="proposal-list">
+                                {% for proposal in data.proposals %}
+                                    <div class="proposal-item">
+                                        <input type="checkbox" id="indicator_{{ forloop.counter }}" name="selected_proposals" value="{{ proposal }}">
+                                        <label for="indicator_{{ forloop.counter }}">{{ proposal }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p>No proposals were generated for this risk.</p>
+                        {% endif %}
+                        <button type="submit" class="button">
+                            <i class="fas fa-chart-line"></i> Create Indicators
+                        </button>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No proposals to display.</p>
+            {% endif %}
+            
+        
+        </form>
+
+
+<form method="post" id="action-form" style="display:none;" action="{% url 'create_actions_from_proposals' %}">
+    <h3>Create Actions</h3>
+    {% csrf_token %}
+    {% if proposals_data %}
+        {% for risk_id, data in proposals_data.items %}
+            <div class="risk-section">
+                <button type="submit" class="button">
+                    <i class="fas fa-tasks"></i> Create Actions
+                </button>
+                <h2>
+                    <a href="{% url 'admin:orm_risk_change' risk_id %}" target="_blank" style="text-decoration: none; color: #007bff;">
+                        {{ data.title|safe }}
+                    </a>
+                </h2>
+                <p>{{ data.description|safe }}</p>
+                <h3>Proposals</h3>
+
+                <input type="hidden" name="selected_risks" value="{{ risk_id }}">
+
+                {% if data.proposals %}
+                    <div class="proposal-list">
+                        {% for proposal in data.proposals %}
+                            <div class="proposal-item">
+                                <input type="checkbox" id="action_proposal_{{ forloop.counter }}" name="selected_proposals" value="{{ proposal }}">
+                                <label for="action_proposal_{{ forloop.counter }}">{{ proposal }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No proposals were generated for this risk.</p>
+                {% endif %}
+                <button type="submit" class="button">
+                    <i class="fas fa-tasks"></i> Create Actions
+                </button>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No proposals to display.</p>
+    {% endif %}
+</form>
+
+
+        <!-- Back to Risks Button -->
+        <a href="/risk-selection/" class="button">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+
+  
+
+        <div class="footer">
+            <p>Proposals generated using <a href="https://www.openai.com/" target="_blank">OpenAI's {{ selected_model }}</a> model.</p>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Approval Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #ececec;
+            font-weight: bold;
+        }
+        .approved { color: green; font-weight: bold; }
+        .pending { color: orange; font-weight: bold; }
+        .overdue { color: red; font-weight: bold; }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .risk-title-link {
+    display: inline-block;
+    padding: 6px 10px;
+    border: 2px solid #555;
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.risk-title-link:hover {
+    background-color: #555;
+    color: white;
+}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Risk Approval Status</h1>
+
+    {% if portfolio_risk_data %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Portfolio</th>
+                    <th>Risk Title</th>
+                    <th>Status</th>
+                    <th>Next Approval Due</th>
+                    <th>Owners</th>
+                    <th>Approved</th>
+                    <th>Pending</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for portfolio_name, risks in portfolio_risk_data.items %}
+                    {% for data in risks|dictsort:"risk.title" %}  <!-- Sorting Risks A-Z -->
+                    <tr>
+                        <td>{{ portfolio_name }}</td>
+                        <td>
+                            <a href="/risk/{{ data.risk.id }}/" target="_blank">
+                                {{ data.risk.title |safe }}
+                            </a>
+                        </td>
+                        <td class="{{ data.color }}">{{ data.status }}</td>
+                        <td>{{ data.next_approval_due|date:"Y-m-d" }}</td>
+                        <td>{{ data.total_owners }}</td>
+                        <td>{{ data.approved_owners|length }}</td>
+                        <td>
+                            {% if data.pending_owners %}
+                                {% for owner in data.pending_owners %}
+                                    ❌ {{ owner.user.username }}<br>
+                                {% endfor %}
+                            {% else %}
+                                ✅ All approved
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="/risk/{{ data.risk.id }}/" target="_blank">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="text-align:center; color:red;">⚠️ No risks available or assigned to portfolios.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

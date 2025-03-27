@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annex Report</title>
+    <style>
+        body { font-family: 'Calibri', sans-serif; line-height: 1.6; margin: 2rem; }
+        h1, h2 { color: #333; }
+        .logo { text-align: center; margin-bottom: 2rem; }
+        .logo img { max-width: 200px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="{{ logo_path }}" alt="Company Logo">
+    </div>
+    <h1>Annex: Risks by Portfolio</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Portfolio</th>
+                <th>Total Risks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for portfolio in portfolios %}
+            <tr>
+                <td>{{ portfolio.name }}</td>
+                <td>{{ portfolio.total_risks }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

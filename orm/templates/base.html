@@ -1,0 +1,32 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Η Εφαρμογή μου{% endblock %}</title>
+  <!-- Συνδέστε το CSS αρχείο σας αν υπάρχει -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <header>
+    <h1>Η Εφαρμογή μου</h1>
+    <nav>
+      <ul>
+        <li><a href="{% url 'assets_with_risks' %}">IT Assets και Κίνδυνοι</a></li>
+        <!-- Μπορείτε να προσθέσετε επιπλέον συνδέσμους εδώ -->
+      </ul>
+    </nav>
+  </header>
+  
+  <main>
+    {% block content %}
+    <!-- Το περιεχόμενο της σελίδας θα εμφανίζεται εδώ -->
+    {% endblock %}
+  </main>
+
+  <footer>
+    <p>&copy; {% now "Y" %} Η Εφαρμογή μου. All rights reserved.</p>
+  </footer>
+</body>
+</html>

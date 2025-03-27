@@ -1,0 +1,325 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPMN Diagram Modeler</title>
+    <!-- Include BPMN.js and related styles -->
+    <script src="https://unpkg.com/bpmn-js/dist/bpmn-modeler.development.js"></script>
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js/dist/assets/diagram-js.css">
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js/dist/assets/bpmn-font/css/bpmn.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        h2 {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+        }
+        #bpmn-container {
+            width: 100%;
+            height: 100vh;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+        .controls {
+            margin: 10px;
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        input, button, select {
+            padding: 5px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #download-btn {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <h2>Business Process Model and Notation (BPMN) Diagram Modeler</h1>
+    <div class="controls">
+        <button id="new-btn" onclick="newDiagram()">
+            <i class="fas fa-plus"></i> New
+        </button>
+        <input type="text" id="diagram-name" placeholder="Enter Diagram Name">
+        <button id="save-btn" onclick="saveDiagram()">
+            <i class="fas fa-save"></i> Save
+        </button>
+        <button id="load-btn" onclick="loadDiagram()">
+            <i class="fas fa-folder-open"></i> Open
+        </button>
+        <input type="color" id="color-picker" value="#FF0000" />
+<button id="apply-color-btn" onclick="applyColorToSelectedShape()">Apply Color</button>
+        <select id="diagram-list"></select>
+        <!-- <button id="delete-btn" onclick="deleteDiagram()">Delete</button> -->
+        <!-- <button id="download-btn" onclick="downloadDiagramAsImage()">Download PNG</button> -->
+        <!-- <button id="add-text-btn" onclick="addTextAnnotation()">Add Text</button> -->
+    </div>
+    <div id="bpmn-container"></div>
+
+    <script>
+        // Initialize BPMN.js Modeler with the container
+       
+       
+       // Apply color to the selected shape
+function applyColorToSelectedShape() {
+    const selectedColor = document.getElementById('color-picker').value;
+    const modeling = bpmnModeler.get('modeling');
+    const selection = bpmnModeler.get('selection');
+    const selectedElements = selection.get();
+
+    if (selectedElements.length === 0) {
+        alert('Please select a shape to change its color.');
+        return;
+    }
+
+    selectedElements.forEach((element) => {
+        modeling.setColor(element, {
+            fill: selectedColor,
+            stroke: '#000000' // Black border
+        });
+    });
+
+    alert('Color applied to selected shape.');
+}
+       
+       
+       
+        const bpmnModeler = new BpmnJS({
+            container: '#bpmn-container',
+            keyboard: { bindTo: window }
+        });
+
+        // Load an initial BPMN diagram with a Start Event
+        const initialDiagram = `<?xml version="1.0" encoding="UTF-8"?>
+        <bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                          xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                          xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                          xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                          xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                          id="Definitions_1"
+                          targetNamespace="http://bpmn.io/schema/bpmn">
+          <bpmn:process id="Process_1" isExecutable="false">
+            <bpmn:startEvent id="StartEvent_1"/>
+          </bpmn:process>
+          <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+            <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+              <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+                <dc:Bounds x="150" y="150" width="36" height="36"/>
+              </bpmndi:BPMNShape>
+            </bpmndi:BPMNPlane>
+          </bpmndi:BPMNDiagram>
+        </bpmn:definitions>`;
+
+        // Load the initial diagram or first available saved diagram
+        async function loadInitialDiagram() {
+            try {
+                const diagrams = await fetchDiagrams();
+                if (diagrams.length > 0) {
+                    loadDiagramByName(diagrams[0].name);
+                } else {
+                    await bpmnModeler.importXML(initialDiagram);
+                }
+            } catch (err) {
+                console.error('Error loading initial diagram:', err);
+            }
+        }
+
+        // Function to create a new diagram (clear the canvas)
+        function newDiagram() {
+            bpmnModeler.importXML(initialDiagram).then(() => {
+                document.getElementById('diagram-name').value = '';
+                alert('New diagram created.');
+            }).catch(err => {
+                console.error('Error creating new diagram:', err);
+            });
+        }
+
+        // Fetch and display available diagrams
+        async function fetchDiagrams() {
+            try {
+                const response = await fetch('/list-diagrams/');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch diagrams');
+                }
+                const diagrams = await response.json();
+                const diagramList = document.getElementById('diagram-list');
+                diagramList.innerHTML = ''; 
+                diagrams.forEach(diagram => {
+                    const option = document.createElement('option');
+                    option.value = diagram.name;
+                    option.textContent = `${diagram.name} (Last updated: ${new Date(diagram.updated_at).toLocaleString()})`;
+                    diagramList.appendChild(option);
+                });
+                return diagrams;
+            } catch (err) {
+                console.error('Error fetching diagrams:', err);
+                return [];
+            }
+        }
+
+        // Save the diagram
+        async function saveDiagram() {
+            const name = document.getElementById('diagram-name').value;
+            if (!name) {
+                alert('Please enter a diagram name.');
+                return;
+            }
+            try {
+                const { xml } = await bpmnModeler.saveXML({ format: true });
+                const response = await fetch('/save-diagram/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: name, xml: xml })
+                });
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to save diagram: ${response.status} - ${errorText}`);
+                }
+                const result = await response.json();
+                alert(result.message || 'Diagram saved successfully!');
+                fetchDiagrams(); 
+            } catch (err) {
+                console.error('Error saving diagram:', err);
+                alert('Error saving diagram: ' + err.message);
+            }
+        }
+
+        // Load the selected diagram
+        async function loadDiagram() {
+            const diagramList = document.getElementById('diagram-list');
+            const selectedName = diagramList.value;
+            if (!selectedName) {
+                alert('Please select a diagram to load.');
+                return;
+            }
+            loadDiagramByName(selectedName);
+        }
+
+        // Load a diagram by name
+        async function loadDiagramByName(name) {
+            try {
+                const response = await fetch(`/get-diagram/${name}/`);
+                if (!response.ok) {
+                    throw new Error('Diagram not found');
+                }
+                const data = await response.json();
+                await bpmnModeler.importXML(data.xml_content);
+                document.getElementById('diagram-name').value = name; 
+                alert('Diagram loaded successfully!');
+            } catch (err) {
+                console.error('Error loading diagram:', err);
+            }
+        }
+
+        // Delete the selected diagram
+        async function deleteDiagram() {
+            const diagramList = document.getElementById('diagram-list');
+            const selectedOption = diagramList.options[diagramList.selectedIndex];
+            if (!selectedOption) {
+                alert('Please select a diagram to delete.');
+                return;
+            }
+            const selectedName = selectedOption.value;
+            try {
+                const response = await fetch(`/delete-diagram/${selectedName}/`, {
+                    method: 'DELETE'
+                });
+                if (!response.ok) {
+                    throw new Error('Error deleting diagram');
+                }
+                alert('Diagram deleted successfully!');
+                fetchDiagrams(); 
+            } catch (err) {
+                console.error('Error deleting diagram:', err);
+            }
+        }
+
+        // Download the current diagram as a PNG image
+        async function downloadDiagramAsImage() {
+            try {
+                const canvas = bpmnModeler.get('canvas');
+                const svgContent = canvas._svg.outerHTML;
+
+                // Create an SVG image element to convert to PNG
+                const img = new Image();
+                const svgBlob = new Blob([svgContent], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function() {
+                    // Create a canvas to draw the image
+                    const canvasEl = document.createElement('canvas');
+                    const context = canvasEl.getContext('2d');
+                    canvasEl.width = img.width;
+                    canvasEl.height = img.height;
+
+                    // Draw the image onto the canvas
+                    context.drawImage(img, 0, 0);
+
+                    // Trigger the download
+                    const link = document.createElement('a');
+                    link.download = (document.getElementById('diagram-name').value || 'diagram') + '.png';
+                    link.href = canvasEl.toDataURL('image/png');
+                    link.click();
+
+                    // Clean up the object URL
+                    URL.revokeObjectURL(url);
+                };
+
+                // Error handling for loading the image
+                img.onerror = function() {
+                    console.error('Failed to load SVG for PNG conversion.');
+                    alert('Error generating image for download.');
+                };
+
+                // Set the source to the created URL for the SVG blob
+                img.src = url;
+            } catch (err) {
+                console.error('Error downloading diagram as PNG:', err);
+                alert('Failed to download diagram as PNG.');
+            }
+        }
+
+        // Add a text annotation to the diagram
+        function addTextAnnotation() {
+            const elementFactory = bpmnModeler.get('elementFactory');
+            const modeling = bpmnModeler.get('modeling');
+            const canvas = bpmnModeler.get('canvas');
+            const textAnnotation = elementFactory.createShape({
+                type: 'bpmn:TextAnnotation',
+                businessObject: bpmnModeler.get('moddle').create('bpmn:TextAnnotation', { text: 'New Annotation' })
+            });
+            const rootElement = canvas.getRootElement();
+            modeling.createShape(textAnnotation, { x: 300, y: 200 }, rootElement);
+        }
+
+        window.onload = loadInitialDiagram;
+    </script>
+</body>
+</html>

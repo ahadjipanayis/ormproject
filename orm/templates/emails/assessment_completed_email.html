@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Risk Assessment Completion / Ολοκλήρωση Αξιολόγησης Κινδύνου</title>
+</head>
+<body>
+    <!-- English Version -->
+    <h2>Risk Assessment Completion</h2>
+    <p>Dear {{ user.get_full_name }},</p>
+
+    <p>The risk assessment for <strong>{{ risk.title }}</strong> has been completed.</p>
+
+    <p>You can review the assessment in the system.</p>
+
+    <p>Thank you,<br>ermapp.avax.gr Admin</p>
+
+
+    <hr> <!-- Separator between English and Greek versions -->
+
+    <!-- Greek Version -->
+    <h2>Ολοκλήρωση Αξιολόγησης Κινδύνου</h2>
+    <p>Αγαπητέ/ή {{ user.get_full_name }},</p>
+
+    <p>Η αξιολόγηση του κινδύνου για <strong>{{ risk.title }}</strong> έχει ολοκληρωθεί.</p>
+
+    <p>Μπορείτε να ελέγξετε την αξιολόγηση στο σύστημα.</p>
+
+    <p>Σας ευχαριστούμε,<br>ermapp.avax.gr Admin</p>
+
+</body>
+</html>

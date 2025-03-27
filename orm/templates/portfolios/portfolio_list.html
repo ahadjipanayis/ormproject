@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 0; /* Remove padding to use full screen */
+            margin: 0; /* Ensure no default margins */
+        }
+        .container {
+            width: 100%; /* Full width */
+            background-color: #fff;
+            padding: 30px; /* Increased padding for comfort */
+            border-radius: 0; /* Remove rounded corners for full-width look */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px; /* More spacing */
+            font-size: 2.5rem; /* Larger font size */
+            color: #333; /* Slightly darker for contrast */
+        }
+        .add-button {
+            display: inline-block;
+            padding: 12px 20px; /* Larger button */
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 1.25rem; /* Larger font size */
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px; /* Added spacing below button */
+        }
+        .add-button:hover {
+            background-color: #218838;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        table {
+            width: 100%; /* Ensure table spans full width */
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px; /* Increased padding for larger cells */
+            text-align: left;
+            font-size: 1.25rem; /* Larger font size for table content */
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer; /* Indicate clickable headers */
+        }
+        th:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 1.25rem; /* Match table font size */
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Portfolio List</h1>
+        <a href="{% url 'portfolio_add' %}" class="add-button">Add New Portfolio</a>
+        <table id="portfolioTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Name</th>
+                    <th onclick="sortTable(1)">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for portfolio in portfolios %}
+                <tr>
+                    <td><a href="{% url 'portfolio_detail' portfolio.pk %}">{{ portfolio.name }}</a></td>
+                    <td>{{ portfolio.description|safe }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center">No portfolios found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function sortTable(n) {
+            let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("portfolioTable");
+            switching = true;
+            dir = "asc"; // Set the sorting direction to ascending initially
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                    // Get text content, accounting for links in the "Name" column
+                    let xContent = n === 0 ? x.getElementsByTagName("a")[0].innerHTML : x.innerHTML;
+                    let yContent = n === 0 ? y.getElementsByTagName("a")[0].innerHTML : y.innerHTML;
+
+                    if (dir === "asc") {
+                        if (xContent.toLowerCase() > yContent.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir === "desc") {
+                        if (xContent.toLowerCase() < yContent.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount === 0 && dir === "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

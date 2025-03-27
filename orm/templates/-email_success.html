@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Επιτυχία Αποστολής Email</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-success">✅ Τα Emails στάλθηκαν επιτυχώς!</h1>
+        <p>Τα ακόλουθα emails έχουν αποσταλεί στους χρήστες:</p>
+        <ul class="list-group">
+            {% for user_email, email_body in emails %}
+                <li class="list-group-item">
+                    <strong>{{ user_email }}</strong> – <a href="javascript:void(0);" onclick="toggleEmail('{{ forloop.counter }}')">Προβολή</a>
+                    <div id="email-body-{{ forloop.counter }}" style="display: none; border: 1px solid #ccc; padding: 10px; margin-top: 10px;">
+                        {{ email_body|safe }}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        function toggleEmail(id) {
+            var emailBody = document.getElementById("email-body-" + id);
+            emailBody.style.display = emailBody.style.display === "none" ? "block" : "none";
+        }
+    </script>
+</body>
+</html>

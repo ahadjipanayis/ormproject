@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Risk Assessment Assigned / Ανάθεση Αξιολόγησης Κινδύνου</title>
+</head>
+<body>
+    <!-- English Version -->
+    <h2>Risk Assessment Assigned</h2>
+    <p>Dear {{ assessor.get_full_name }},</p>
+
+    <p>A new risk assessment has been assigned to you for the risk: <strong>{{ risk.title }}</strong>.</p>
+
+    <p>Please <a href="{{ link }}">click here</a> to complete the assessment.</p>
+
+    <p>Thank you,<br>ermapp.avax.gr Admin</p>
+
+    <hr> <!-- Separator between English and Greek versions -->
+
+    <!-- Greek Version -->
+    <h2>Ανάθεση Αξιολόγησης Κινδύνου</h2>
+    <p>Αγαπητέ/ή {{ assessor.get_full_name }},</p>
+
+    <p>Σας έχει ανατεθεί μια νέα αξιολόγηση για τον κίνδυνο: <strong>{{ risk.title }}</strong>.</p>
+
+    <p>Παρακαλώ <a href="{{ link }}">πατήστε εδώ</a> για να ολοκληρώσετε την αξιολόγηση.</p>
+
+    <p>Σας ευχαριστούμε,<br>ermapp.avax.gr Admin</p>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update IT Asset</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+
+</head>
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .container {
+            width: 100%;       /* Full width of the window */
+            height: 100%;      /* Full height of the window */
+            margin: 0pt;         /* Remove default margins */
+            padding: 5pt;        /* Remove padding */
+            max-width: none;   /* Remove any inherited width constraints */
+            box-sizing: border-box; /* Include padding in width calculations */
+        }
+    .card {
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    .card-header {
+        font-weight: bold;
+    }
+    .form-control, .btn {
+        border-radius: 5px;
+    }
+    .add-btn {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+</style>
+   
+
+
+
+
+
+<body>
+    <div class="container mt-4">
+        <!-- <h1>Update IT Asset: {{ it_asset.name }}</h1> -->
+
+        {% if messages %}
+            <div class="alert alert-info">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        
+
+        <div class="d-flex justify-content-start align-items-center gap-2 mt-4">
+    
+            <a href="{% url 'itasset_list' %}" class="btn btn-secondary">
+                <i class="fas fa-desktop"></i> Back to IT Asset List
+            </a>
+
+            <br>
+        
+            <a href="{% url 'itasset_add' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add New IT Asset
+            </a>
+        
+        </div>
+        
+        <br>
+        
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Update IT Asset</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+
+
+                    
+                    {% csrf_token %}
+
+                
+                        <button type="submit" name="save_asset" class="btn btn-primary">Save IT Asset</button>
+                    </div>
+
+
+                    <!-- Asset Details -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-info text-white">Asset Details</div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Asset Name</label>
+                                <input type="text" id="name" name="name" class="form-control" value="{{ form.instance.name }}" required>
+                            </div>
+        
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea id="description" name="description" class="form-control" rows="3">{{ form.instance.description }}</textarea>
+                            </div>
+        
+                            <div class="mb-3">
+                                <label for="asset_type" class="form-label">Asset Type</label>
+                                <select name="asset_type" id="asset_type" class="form-select">
+                                    {% for key, value in form.fields.asset_type.choices %}
+                                        <option value="{{ key }}" {% if form.instance.asset_type == key %}selected{% endif %}>{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+        
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location</label>
+                                <input type="text" id="location" name="location" class="form-control" value="{{ form.instance.location }}">
+                            </div>
+        
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select name="status" id="status" class="form-select">
+                                    {% for key, value in form.fields.status.choices %}
+                                        <option value="{{ key }}" {% if form.instance.status == key %}selected{% endif %}>{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- CIA Ratings -->
+                    <div class="card mb-3">
+                        <div class="card-header bg-dark text-white">CIA Ratings</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="confidentiality" class="form-label">Confidentiality</label>
+                                    <select name="confidentiality" id="confidentiality" class="form-select">
+                                        <option value="1" {% if form.instance.confidentiality == 1 %}selected{% endif %}>Low</option>
+                                        <option value="2" {% if form.instance.confidentiality == 2 %}selected{% endif %}>Medium</option>
+                                        <option value="3" {% if form.instance.confidentiality == 3 %}selected{% endif %}>High</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="integrity" class="form-label">Integrity</label>
+                                    <select name="integrity" id="integrity" class="form-select">
+                                        <option value="1" {% if form.instance.integrity == 1 %}selected{% endif %}>Low</option>
+                                        <option value="2" {% if form.instance.integrity == 2 %}selected{% endif %}>Medium</option>
+                                        <option value="3" {% if form.instance.integrity == 3 %}selected{% endif %}>High</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="availability" class="form-label">Availability</label>
+                                    <select name="availability" id="availability" class="form-select">
+                                        <option value="1" {% if form.instance.availability == 1 %}selected{% endif %}>Low</option>
+                                        <option value="2" {% if form.instance.availability == 2 %}selected{% endif %}>Medium</option>
+                                        <option value="3" {% if form.instance.availability == 3 %}selected{% endif %}>High</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="criticality" class="form-label">Criticality</label>
+                                    <select name="criticality" id="criticality" class="form-select">
+                                        <option value="1" {% if form.instance.criticality == 1 %}selected{% endif %}>Low</option>
+                                        <option value="2" {% if form.instance.criticality == 2 %}selected{% endif %}>Medium</option>
+                                        <option value="3" {% if form.instance.criticality == 3 %}selected{% endif %}>High</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Portfolio Selection -->
+                    <div class="mb-3">
+                        <label for="portfolio" class="form-label">Portfolio</label>
+                        <select name="portfolio" id="portfolio" class="form-select">
+                            {% for portfolio in all_portfolios %}
+                                <option value="{{ portfolio.id }}" {% if form.instance.portfolio_id == portfolio.id %}selected{% endif %}>{{ portfolio.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+        
+                    <!-- Buttons -->
+               
+                </form>
+            </div>
+        </div>
+        
+        
+        <br>
+
+
+          <!-- Linked Owners -->
+          <div class="card mt-3">
+            <div class="card-header bg-success text-white">Linked Owners</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for owner in linked_owners %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            {{ owner.user.username }}
+                            <form method="POST">
+                                {% csrf_token %}
+                                <button type="submit" name="unlink_owner" value="{{ owner.id }}" class="btn btn-danger btn-sm">Unlink</button>
+                            </form>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No owners linked.</li>
+                    {% endfor %}
+                </ul>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success mt-2">Link Owner</button>
+
+                    <select name="link_owner" class="form-control mt-2">
+                        {% for owner in all_owners %}
+                            <option value="{{ owner.id }}">{{ owner.user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <br>
+
+
+
+<br>
+
+    
+        <!-- Linked Vulnerabilities -->
+        <div class="card mt-3">
+            <div class="card-header bg-warning text-white">Linked Vulnerabilities</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for vulnerability in linked_vulnerabilities %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            {{ vulnerability.code }} - {{ vulnerability.description }}
+                            <form method="POST">
+                                {% csrf_token %}
+                                <button type="submit" name="unlink_vulnerability" value="{{ vulnerability.id }}" class="btn btn-danger btn-sm">Unlink</button>
+                            </form>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No vulnerabilities linked.</li>
+                    {% endfor %}
+                </ul>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success mt-2">Link Vulnerability</button>
+
+                    <select name="link_vulnerability" class="form-control mt-2">
+                        {% for vulnerability in all_vulnerabilities %}
+                            <option value="{{ vulnerability.id }}">{{ vulnerability.code }} - {{ vulnerability.description }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <br>
+
+      
+
+   
+
+    <!-- Linked IT Threats -->
+    <div class="card">
+        <div class="card-header bg-info text-white">Linked IT Threats</div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for threat in linked_threats %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        {{ threat.code }} - {{ threat.description }}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <button type="submit" name="unlink_threat" value="{{ threat.id }}" class="btn btn-danger btn-sm">Unlink</button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No IT threats linked.</li>
+                {% endfor %}
+            </ul>
+
+            <form method="POST">
+
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success mt-2">Link IT Threat</button>
+
+                <select name="link_threat" class="form-control mt-2">
+                    {% for threat in all_threats %}
+                        <option value="{{ threat.id }}">{{ threat.code }} - {{ threat.description }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="card mt-3">
+        <div class="card-header bg-danger text-white">Linked Risks</div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for risk in linked_risks %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        {{ risk.title |safe }}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <button type="submit" name="unlink_risk" value="{{ risk.id }}" class="btn btn-danger btn-sm">Unlink</button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No risks linked.</li>
+                {% endfor %}
+            </ul>
+
+            <form method="POST">
+
+                <button type="submit" class="btn btn-success mt-2">Link Risk</button>
+
+                {% csrf_token %}
+                <select name="link_risk" class="form-control mt-2">
+                    {% for risk in all_risks %}
+                        <option value="{{ risk.id }}">{{ risk.title |safe }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <br>
+
+
+
+
+    </div>
+</body>
+</html>

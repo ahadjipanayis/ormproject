@@ -1,0 +1,197 @@
+{% load static i18n %}
+{% if user.is_authenticated %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let username = "{{ user.first_name|default:user.username }}";
+            let welcomeMessage = `🚀 Hi ${username}, explore the power of AI agents with Web & File Search!`;
+            document.getElementById("welcome-message").innerText = welcomeMessage;
+        });
+    </script>
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Explorer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+
+    <style>
+        body {
+            font-family: 'Calibri', sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: #0a58ca;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            padding: 15px;
+            font-size: 22px;
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            border-bottom: 1px solid #d1d3d4;
+        }
+
+        .welcome-message {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #0a58ca;
+            margin-bottom: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .user-message {
+            margin-left: auto;
+            max-width: 50%;
+            background-color: #0a58ca;
+            color: white;
+            text-align: right;
+        }
+
+        .bot-message {
+            width: 100%;
+            background-color: #d1d3d4;
+            color: black;
+        }
+
+        .chat-footer {
+            display: flex;
+            padding: 15px;
+            background: #fff;
+            border-top: 1px solid #d1d3d4;
+        }
+
+        .chat-footer input {
+            flex-grow: 1;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #d1d3d4;
+            border-radius: 4px;
+        }
+
+        .chat-footer button {
+            background: #0a58ca;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .chat-footer button:hover {
+            background: #084298;
+        }
+
+        .disclaimer {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        .disclaimer strong {
+            font-size: 16px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        🤖 AI Agent Explorer - Web & File Search
+    </div>
+
+    <p id="welcome-message" class="welcome-message">🚀 Hi, explore AI-powered insights...</p>
+
+    <div id="chat-box" class="chat-box">
+        <!-- Messages appear here -->
+    </div>
+
+    <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Ask me anything...">
+        <button id="send-btn">Send</button>
+    </div>
+
+    <div class="disclaimer">
+        <strong>Disclaimer:</strong> AI-generated responses are for informational purposes.  
+        <br>
+        Powered by <a href="https://openai.com" target="_blank">OpenAI</a> - Enhancing AI-driven exploration.
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        function appendMessage(text, sender) {
+            let messageClass = sender === "user" ? "user-message" : "bot-message";
+            let messageHTML = `<div class="message ${messageClass}">${text}</div>`;
+            $("#chat-box").append(messageHTML);
+            $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+        }
+
+        function sendMessage() {
+            let userMessage = $("#chat-input").val().trim();
+            if (!userMessage) return;
+
+            appendMessage(userMessage, "user");
+            $("#chat-input").val("");
+
+            $.ajax({
+                url: "/agent-explorer/api/",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ message: userMessage }),
+                success: function(response) {
+                    appendMessage(response.response, "bot");
+                },
+                error: function() {
+                    appendMessage("⚠️ Error fetching response. Try again.", "bot");
+                }
+            });
+        }
+
+        $("#send-btn").click(sendMessage);
+        $("#chat-input").keypress(function(event) {
+            if (event.which === 13) { event.preventDefault(); sendMessage(); }
+        });
+    });
+</script>
+
+</body>
+</html>

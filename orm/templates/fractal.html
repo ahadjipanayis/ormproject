@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        canvas {
+            border: 2px solid #333;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ title }}</h1>
+        <p>{{ description }}</p>
+        <canvas id="fractalCanvas" width="800" height="600"></canvas>
+        <p>Use mouse wheel to zoom, click and drag to pan!</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('fractalCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        const maxIter = 100;
+
+        // Julia Set parameter (c = -0.4 + 0.6i gives a nice dendritic pattern)
+        const cReal = -0.4;
+        const cImag = 0.6;
+
+        let centerX = 0;
+        let centerY = 0;
+        let scale = 4.0; // Initial scale (spans ~4 units)
+
+        function juliaSet(real, imag) {
+            let zReal = real;
+            let zImag = imag;
+            for (let i = 0; i < maxIter; i++) {
+                let zr2 = zReal * zReal;
+                let zi2 = zImag * zImag;
+                if (zr2 + zi2 > 4) {
+                    let color = Math.floor(255 * (i / maxIter));
+                    return [0, color, color / 2]; // Cyan-ish gradient
+                }
+                zImag = 2 * zReal * zImag + cImag;
+                zReal = zr2 - zi2 + cReal;
+            }
+            return [0, 0, 0]; // Black for inside the set
+        }
+
+        function drawFractal() {
+            const imgData = ctx.createImageData(width, height);
+            const data = imgData.data;
+
+            for (let px = 0; px < width; px++) {
+                for (let py = 0; py < height; py++) {
+                    let x = centerX - scale / 2 + (px / width) * scale;
+                    let y = centerY - (scale * height / width) / 2 + (py / height) * (scale * height / width);
+                    let color = juliaSet(x, y);
+                    let i = (py * width + px) * 4;
+                    data[i] = color[0];     // R
+                    data[i + 1] = color[1]; // G
+                    data[i + 2] = color[2]; // B
+                    data[i + 3] = 255;      // A
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        // Initial draw
+        drawFractal();
+
+        // Zoom with mouse wheel
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomFactor = e.deltaY > 0 ? 1.2 : 0.8;
+            const mouseX = e.offsetX;
+            const mouseY = e.offsetY;
+
+            const oldScale = scale;
+            scale *= zoomFactor;
+
+            const realX = centerX - oldScale / 2 + (mouseX / width) * oldScale;
+            const realY = centerY - (oldScale * height / width) / 2 + (mouseY / height) * (oldScale * height / width);
+
+            centerX = realX - (mouseX / width - 0.5) * scale;
+            centerY = realY - (mouseY / height - 0.5) * (scale * height / width);
+
+            drawFractal();
+        });
+
+        // Pan with click and drag
+        let dragging = false;
+        let lastX, lastY;
+
+        canvas.addEventListener('mousedown', (e) => {
+            dragging = true;
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (dragging) {
+                const dx = e.offsetX - lastX;
+                const dy = e.offsetY - lastY;
+                centerX -= dx * scale / width;
+                centerY -= dy * (scale * height / width) / height;
+                lastX = e.offsetX;
+                lastY = e.offsetY;
+                drawFractal();
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => dragging = false);
+        canvas.addEventListener('mouseleave', () => dragging = false);
+    </script>
+</body>
+</html>

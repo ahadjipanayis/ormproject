@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Risk Tables - Simple View</title>
+
+    <!-- jqGrid CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.5/css/ui.jqgrid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.5/js/jquery.jqgrid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <style>
+        body {
+            font-family: Calibri, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .ui-jqgrid .ui-jqgrid-btable td {
+            font-size: 16px;
+        }
+        .ui-jqgrid .ui-jqgrid-htable th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        .risk-count {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            color: #007bff;
+            display: flex;
+            justify-content: space-between;
+        }
+        .toggle-button {
+            cursor: pointer;
+            font-size: 14px;
+            color: #007bff;
+            text-decoration: underline;
+        }
+        .due-in { background-color: #90EE90; }
+        .passed-by { background-color: #FF6F6F; }
+        a {
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: none;
+        }
+        .resizable-table {
+            position: relative;
+            padding-bottom: 5px;
+        }
+        .resizable-table .ui-resizable-handle {
+            background: #007bff;
+            bottom: 0;
+            height: 5px;
+            cursor: s-resize;
+        }
+    </style>
+</head>
+<body>
+    <!-- Approval Requests Table -->
+    <div class="risk-count">
+        <span>Total Approval Requests: <span id="total-requests"></span></span>
+        <span class="toggle-button" onclick="toggleTable('grid-container-approval')">Collapse/Expand</span>
+    </div>
+    <div id="grid-container-approval" class="resizable-table">
+        <table id="approval-requests-grid"></table>
+    </div>
+
+    <!-- Actions by Performer Table -->
+    <div class="risk-count">
+        <span>Total Actions: <span id="total-actions"></span></span>
+        <span class="toggle-button" onclick="toggleTable('grid-container-actions')">Collapse/Expand</span>
+    </div>
+    <div id="grid-container-actions" class="resizable-table">
+        <table id="actions-performer-grid"></table>
+    </div>
+
+    <!-- Risks Without Owners Table -->
+    <div class="risk-count">
+        <span>Total Risks Without Owners: <span id="total-no-owner-risks"></span></span>
+        <span class="toggle-button" onclick="toggleTable('grid-container-no-owner')">Collapse/Expand</span>
+    </div>
+    <div id="grid-container-no-owner" class="resizable-table">
+        <table id="no-owner-risks-grid"></table>
+    </div>
+
+    <!-- Fourth Table: Risks by Owner, Portfolio with Grouping -->
+    <div class="risk-count">
+        <span>Total Risks by Owner: <span id="total-owner-risks"></span></span>
+        <span class="toggle-button" onclick="toggleTable('grid-container-owner')">Collapse/Expand</span>
+    </div>
+    <div id="grid-container-owner" class="resizable-table">
+        <table id="owner-risks-grid"></table>
+    </div>
+
+    <script>
+        function countdownFormatter(cellvalue) {
+            if (cellvalue === '') return '';
+            const styleClass = cellvalue > 0 ? 'due-in' : 'passed-by';
+            const label = cellvalue > 0 ? `Due In: ${cellvalue} days` : `Passed By: ${Math.abs(cellvalue)} days`;
+            return `<div class="${styleClass}">${label}</div>`;
+        }
+
+        function colorScoreFormatter(cellvalue) {
+    let color;
+    if (cellvalue >= 15 && cellvalue <= 25) color = '#FF6F6F'; // Red
+    else if (cellvalue >= 8 && cellvalue <= 12) color = '#FFD700'; // orange
+    else if (cellvalue >= 1 && cellvalue <= 6) color = '#90EE90'; // Green
+    else color = '#FFFFFF'; // Default White for out-of-range
+
+    return `<div style="background-color:${color}; padding: 5px;">${cellvalue}</div>`;
+}
+function expandAllGroups(gridId) {
+    $(`#${gridId}`).jqGrid('groupingToggle', false); // Expand all
+}
+
+function collapseAllGroups(gridId) {
+    $(`#${gridId}`).jqGrid('groupingToggle', true); // Collapse all
+}
+
+        function loadTableData(type, gridId, colModel, totalCountId) {
+            $.ajax({
+                url: "{% url 'admin_pivots' %}",
+                data: { type: type },
+                dataType: "json",
+                success: function(data) {
+                    const rows = data.rows.map(row => row);
+                    document.getElementById(totalCountId).textContent = rows.length;
+
+                    $("#" + gridId).jqGrid({
+                        data: rows,
+                        datatype: "local",
+                        colModel: colModel,
+                        viewrecords: true,
+                        width: '100%',
+                        autowidth: true,
+                        height: 300,
+                        scroll: 1,
+                        grouping: gridId === 'owner-risks-grid',
+                        groupingView: {
+                            groupField: ['owner', 'portfolio'],
+                            groupColumnShow: [true, true],
+                            groupText: [
+                                'Owner: <b>{0}</b> - <b>{1} items</b>', // Show total for the "owner" group
+                                'Portfolio: <b>{0}</b> - <b>{1} items</b>' // Show total for the "portfolio" group
+                            ],
+                            groupCollapse: true, // Groups will be collapsed initially
+                            groupDataSorted: true,
+                            groupOrder: ['asc', 'asc'],
+                            groupSummary: [true, true] // Enable group summaries if needed
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error loading data for grid:", gridId, error);
+                }
+            });
+        }
+
+        // Toggle function for collapsing/expanding tables
+        function toggleTable(containerId) {
+            const container = document.getElementById(containerId);
+            if (container.style.display === "none") {
+                container.style.display = "block";
+            } else {
+                container.style.display = "none";
+            }
+        }
+
+        $(function () {
+            // Make each table resizable
+            $(".resizable-table").resizable({
+                handles: 's',
+                minHeight: 150,
+                resize: function(event, ui) {
+                    const grid = $(this).find(".ui-jqgrid-btable");
+                    grid.jqGrid("setGridHeight", ui.size.height - 30);
+                }
+            });
+
+            // Approval Requests Grid
+            loadTableData(
+                'approval',
+                'approval-requests-grid',
+                [
+                    { label: 'Countdown', name: 'countdown', width: 150, formatter: countdownFormatter, sorttype: 'int' },
+                    { label: 'Due Date', name: 'due_date', width: 120, sorttype: 'date' },
+                    { label: 'Risk Title', name: 'risk_title', width: 300, formatter: "html" },
+                    { label: 'User', name: 'user', width: 150 }
+                ],
+                'total-requests'
+            );
+
+            // Actions by Performer Grid
+            loadTableData(
+                'actions',
+                'actions-performer-grid',
+                [
+                    { label: 'Countdown', name: 'countdown', width: 150, formatter: countdownFormatter, sorttype: 'int' },
+                    { label: 'Deadline', name: 'deadline', width: 120, sorttype: 'date' },
+                    { label: 'Title', name: 'title', width: 300, formatter: "html" },
+                    { label: 'Performer', name: 'performer', width: 150 }
+                ],
+                'total-actions'
+            );
+
+            // Risks Without Owners Grid
+            loadTableData(
+                'no_owner_risks',
+                'no-owner-risks-grid',
+                [
+                    { label: 'Risk Title', name: 'risk_title', width: 300, formatter: "html" }
+                ],
+                'total-no-owner-risks'
+            );
+
+            // Fourth Table: Risks by Owner, Portfolio with Grouping
+            $(function () {
+    // Ensure jqGrid loads properly and DOM is ready
+    loadTableData(
+        'owner_portfolio_category_risk',
+        'owner-risks-grid',
+        [
+            { label: 'Owner', name: 'owner', width: 150 },
+            { label: 'Portfolio', name: 'portfolio', width: 150 },
+            { label: 'Risk Title', name: 'risk_title', width: 300, formatter: "html" },
+            { label: 'Inherent Score', name: 'inherent_score', width: 120, align: 'center', formatter: colorScoreFormatter },
+            { label: 'Residual Score', name: 'residual_score', width: 120, align: 'center', formatter: colorScoreFormatter },
+            { label: 'Targeted Score', name: 'targeted_score', width: 120, align: 'center', formatter: colorScoreFormatter }
+        ],
+        'total-owner-risks'
+    );
+
+    // Add click events for Expand All and Collapse All
+    $('#expand-all').on('click', function () {
+        $('#owner-risks-grid').jqGrid('groupingToggle', null); // Expand all groups
+    });
+
+    $('#collapse-all').on('click', function () {
+        $('#owner-risks-grid').jqGrid('groupingToggle', null); // Collapse all groups
+    });
+});
+        });
+    </script>
+</body>
+</html>

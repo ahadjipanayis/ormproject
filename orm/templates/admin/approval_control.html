@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approval Control Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .filter-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        select {
+            padding: 5px;
+            font-size: 16px;
+        }
+        .collapsible {
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 18px;
+            background-color: #ddd;
+            font-weight: bold;
+        }
+        .collapsible:hover {
+            background-color: #ccc;
+        }
+        .content {
+            display: none;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        .status {
+            font-weight: bold;
+            padding: 5px;
+        }
+        .status.approved { color: green; }
+        .status.rejected { color: red; }
+        .status.pending { color: orange; }
+        ul {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Approval Control Panel</h1>
+
+<div class="filter-container">
+    <label for="statusFilter">Filter by Status:</label>
+    <select id="statusFilter">
+        <option value="">All</option>
+        <option value="approved">Approved</option>
+        <option value="pending">Pending</option>
+        <option value="rejected">Rejected</option>
+    </select>
+</div>
+
+{% for user, portfolios in user_portfolio_status.items %}
+    <button class="collapsible user-section">👤 {{ user }}</button>
+    <div class="content">
+        {% for portfolio, statuses in portfolios.items %}
+            <button class="collapsible portfolio-section">📂 {{ portfolio }}</button>
+            <div class="content">
+                {% for status, requests in statuses.items %}
+                    <button class="collapsible status-section status {{ status }}" data-status="{{ status }}">📌 {{ status|title }}</button>
+                    <div class="content">
+                        <ul>
+                            {% for approval in requests %}
+                                <li>
+                                    {{ approval.risk.title|safe }} - {{ approval.due_date }}
+                                    <a href="/risk/{{ approval.risk.id }}/" target="_blank">Edit</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let collapsibles = document.querySelectorAll(".collapsible");
+        let filterSelect = document.getElementById("statusFilter");
+
+        collapsibles.forEach(button => {
+            button.addEventListener("click", function () {
+                this.classList.toggle("active");
+                let content = this.nextElementSibling;
+                content.style.display = (content.style.display === "block") ? "none" : "block";
+            });
+        });
+
+        // Filter logic
+        filterSelect.addEventListener("change", function () {
+            let selectedStatus = this.value;
+            let allSections = document.querySelectorAll(".content");
+            let allCollapsibles = document.querySelectorAll(".collapsible");
+
+            // Collapse all sections first
+            allSections.forEach(section => section.style.display = "none");
+            allCollapsibles.forEach(btn => btn.classList.remove("active"));
+
+            if (selectedStatus) {
+                // Expand only sections that contain the selected status
+                let statusButtons = document.querySelectorAll(`.status-section[data-status="${selectedStatus}"]`);
+                
+                statusButtons.forEach(button => {
+                    button.classList.add("active");
+                    let statusContent = button.nextElementSibling;
+                    statusContent.style.display = "block";
+
+                    // Expand parent portfolio section
+                    let portfolioContent = button.closest(".content").previousElementSibling;
+                    if (portfolioContent && portfolioContent.classList.contains("collapsible")) {
+                        portfolioContent.classList.add("active");
+                        portfolioContent.nextElementSibling.style.display = "block";
+                    }
+
+                    // Expand parent user section
+                    let userContent = button.closest(".content").parentElement.previousElementSibling;
+                    if (userContent && userContent.classList.contains("collapsible")) {
+                        userContent.classList.add("active");
+                        userContent.nextElementSibling.style.display = "block";
+                    }
+                });
+            } else {
+                // Show all sections if "All" is selected
+                allSections.forEach(section => section.style.display = "block");
+                allCollapsibles.forEach(btn => btn.classList.add("active"));
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

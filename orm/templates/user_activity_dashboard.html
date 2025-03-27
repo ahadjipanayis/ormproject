@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Timeline Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .date-group {
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .date-header {
+            padding: 15px;
+            background: #2c3e50;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .date-header:hover {
+            background: #34495e;
+        }
+        .date-activities {
+            display: none;
+            padding: 15px;
+        }
+        .table {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        .table th {
+            background: #34495e;
+            color: white;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .status-success { background: #28a745; }
+        .status-warning { background: #fd7e14; }
+        .status-error { background: #dc3545; }
+        .search-bar {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Activity Timeline Dashboard <small class="text-muted">({{ total_activities }} activities)</small></h1>
+            <div>
+                <button id="refreshBtn" class="btn btn-primary me-2" onclick="location.reload();"><i class="fas fa-sync"></i> Refresh</button>
+            </div>
+        </div>
+
+        <div class="mb-3 text-muted">Last updated: {{ last_updated|date:"d/m/Y H:i:s" }}</div>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search activities...">
+        </div>
+
+        <div id="activity-container">
+            {% if activities %}
+                {% for user, user_activities in activities.items %}
+                    {% for activity in user_activities %}
+                        <div class="activity-data" 
+                             data-user="{{ user }}"
+                             data-activity-type="{{ activity.activity_type }}"
+                             data-timestamp="{{ activity.timestamp|date:'c' }}"
+                             data-ip-address="{{ activity.ip_address|default:'N/A' }}"
+                             data-page-accessed="{{ activity.page_accessed|default:'N/A' }}"
+                             data-user-agent="{{ activity.user_agent|default:'N/A'|truncatechars:100 }}"
+                             data-session-key="{{ activity.session_key|default:'N/A' }}"
+                             data-referrer="{{ activity.referrer|default:'N/A' }}"
+                             data-status="{% if activity.activity_type == 'login' %}success{% elif activity.activity_type == 'logout' %}warning{% else %}error{% endif %}">
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info">No activities found</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        class ActivityTimelineDashboard {
+            constructor() {
+                this.container = document.getElementById('activity-container');
+                this.searchInput = document.getElementById('searchInput');
+                this.groupedByDate = {};
+                this.initEventListeners();
+                this.renderActivities();
+            }
+
+            initEventListeners() {
+                this.searchInput.addEventListener('input', () => this.filterActivities());
+            }
+
+            groupByDate() {
+                this.groupedByDate = {};
+                const activityElements = document.querySelectorAll('.activity-data');
+                
+                activityElements.forEach(element => {
+                    const activity = {
+                        user: element.dataset.user,
+                        activity_type: element.dataset.activityType,
+                        timestamp: element.dataset.timestamp,
+                        ip_address: element.dataset.ipAddress,
+                        page_accessed: element.dataset.pageAccessed,
+                        user_agent: element.dataset.userAgent,
+                        session_key: element.dataset.sessionKey,
+                        referrer: element.dataset.referrer,
+                        status: element.dataset.status
+                    };
+                    
+                    const date = new Date(activity.timestamp);
+                    const dateKey = date.toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+                    
+                    if (!this.groupedByDate[dateKey]) {
+                        this.groupedByDate[dateKey] = [];
+                    }
+                    this.groupedByDate[dateKey].push(activity);
+                });
+            }
+
+            renderActivities() {
+                this.groupByDate();
+                this.container.innerHTML = '';
+                
+                if (Object.keys(this.groupedByDate).length === 0) {
+                    this.container.innerHTML = '<div class="alert alert-info">No activities found</div>';
+                    return;
+                }
+
+                const sortedDates = Object.keys(this.groupedByDate).sort((a, b) => {
+                    return new Date(b.split('/').reverse().join('-')) - new Date(a.split('/').reverse().join('-'));
+                });
+
+                sortedDates.forEach(date => {
+                    const dateGroup = this.createDateGroup(date, this.groupedByDate[date]);
+                    this.container.appendChild(dateGroup);
+                });
+
+                this.restoreExpandedState();
+            }
+
+            createDateGroup(date, activities) {
+                const div = document.createElement('div');
+                div.className = 'date-group';
+                div.innerHTML = `
+                    <div class="date-header" data-date="${date}">
+                        Date: ${date} <span id="arrow-${date.replace(/\//g, '-')}">▼</span>
+                    </div>
+                    <div class="date-activities" id="activities-${date.replace(/\//g, '-')}">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Activity</th>
+                                    <th>Timestamp</th>
+                                    <th>IP Address</th>
+                                    <th>Page Accessed</th>
+                                    <th>User Agent</th>
+                                    <th>Session Key</th>
+                                    <th>Referrer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${activities.map(act => this.createActivityRow(act)).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                div.querySelector('.date-header').addEventListener('click', () => this.toggleActivities(date));
+                return div;
+            }
+
+            createActivityRow(activity) {
+                const date = new Date(activity.timestamp);
+                const formattedDate = isNaN(date) ? "Unknown" : date.toLocaleString();
+                const statusClass = activity.status === 'success' ? 'status-success' :
+                                  activity.status === 'error' ? 'status-error' : 'status-warning';
+                
+                return `
+                    <tr>
+                        <td>${activity.user}</td>
+                        <td><span class="status-indicator ${statusClass}"></span>${activity.activity_type}</td>
+                        <td>${formattedDate}</td>
+                        <td>${activity.ip_address}</td>
+                        <td>${activity.page_accessed}</td>
+                        <td>${activity.user_agent}</td>
+                        <td>${activity.session_key}</td>
+                        <td>${activity.referrer}</td>
+                    </tr>
+                `;
+            }
+
+            toggleActivities(date) {
+                const activitiesDiv = document.getElementById(`activities-${date.replace(/\//g, '-')}`);
+                const arrow = document.getElementById(`arrow-${date.replace(/\//g, '-')}`);
+                const isOpen = activitiesDiv.style.display === 'block';
+                
+                activitiesDiv.style.display = isOpen ? 'none' : 'block';
+                arrow.innerHTML = isOpen ? '▼' : '▲';
+                localStorage.setItem(`date-${date}-expanded`, !isOpen);
+            }
+
+            restoreExpandedState() {
+                document.querySelectorAll('.date-header').forEach(header => {
+                    const date = header.dataset.date;
+                    if (localStorage.getItem(`date-${date}-expanded`) === 'true') {
+                        this.toggleActivities(date);
+                    }
+                });
+            }
+
+            filterActivities() {
+                const search = this.searchInput.value.toLowerCase();
+                document.querySelectorAll('.date-group').forEach(group => {
+                    const rows = group.querySelectorAll('tbody tr');
+                    let visibleRows = 0;
+                    
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        const isVisible = text.includes(search);
+                        row.style.display = isVisible ? '' : 'none';
+                        if (isVisible) visibleRows++;
+                    });
+                    
+                    group.style.display = visibleRows > 0 ? '' : 'none';
+                });
+            }
+        }
+
+        window.onload = () => new ActivityTimelineDashboard();
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Participation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+
+    <div class="card shadow-lg p-4">
+        <h1 class="text-center text-primary mb-4">📅 Confirm Your Availability</h1>
+
+        <div class="mb-3">
+            <p><strong>📧 Email:</strong> {{ email_log.recipient_email }}</p>
+            <p><strong>📜 Subject:</strong> {{ email_log.subject }}</p>
+            <p><strong>📌 Sent At:</strong> {{ email_log.sent_at }}</p>
+        </div>
+
+        <hr>
+
+        <form method="POST" class="mt-3">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="response_date" class="form-label">📆 Ημερομηνία:</label>
+                <input type="date" id="response_date" name="response_date" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="meeting_time" class="form-label">⏰ Ώρα:</label>
+                <input type="time" id="meeting_time" name="meeting_time" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="location" class="form-label">📍 Τοποθεσία:</label>
+                <input type="text" id="location" name="location" class="form-control" placeholder="Enter location" required>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 fw-bold">✅ Επιβεβαίωση Συμμετοχής</button>
+        </form>
+
+    </div>
+
+</body>
+</html>

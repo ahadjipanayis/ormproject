@@ -1,0 +1,125 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Counterparty List" %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <style>
+        .container {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 5pt;
+            max-width: none;
+            box-sizing: border-box;
+        }
+        .sortable:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="page-header d-flex justify-content-between align-items-center mb-3">
+        <h1>{% trans "Counterparty List" %}</h1>
+        <div>
+            <a href="{% url 'counterparty_add' %}" class="btn btn-primary">{% trans "Add Counterparty" %}</a>
+            <a href="{% url 'kyc_standard_list' %}" class="btn btn-secondary ms-2">
+                <i class="fas fa-certificate" style="margin-right: 8px;"></i> {% trans "View KYC Standards" %}
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <form method="GET" class="filter-section row g-3">
+        <div class="col-md-2">
+            <label class="filter-label" for="type-filter">{% trans "Type" %}</label>
+            <select class="form-select filter-input" id="type-filter" name="type">
+                <option value="">{% trans "All" %}</option>
+                <option value="CLIENT">{% trans "Client" %}</option>
+                <option value="SUPPLIER">{% trans "Supplier" %}</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="filter-label" for="entity-filter">{% trans "Entity" %}</label>
+            <select class="form-select filter-input" id="entity-filter" name="entity">
+                <option value="">{% trans "All" %}</option>
+                <option value="LEGAL_ENTITY">{% trans "Legal Entity" %}</option>
+                <option value="INDIVIDUAL">{% trans "Individual" %}</option>
+            </select>
+        </div>
+    </form>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover table-bordered" id="counterparty-table">
+                <thead class="table-light">
+                <tr>
+                    <th class="sortable" data-column="0">{% trans "Name" %}</th>
+                    <th class="sortable" data-column="1">{% trans "Type" %}</th>
+                    <th class="sortable" data-column="2">{% trans "Entity" %}</th>
+                    <th>{% trans "Last Assessment Date" %}</th>
+                    <th>{% trans "Contact" %}</th>
+                    <th>{% trans "Sanctioned" %}</th>
+                    <th class="sortable" data-column="5">{% trans "Risk Level" %}</th>
+                    <th class="sortable" data-column="6">{% trans "Score" %}</th>
+                    <th>{% trans "Active Status" %}</th>
+                    <th>{% trans "Actions" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for counterparty in counterparties %}
+                <tr>
+                    <td><a href="{% url 'counterparty_edit' counterparty.id %}">{{ counterparty.name }}</a></td>
+                    <td>{{ counterparty.get_counterparty_type_display }}</td>
+                    <td>{{ counterparty.get_entity_type_display }}</td>
+                    <td>
+                        {% if counterparty.latest_assessment %}
+                            {{ counterparty.latest_assessment.assessment_date|date:"F j, Y" }}
+                        {% else %}
+                            <span class="badge bg-secondary">{% trans "No Assessments" %}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div>{% trans "Email" %}: {{ counterparty.contact_email|default:"{% trans 'Not Available' %}" }}</div>
+                        <div>{% trans "Phone" %}: {{ counterparty.contact_phone|default:"{% trans 'Not Available' %}" }}</div>
+                    </td>
+                    <td>
+                        {% if counterparty.is_sanctioned %}
+                            <span class="badge bg-danger">{% trans "Yes" %}</span>
+                        {% else %}
+                            <span class="badge bg-success">{% trans "No" %}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ counterparty.latest_assessment.classification|default:"{% trans 'Unknown' %}" }}</td>
+                    <td>{{ counterparty.latest_assessment.overall_score|floatformat:2|default:"N/A" }}</td>
+                    <td>
+                        {% if counterparty.is_active %}
+                            <span class="badge bg-success">{% trans "Active" %}</span>
+                        {% else %}
+                            <span class="badge bg-danger">{% trans "Inactive" %}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column">
+                            <a href="{% url 'counterparty_edit' counterparty.id %}" class="btn btn-sm btn-warning mb-1">{% trans "Edit" %}</a>
+                            <a href="{% url 'counterparty_delete' counterparty.id %}" class="btn btn-sm btn-danger mb-1">{% trans "Delete" %}</a>
+                            <a href="{% url 'assessment_list' counterparty.id %}" class="btn btn-sm btn-info">{% trans "Assessments" %}</a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" class="text-center text-muted">{% trans "No counterparties found." %}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

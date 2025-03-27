@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Appetite Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f4f6f8; text-align: center; margin: 0; padding: 0; }
+        h2 { font-size: 30px; background-color: #007bff; color: white; padding: 15px; margin: 0; }
+
+        /* Collapsible Filter Section */
+        .collapsible {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            width: 90%;
+            margin: 10px auto;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 20px;
+            border-radius: 5px;
+        }
+        .active, .collapsible:hover {
+            background-color: #0056b3;
+        }
+        .content {
+            padding: 10px 15px;
+            display: none;
+            background-color: #e9f2fb;
+            border-radius: 5px;
+            width: 90%;
+            margin: auto;
+        }
+
+        /* Portfolio Selection Box */
+        #portfolioSelect {
+            font-size: 18px;
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            height: 300px;
+        }
+
+        #chart-container { width: 90%; margin: 20px auto; }
+        #total-risks { font-size: 22px; font-weight: bold; margin-bottom: 15px; }
+
+        /* Risk Table Styling */
+        .risk-table { width: 90%; margin: auto; border-collapse: collapse; }
+        .risk-table th, .risk-table td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .risk-table th { background-color: #007bff; color: white; font-size: 20px; }
+
+        /* Column Width Adjustments */
+        .index-column { width: 50px; }
+        .risk-title {
+            text-align: left !important;
+            width: 500px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .risk-score, .risk-table th:nth-child(3), .risk-table th:nth-child(4), .risk-table th:nth-child(5) {
+            width: 80px;
+        }
+
+        .risk-score {
+            font-weight: bold;
+            padding: 8px;
+            color: white;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Risk Appetite Analysis</h2>
+
+    <!-- Collapsible Filter Section -->
+    <button class="collapsible">Filter Portfolios ▼</button>
+    <div class="content">
+        <label for="portfolioSelect">Select Portfolios:</label>
+        <select id="portfolioSelect" multiple></select>
+    </div>
+
+    <!-- Total Risks Display -->
+    <div id="total-risks"></div>
+
+    <!-- Portfolio Chart -->
+    <div id="chart-container">
+        <canvas id="portfolioChart"></canvas>
+    </div>
+
+    <!-- Risk Details Section -->
+    <div id="risk-details">
+        <h3 id="risk-list-header">Select a portfolio to see risks</h3>
+        <table class="risk-table">
+            <thead>
+                <tr>
+                    <th class="index-column">#</th>
+                    <th class="risk-title">Risk Title</th>
+                    <th>Inherent Score</th>
+                    <th>Residual Score</th>
+                    <th>Targeted Score</th>
+                </tr>
+            </thead>
+            <tbody id="risk-list"></tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const chartData = {{ chart_data|safe }};
+            const ctxPortfolio = document.getElementById('portfolioChart').getContext('2d');
+            let portfolioChart;
+
+            // Collapsible Filter
+            const coll = document.querySelector(".collapsible");
+            const content = document.querySelector(".content");
+            coll.addEventListener("click", function () {
+                this.classList.toggle("active");
+                content.style.display = content.style.display === "block" ? "none" : "block";
+                this.textContent = content.style.display === "block" ? "Filter Portfolios ▲" : "Filter Portfolios ▼";
+            });
+
+            // Populate Portfolio Selection (Sorted Alphabetically)
+            const portfolioSelect = document.getElementById('portfolioSelect');
+            const portfolios = Object.keys(chartData).sort();
+            portfolios.forEach(portfolio => {
+                const option = document.createElement('option');
+                option.value = portfolio;
+                option.textContent = portfolio;
+                portfolioSelect.appendChild(option);
+            });
+
+            function getRiskColor(score) {
+                return score <= 6 ? 'green' : score <= 12 ? 'orange' : 'red';
+            }
+
+            function updatePortfolioChart(selectedPortfolios) {
+                const filteredData = selectedPortfolios.length === 0
+                    ? chartData
+                    : Object.fromEntries(Object.entries(chartData).filter(([portfolio]) => selectedPortfolios.includes(portfolio)));
+
+                const portfolioLabels = Object.keys(filteredData).sort();
+                const lowRisks = portfolioLabels.map(p => filteredData[p]?.low?.count || 0);
+                const mediumRisks = portfolioLabels.map(p => filteredData[p]?.medium?.count || 0);
+                const highRisks = portfolioLabels.map(p => filteredData[p]?.high?.count || 0);
+
+                const totalResidualRisks = lowRisks.map((low, i) => low + mediumRisks[i] + highRisks[i]);
+
+                document.getElementById('total-risks').innerText = `Total Residual Risks: ${totalResidualRisks.reduce((a, b) => a + b, 0)}`;
+
+                const portfolioChartData = {
+                    labels: portfolioLabels,
+                    datasets: [
+                        { label: 'Low Risks', data: lowRisks, backgroundColor: 'green' },
+                        { label: 'Medium Risks', data: mediumRisks, backgroundColor: 'orange' },
+                        { label: 'High Risks', data: highRisks, backgroundColor: 'red' }
+                    ],
+                };
+
+                if (portfolioChart) portfolioChart.destroy();
+
+                portfolioChart = new Chart(ctxPortfolio, {
+                    type: 'bar',
+                    data: portfolioChartData,
+                    options: {
+                        responsive: true,
+                        indexAxis: 'y',
+                        plugins: {
+                            datalabels: {
+                                color: 'white',
+                                anchor: 'center',
+                                align: 'center',
+                                font: { weight: 'bold', size: 14 },
+                                formatter: (value) => (value > 0 ? value : '')  // Show individual counts
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: context => `${context.dataset.label}: ${context.raw}`
+                                }
+                            },
+                            afterDatasetsDraw: function (chart) {
+                                const ctx = chart.ctx;
+                                chart.data.datasets[2].data.forEach((value, index) => {
+                                    const meta = chart.getDatasetMeta(2).data[index];
+                                    const total = totalResidualRisks[index];
+
+                                    if (total > 0) {
+                                        ctx.fillStyle = 'black';
+                                        ctx.font = 'bold 16px Arial';
+                                        ctx.textAlign = 'left';
+                                        ctx.fillText(total, meta.x + 10, meta.y + meta.height / 2);
+                                    }
+                                });
+                            }
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                                ticks: { font: { size: 16 } }
+                            },
+                            y: {
+                                stacked: true,
+                                ticks: { font: { size: 18 } }
+                            }
+                        },
+                        onClick: (event, elements) => {
+                            if (elements.length > 0) {
+                                const index = elements[0].index;
+                                const selectedPortfolio = portfolioLabels[index];
+                                displayRiskList(selectedPortfolio, chartData[selectedPortfolio]);
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+
+            function displayRiskList(portfolio, data) {
+                const riskListHeader = document.getElementById('risk-list-header');
+                const riskList = document.getElementById('risk-list');
+                riskList.innerHTML = '';
+
+                const risks = [...data.low.risks, ...data.medium.risks, ...data.high.risks].sort((a, b) => b.residual - a.residual);
+                riskListHeader.textContent = `Risks in ${portfolio}`;
+
+                risks.forEach((risk, index) => {
+                    riskList.innerHTML += `
+                        <tr>
+                            <td class="index-column">${index + 1}</td>
+                            <td class="risk-title"><a href="/risk/${risk.id}/" target="_blank">${risk.title}</a></td>
+                            <td class="risk-score" style="background-color:${getRiskColor(risk.inherent)}">${risk.inherent}</td>
+                            <td class="risk-score" style="background-color:${getRiskColor(risk.residual)}">${risk.residual}</td>
+                            <td class="risk-score" style="background-color:${getRiskColor(risk.targeted)}">${risk.targeted}</td>
+                        </tr>`;
+                });
+            }
+
+            document.getElementById('portfolioSelect').addEventListener('change', function () {
+                const selectedPortfolios = Array.from(this.selectedOptions).map(option => option.value);
+                updatePortfolioChart(selectedPortfolios);
+            });
+
+            updatePortfolioChart([]);  // Default: Show all portfolios
+        });
+    </script>
+
+</body>
+</html>

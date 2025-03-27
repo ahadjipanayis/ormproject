@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ermapp.avax.gr | Residual Risk Level per Role</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f8;
+        }
+        h2 {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            margin: 0 0 20px;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        #chart-container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        #total-risks {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        #risk-details {
+            margin-top: 30px;
+            border-top: 2px solid #ccc;
+            padding-top: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .risk-list-header {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .risk-list-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .risk-list-item:last-child {
+            border-bottom: none;
+        }
+        .risk-number {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .risk-list-item a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .risk-list-item a:hover {
+            text-decoration: underline;
+        }
+    
+        /* Button Styles */
+        #apply-filters {
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    
+        #apply-filters:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+    
+        #apply-filters:active {
+            background-color: #003d7a;
+        }
+        #toggle-filters {
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+
+    #toggle-filters:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    #toggle-filters:active {
+        background-color: #003d7a;
+    }
+
+    #filter-section {
+        background-color: #ffffff;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 10px;
+    }
+
+    #filter-section p {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    #filter-section div {
+        margin-bottom: 5px;
+    }
+
+    #filter-section label {
+        font-size: 16px;
+        margin-left: 5px;
+    }
+
+    #apply-filters {
+        background-color: #28a745;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        margin-top: 10px;
+    }
+
+    #apply-filters:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
+
+    #apply-filters:active {
+        background-color: #1e7e34;
+    }
+    </style>
+    
+</head>
+<body>
+    <h2>Residual Risk Level per Role</h2>
+
+
+    <div id="chart-container">
+        <button id="toggle-filters">Filters</button>
+        <div id="filter-section" style="display: none;">
+            <p>Select Portfolios:</p>
+            <form id="portfolio-filter-form">
+                {% for portfolio in portfolios %}
+                    <div>
+                        <input 
+                            type="checkbox" 
+                            id="portfolio_{{ portfolio.id }}" 
+                            name="portfolio" 
+                            value="{{ portfolio.id }}" 
+                            checked> <!-- Always preselected -->
+                        <label for="portfolio_{{ portfolio.id }}">{{ portfolio.name }}</label>
+                    </div>
+                {% endfor %}
+            </form>
+            <button id="apply-filters">Apply Filters</button>
+        </div>
+        <div id="total-risks"></div>
+        <canvas id="riskBarChart" width="800" height="400"></canvas>
+     
+    </div>
+    
+
+
+
+<!-- 
+    <div id="chart-container">
+        <canvas id="riskBarChart" width="800" height="400"></canvas>
+        <div id="total-risks"></div>
+    </div>
+     -->
+    <div id="risk-details">
+        <h3>Click a bar section to see risk details</h3>
+        <div id="risk-list-header" class="risk-list-header"></div>
+        <div id="risk-list" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Parse chart data passed from Django
+            const chartData = {{ chart_data|safe }};
+
+            console.log("Chart Data:", chartData); // Debugging to ensure data is received
+
+            if (!chartData || Object.keys(chartData).length === 0) {
+                console.error("Chart Data is empty or invalid!");
+                document.getElementById('total-risks').textContent = "No data available.";
+                return;
+            }
+
+            // Compute total risks for sorting
+            const rolesWithTotals = Object.entries(chartData).map(([role, data]) => {
+                const totalRisks = data.low.count + data.medium.count + data.high.count;
+                return { role, totalRisks, data };
+            });
+
+            // Sort roles by total risks in descending order
+            rolesWithTotals.sort((a, b) => b.totalRisks - a.totalRisks);
+
+            // Extract sorted roles and datasets
+            const roles = rolesWithTotals.map(item => item.role);
+            const lowData = rolesWithTotals.map(item => item.data.low.count);
+            const mediumData = rolesWithTotals.map(item => item.data.medium.count);
+            const highData = rolesWithTotals.map(item => item.data.high.count);
+
+            // Calculate total risks
+            const totalRisks = lowData.reduce((a, b) => a + b, 0) +
+                mediumData.reduce((a, b) => a + b, 0) +
+                highData.reduce((a, b) => a + b, 0);
+            document.getElementById('total-risks').textContent = `Total Risks: ${totalRisks}`;
+
+            // Initialize the chart
+            const ctx = document.getElementById('riskBarChart').getContext('2d');
+            const riskBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: roles,
+                    datasets: [
+                        {
+                            label: 'Low Risks',
+                            data: lowData,
+                            backgroundColor: 'green',
+                        },
+                        {
+                            label: 'Medium Risks',
+                            data: mediumData,
+                            backgroundColor: 'orange',
+                        },
+                        {
+                            label: 'High Risks',
+                            data: highData,
+                            backgroundColor: 'red',
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    indexAxis: 'y',
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return `${context.dataset.label}: ${context.raw}`;
+                                },
+                            },
+                        },
+                        title: {
+                            display: false,
+                        },
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Risks',
+                            },
+                        },
+                        y: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Roles',
+                            },
+                        },
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const barIndex = elements[0].index;
+                            const datasetIndex = elements[0].datasetIndex;
+                            const role = roles[barIndex];
+                            const level = ['low', 'medium', 'high'][datasetIndex];
+                            const risks = rolesWithTotals[barIndex].data[level].risks;
+
+                            const riskHeader = document.getElementById('risk-list-header');
+                            riskHeader.textContent = `${level.charAt(0).toUpperCase() + level.slice(1)} Risks for ${role}`;
+
+                            const riskList = document.getElementById('risk-list');
+                            riskList.innerHTML = ''; // Clear previous list
+
+                            if (risks && risks.length > 0) {
+                                risks.forEach((risk, idx) => {
+                                    const riskItem = document.createElement('div');
+                                    riskItem.className = 'risk-list-item';
+                                    riskItem.innerHTML = `
+                                        <span class="risk-number">${idx + 1}.</span>
+                                        <a href="${risk.change_url}" target="_blank">${risk.title}</a>
+                                    `;
+                                    riskList.appendChild(riskItem);
+                                });
+                            } else {
+                                const noRisksMsg = document.createElement('div');
+                                noRisksMsg.className = 'risk-list-item';
+                                noRisksMsg.textContent = `No risks available for "${role}" (${level}).`;
+                                riskList.appendChild(noRisksMsg);
+                            }
+                        }
+                    },
+                },
+                plugins: [
+                    {
+                        id: 'customLabels',
+                        afterDatasetsDraw(chart) {
+                            const { ctx } = chart;
+                            const datasets = chart.data.datasets;
+
+                            datasets.forEach((dataset, datasetIndex) => {
+                                const meta = chart.getDatasetMeta(datasetIndex);
+
+                                meta.data.forEach((bar, index) => {
+                                    const value = dataset.data[index];
+                                    const total = datasets.reduce((sum, ds) => sum + ds.data[index], 0);
+
+                                    if (value > 0) {
+                                        // Center the number within the bar section
+                                        const x = bar.base + (bar.width / 2);
+                                        const y = bar.y + (bar.height / 2) - 7;
+
+                                        ctx.font = 'bold 12px Arial';
+                                        ctx.textAlign = 'center';
+                                        ctx.fillStyle = '#000';
+                                        ctx.fillText(value, x, y);
+                                    }
+
+                                    // Place total value at the far right
+                                    if (datasetIndex === datasets.length - 1) {
+                                        const totalX = bar.base + bar.width + 10;
+                                        const totalY = bar.y + (bar.height / 2) - 7;
+
+                                        ctx.font = 'bold 14px Arial';
+                                        ctx.fillStyle = '#000';
+                                        ctx.textAlign = 'left';
+                                        ctx.fillText(total, totalX, totalY);
+                                    }
+                                });
+                            });
+                        },
+                    },
+                ],
+            });
+        });
+
+
+
+
+            document.addEventListener('DOMContentLoaded', function () {
+        const chartData = {{ chart_data|safe }};
+
+        if (!chartData || Object.keys(chartData).length === 0) {
+            document.getElementById('total-risks').textContent = "No data available.";
+            return;
+        }
+
+        const createChart = (data) => {
+            const rolesWithTotals = Object.entries(data).map(([role, roleData]) => {
+                const totalRisks = roleData.low.count + roleData.medium.count + roleData.high.count;
+                return { role, totalRisks, data: roleData };
+            });
+
+            rolesWithTotals.sort((a, b) => b.totalRisks - a.totalRisks);
+
+            const roles = rolesWithTotals.map(item => item.role);
+            const lowData = rolesWithTotals.map(item => item.data.low.count);
+            const mediumData = rolesWithTotals.map(item => item.data.medium.count);
+            const highData = rolesWithTotals.map(item => item.data.high.count);
+
+            const totalRisks = lowData.reduce((a, b) => a + b, 0) +
+                mediumData.reduce((a, b) => a + b, 0) +
+                highData.reduce((a, b) => a + b, 0);
+            document.getElementById('total-risks').textContent = `Total Risks: ${totalRisks}`;
+
+            const ctx = document.getElementById('riskBarChart').getContext('2d');
+            if (window.riskBarChart) {
+                window.riskBarChart.destroy();
+            }
+            window.riskBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: roles,
+                    datasets: [
+                        { label: 'Low Risks', data: lowData, backgroundColor: 'green' },
+                        { label: 'Medium Risks', data: mediumData, backgroundColor: 'orange' },
+                        { label: 'High Risks', data: highData, backgroundColor: 'red' },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { stacked: true, title: { display: true, text: 'Number of Risks' } },
+                        y: { stacked: true, title: { display: true, text: 'Roles' } },
+                    },
+                },
+            });
+        };
+
+        createChart(chartData);
+
+        document.getElementById('apply-filters').addEventListener('click', () => {
+            const filteredData = {}; // Adjust this based on your filtering logic
+            createChart(filteredData);
+        });
+    });
+
+
+ // Toggle the filter section visibility
+ document.getElementById('toggle-filters').addEventListener('click', () => {
+        const filterSection = document.getElementById('filter-section');
+        filterSection.style.display = filterSection.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Apply the selected filters
+    document.getElementById('apply-filters').addEventListener('click', () => {
+        const checkboxes = document.querySelectorAll('#portfolio-filter-form input[type="checkbox"]');
+        const selectedPortfolios = Array.from(checkboxes)
+            .filter(checkbox => checkbox.checked) // Only checked checkboxes
+            .map(checkbox => `portfolios=${checkbox.value}`) // Collect portfolio IDs
+            .join('&');
+
+        // Redirect with selected portfolios as query parameters
+        const urlParams = new URLSearchParams(selectedPortfolios);
+        window.location.href = `?${urlParams.toString()}`;
+    });
+    </script>
+</body>
+</html>

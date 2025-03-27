@@ -1,0 +1,2392 @@
+# Greek translation for Documents template
+#: orm/templates/frontend.html:292 orm/templates/frontend.html:307
+#: orm/templates/frontend.html:355 orm/templates/frontend.html:365
+#: orm/templates/frontend.html:403 orm/templates/risk_list_new.html:106
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-19 09:18+0200\n"
+"PO-Revision-Date: 2025-03-18 12:00+0200\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: Greek <el@example.com>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Greek translation for ormproject
+# Copyright (C) 2025 AVAX
+# This file is distributed under the same license as the ormproject package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#: media/documents/frontend.html:8 orm/templates/frontend.html:8
+msgid "Enterprise Risk Management - AVAX"
+msgstr "Διαχείριση Κινδύνων - AVAX"
+
+#: media/documents/frontend.html:266 orm/templates/frontend.html:266
+msgid "AVAX Logo"
+msgstr "Λογότυπο AVAX"
+
+#: media/documents/frontend.html:270 orm/templates/frontend.html:276
+msgid "Calendar"
+msgstr "Ημερολόγιο"
+
+#: media/documents/frontend.html:270 orm/templates/frontend.html:276
+msgid "View Calendar"
+msgstr "Προβολή Ημερολογίου"
+
+#: media/documents/frontend.html:275 media/documents/frontend.html:276
+#: media/documents/frontend.html:340 orm/templates/frontend.html:281
+#: orm/templates/frontend.html:282 orm/templates/frontend.html:311
+#: orm/templates/procedures/procedure_list.html:8
+#: orm/templates/procedures/procedure_list.html:91
+#: orm/templates/risk_detail.html:1102 orm/templates/risk_detail.html:2427
+msgid "Procedures"
+msgstr "Διαδικασίες"
+
+msgid "IT Report"
+msgstr "Αναφορά Πληροφορικής"
+
+
+
+
+#: media/documents/frontend.html:275 orm/templates/frontend.html:281
+msgid "View Procedures"
+msgstr "Προβολή Διαδικασιών"
+
+#: media/documents/frontend.html:280
+#: orm/templates/documents/document_list.html:8 orm/templates/frontend.html:286
+msgid "Documents"
+msgstr "Έγγραφα"
+
+#: media/documents/frontend.html:280 orm/templates/frontend.html:286
+msgid "View Documents"
+msgstr "Προβολή Εγγράφων"
+
+#: media/documents/frontend.html:285 media/documents/frontend.html:286
+#: orm/templates/frontend.html:291
+msgid "Counterparties"
+msgstr "Αντισυμβαλλόμενοι"
+
+#: media/documents/frontend.html:285 orm/templates/frontend.html:291
+msgid "View Counterparties"
+msgstr "Προβολή Αντισυμβαλλομένων"
+
+#: media/documents/frontend.html:290 media/documents/frontend.html:291
+#: orm/templates/frontend.html:296 orm/templates/frontend.html:297
+#: orm/templates/risk_detail.html:1097 orm/templates/risk_detail.html:2676
+msgid "Incidents"
+msgstr "Περιστατικά"
+
+#: media/documents/frontend.html:290 orm/templates/frontend.html:296
+msgid "View Incidents"
+msgstr "Προβολή Περιστατικών"
+
+#: media/documents/frontend.html:295 media/documents/frontend.html:296
+#: media/documents/risk_list_new.html:7 media/documents/risk_list_new.html:76
+#: orm/templates/frontend.html:301 orm/templates/frontend.html:302
+#: orm/templates/risk_list_new.html:7 orm/templates/risk_list_new.html:104
+msgid "Risk Registry"
+msgstr "Μητρώο Κινδύνων"
+
+#: media/documents/frontend.html:295 orm/templates/frontend.html:301
+msgid "View Risk Registry"
+msgstr "Προβολή Μητρώου Κινδύνων"
+
+#: media/documents/frontend.html:300 media/documents/frontend.html:301
+#: orm/templates/frontend.html:329
+msgid "KPIs/KRIs"
+msgstr "KPIs/KRIs"
+
+# Kept as-is, common in Greek technical contexts
+#: media/documents/frontend.html:300 orm/templates/frontend.html:329
+msgid "View KPIs/KRIs"
+msgstr "Προβολή KPIs/KRIs"
+
+#: media/documents/frontend.html:305 media/documents/frontend.html:306
+#: media/documents/frontend.html:343 orm/templates/actions/action_list.html:10
+#: orm/templates/counterparty_list.html:70
+#: orm/templates/events/event_list.html:100 orm/templates/frontend.html:314
+#: orm/templates/frontend.html:334 orm/templates/frontend.html:335
+#: orm/templates/indicators/indicator_list.html:109
+#: orm/templates/procedures/procedure_list.html:102
+#: orm/templates/risk_detail.html:1087 orm/templates/risk_detail.html:1486
+msgid "Actions"
+msgstr "Ενέργειες"
+
+#: media/documents/frontend.html:305 orm/templates/frontend.html:334
+msgid "View Actions"
+msgstr "Προβολή Ενεργειών"
+
+#: media/documents/frontend.html:312 orm/templates/frontend.html:341
+msgid "IT Options"
+msgstr "Επιλογές IT"
+
+#: media/documents/frontend.html:312 orm/templates/frontend.html:341
+msgid "IT"
+msgstr "IT"
+
+#: media/documents/frontend.html:314 orm/templates/frontend.html:343
+msgid "Risk per IT Asset"
+msgstr "Κίνδυνος ανά IT Περιουσιακό Στοιχείο"
+
+#: media/documents/frontend.html:315 orm/templates/frontend.html:344
+#: orm/templates/risk_detail.html:1107 orm/templates/risk_detail.html:2225
+msgid "IT Assets"
+msgstr "IT Περιουσιακά Στοιχεία"
+
+#: media/documents/frontend.html:316 orm/templates/frontend.html:345
+msgid "IT Threats"
+msgstr "IT Απειλές"
+
+#: media/documents/frontend.html:317 orm/templates/frontend.html:346
+#: orm/templates/itassets_with_risks.html:184
+msgid "Vulnerabilities"
+msgstr "Ευπάθειες"
+
+#: media/documents/frontend.html:318 media/documents/frontend.html:398
+#: orm/templates/frontend.html:347 orm/templates/frontend.html:409
+msgid "Network Tools"
+msgstr "Εργαλεία Δικτύου"
+
+#: media/documents/frontend.html:326 orm/templates/frontend.html:355
+msgid "Audit Options"
+msgstr "Επιλογές Ελέγχου"
+
+#: media/documents/frontend.html:326
+msgid "Audit"
+msgstr "Έλεγχος"
+
+#: media/documents/frontend.html:328 orm/templates/frontend.html:357
+msgid "S O A"
+msgstr "S O A"
+
+# Typically kept as acronym
+#: media/documents/frontend.html:329 orm/templates/counterparty_list.html:110
+#: orm/templates/frontend.html:358
+msgid "Assessments"
+msgstr "Αξιολογήσεις"
+
+#: media/documents/frontend.html:336 orm/templates/frontend.html:307
+msgid "Tools Options"
+msgstr "Επιλογές Εργαλείων"
+
+#: media/documents/frontend.html:336
+msgid "Tools"
+msgstr "Εργαλεία"
+
+#: media/documents/frontend.html:338 media/documents/frontend.html:376
+#: orm/templates/frontend.html:309 orm/templates/frontend.html:387
+msgid "Open AI"
+msgstr "Open AI"
+
+#: media/documents/frontend.html:339 orm/templates/frontend.html:310
+msgid "User Input"
+msgstr "Εισαγωγή Χρήστη"
+
+#: media/documents/frontend.html:341 orm/templates/frontend.html:312
+msgid "Flow Charts"
+msgstr "Διαγράμματα Ροής"
+
+#: media/documents/frontend.html:342 orm/templates/frontend.html:313
+#: orm/templates/risk_detail.html:1067 orm/templates/risk_detail.html:1280
+#: orm/templates/risk_list_new.html:168
+msgid "Mitigations"
+msgstr "Μέτρα Μετριασμού"
+
+#: media/documents/frontend.html:344 orm/templates/frontend.html:315
+#: orm/templates/frontend.html:330
+#: orm/templates/indicators/indicator_list.html:7
+#: orm/templates/indicators/indicator_list.html:80
+#: orm/templates/risk_detail.html:1092 orm/templates/risk_detail.html:1709
+msgid "Indicators"
+msgstr "Δείκτες"
+
+#: media/documents/frontend.html:345 orm/templates/frontend.html:316
+#: orm/templates/frontend.html:324 orm/templates/frontend.html:325
+#: orm/templates/risk_detail.html:1077 orm/templates/risk_detail.html:2783
+msgid "Opportunities"
+msgstr "Ευκαιρίες"
+
+#: media/documents/frontend.html:346 orm/templates/frontend.html:317
+#: orm/templates/itassets_with_risks.html:185
+#: orm/templates/risk_detail.html:1082 orm/templates/risk_detail.html:2831
+msgid "Threats"
+msgstr "Απειλές"
+
+#: media/documents/frontend.html:347 orm/templates/frontend.html:318
+msgid "Categories"
+msgstr "Κατηγορίες"
+
+#: media/documents/frontend.html:348 media/documents/risk_list_new.html:130
+#: orm/templates/frontend.html:319 orm/templates/risk_list_new.html:158
+msgid "Portfolios"
+msgstr "Χαρτοφυλάκια"
+
+#: media/documents/frontend.html:354 orm/templates/frontend.html:365
+msgid "Reports Options"
+msgstr "Επιλογές Αναφορών"
+
+#: media/documents/frontend.html:354
+msgid "Reports"
+msgstr "Αναφορές"
+
+#: media/documents/frontend.html:356 orm/templates/frontend.html:367
+msgid "Portfolio Reports"
+msgstr "Αναφορές Χαρτοφυλακίου"
+
+#: media/documents/frontend.html:357 orm/templates/frontend.html:368
+msgid "Heatmaps"
+msgstr "Θερμικοί Χάρτες"
+
+#: media/documents/frontend.html:358 orm/templates/frontend.html:369
+msgid "Risk Per Owner"
+msgstr "Κίνδυνος ανά Ιδιοκτήτη"
+
+#: media/documents/frontend.html:359 orm/templates/frontend.html:370
+msgid "Risk Per Category"
+msgstr "Κίνδυνος ανά Κατηγορία"
+
+#: media/documents/frontend.html:360 orm/templates/frontend.html:371
+msgid "Risk Per Portfolio"
+msgstr "Κίνδυνος ανά Χαρτοφυλάκιο"
+
+#: media/documents/frontend.html:361 orm/templates/frontend.html:372
+msgid "Pivots"
+msgstr "Πίνακες Στροφής"
+
+#: media/documents/frontend.html:362 orm/templates/frontend.html:373
+msgid "IMF Reports"
+msgstr "Αναφορές ΔΝΤ"
+
+#: media/documents/frontend.html:364 orm/templates/frontend.html:375
+msgid "Ranking"
+msgstr "Κατάταξη"
+
+#: media/documents/frontend.html:365 orm/templates/frontend.html:376
+msgid "Ranking per Portfolio"
+msgstr "Κατάταξη ανά Χαρτοφυλάκιο"
+
+#: media/documents/frontend.html:366 orm/templates/frontend.html:377
+msgid "Risk Appetite"
+msgstr "Όρεξη για Κίνδυνο"
+
+#: media/documents/frontend.html:367 orm/templates/frontend.html:378
+msgid "Admin Pivots"
+msgstr "Πίνακες Διαχειριστή"
+
+#: media/documents/frontend.html:368 orm/templates/frontend.html:379
+msgid "Admin Reports"
+msgstr "Αναφορές Διαχειριστή"
+
+#: media/documents/frontend.html:370 orm/templates/frontend.html:381
+msgid "Risk Network"
+msgstr "Δίκτυο Κινδύνων"
+
+#: media/documents/frontend.html:372 orm/templates/frontend.html:383
+msgid "Open Metabase"
+msgstr "Άνοιγμα Metabase"
+
+#: media/documents/frontend.html:373 orm/templates/frontend.html:384
+msgid "Metabase"
+msgstr "Metabase"
+
+# Kept as-is, brand name
+#: media/documents/frontend.html:375 orm/templates/frontend.html:386
+msgid "Open AI Chat"
+msgstr "Συνομιλία Open AI"
+
+# Repeated, kept consistent
+#: media/documents/frontend.html:378 orm/templates/frontend.html:389
+msgid "XAI Chat"
+msgstr "Συνομιλία XAI"
+
+#: media/documents/frontend.html:379 orm/templates/frontend.html:390
+msgid "XAI"
+msgstr "XAI"
+
+# Kept as-is, brand name
+#: media/documents/frontend.html:385 orm/templates/frontend.html:396
+#: orm/templates/risk_detail.html:679
+msgid "Approve"
+msgstr "Έγκριση"
+
+#: media/documents/frontend.html:385 orm/templates/frontend.html:396
+msgid "View Approvals"
+msgstr "Προβολή Εγκρίσεων"
+
+#: media/documents/frontend.html:392 orm/templates/frontend.html:403
+msgid "Admin Tools"
+msgstr "Εργαλεία Διαχειριστή"
+
+#: media/documents/frontend.html:394 orm/templates/frontend.html:405
+msgid "Admin Panel"
+msgstr "Πίνακας Διαχειριστή"
+
+#: media/documents/frontend.html:395 orm/templates/frontend.html:406
+msgid "Profiles"
+msgstr "Προφίλ"
+
+#: media/documents/frontend.html:396 orm/templates/frontend.html:407
+msgid "Run Approvals"
+msgstr "Εκτέλεση Εγκρίσεων"
+
+#: media/documents/frontend.html:397 orm/templates/frontend.html:408
+msgid "Status Per User"
+msgstr "Κατάσταση ανά Χρήστη"
+
+#: media/documents/frontend.html:399 orm/templates/frontend.html:410
+msgid "User Activity"
+msgstr "Δραστηριότητα Χρήστη"
+
+#: media/documents/frontend.html:400 orm/templates/frontend.html:411
+msgid "Email Tracking"
+msgstr "Παρακολούθηση Email"
+
+#: media/documents/frontend.html:401 orm/templates/frontend.html:412
+msgid "Setup Session"
+msgstr "Ρύθμιση Συνεδρίας"
+
+#: media/documents/frontend.html:408 orm/templates/frontend.html:444
+msgid "User Options"
+msgstr "Επιλογές Χρήστη"
+
+#: media/documents/frontend.html:410 orm/templates/frontend.html:446
+#: orm/templates/registration/password_change.html:8
+#: orm/templates/registration/password_change.html:184
+msgid "Change Password"
+msgstr "Αλλαγή Κωδικού"
+
+#: media/documents/frontend.html:411 orm/templates/frontend.html:271
+#: orm/templates/frontend.html:272 orm/templates/frontend.html:447
+msgid "ERM Manual"
+msgstr "Εγχειρίδιο ERM"
+
+#: media/documents/frontend.html:415 media/documents/frontend.html:436
+#: orm/templates/frontend.html:424 orm/templates/frontend.html:451
+msgid "Select Language"
+msgstr "Επιλογή Γλώσσας"
+
+#: media/documents/frontend.html:427 orm/templates/frontend.html:470
+msgid "Logout"
+msgstr "Αποσύνδεση"
+
+#: media/documents/frontend.html:447 orm/templates/frontend.html:475
+msgid "Toggle Menu"
+msgstr "Εναλλαγή Μενού"
+
+#: media/documents/risk_list_new.html:76 orm/templates/risk_list_new.html:104
+msgid "Total Risks"
+msgstr "Συνολικός Αριθμός Κινδύνων"
+
+#: media/documents/risk_list_new.html:78 orm/templates/risk_list_new.html:102
+msgid "New Risk"
+msgstr "Νέος Κίνδυνος"
+
+#: media/documents/risk_list_new.html:81
+#: orm/templates/itassets_with_risks.html:173
+msgid "Refresh"
+msgstr ""
+
+#: media/documents/risk_list_new.html:83 orm/templates/risk_list_new.html:108
+msgid "Search risks by title..."
+msgstr "Αναζητήστε κινδύνους κατά τίτλο..."
+
+#: media/documents/risk_list_new.html:87 orm/templates/risk_list_new.html:112
+msgid "Filters"
+msgstr "Φίλτρα"
+
+#: media/documents/risk_list_new.html:94
+#: orm/templates/actions/action_list.html:168
+#: orm/templates/actions/action_list.html:228
+#: orm/templates/actions/action_list.html:288
+#: orm/templates/events/event_list.html:99
+#: orm/templates/indicators/indicator_list.html:107
+#: orm/templates/mitigation_detail.html:101
+#: orm/templates/opportunities/opportunity_list.html:109
+#: orm/templates/procedures/procedure_list.html:101
+#: orm/templates/risk_detail.html:635 orm/templates/risk_list_new.html:119
+msgid "Portfolio"
+msgstr "Χαρτοφυλάκιο"
+
+#: media/documents/risk_list_new.html:96 media/documents/risk_list_new.html:105
+#: media/documents/risk_list_new.html:114 orm/templates/risk_list_new.html:121
+#: orm/templates/risk_list_new.html:130 orm/templates/risk_list_new.html:139
+msgid "Select All"
+msgstr ""
+
+#: media/documents/risk_list_new.html:103
+#: media/documents/risk_list_new.html:140 orm/templates/risk_detail.html:622
+#: orm/templates/risk_list_new.html:128 orm/templates/risk_list_new.html:169
+msgid "Category"
+msgstr "Κατηγορία"
+
+#: media/documents/risk_list_new.html:112 orm/templates/calendar_view.html:362
+#: orm/templates/events/event_list.html:97
+#: orm/templates/indicators/indicator_list.html:105
+#: orm/templates/opportunities/opportunity_list.html:110
+#: orm/templates/procedures/procedure_list.html:100
+#: orm/templates/risk_list_new.html:137
+msgid "Owner"
+msgstr "Ιδιοκτήτης"
+
+#: media/documents/risk_list_new.html:122 orm/templates/risk_list_new.html:147
+msgid "Apply Filters"
+msgstr "Εφαρμογή Φίλτρων"
+
+#: media/documents/risk_list_new.html:127
+#: media/documents/risk_list_new.html:274
+#: media/documents/risk_list_new.html:287 orm/templates/risk_list_new.html:153
+#: orm/templates/risk_list_new.html:315 orm/templates/risk_list_new.html:328
+msgid "Expand All"
+msgstr "Ανάπτυξη όλων"
+
+#: media/documents/risk_list_new.html:134 orm/templates/risk_list_new.html:162
+msgid "Risks"
+msgstr "Κίνδυνοι"
+
+#: media/documents/risk_list_new.html:139 orm/forms.py:206
+#: orm/templates/actions/action_list.html:167
+#: orm/templates/actions/action_list.html:227
+#: orm/templates/actions/action_list.html:287
+#: orm/templates/events/event_list.html:95
+#: orm/templates/indicators/indicator_list.html:101
+#: orm/templates/mitigation_detail.html:78
+#: orm/templates/opportunities/opportunity_list.html:108
+#: orm/templates/procedures/procedure_list.html:98
+#: orm/templates/risk_list_new.html:167
+msgid "Title"
+msgstr "Τίτλος"
+
+#: media/documents/risk_list_new.html:141 orm/templates/risk_detail.html:2002
+#: orm/templates/risk_list_new.html:170
+msgid "Inherent Score"
+msgstr "Εγγενής (Inherent) Βαθμολογία"
+
+#: media/documents/risk_list_new.html:142 orm/templates/risk_detail.html:2003
+#: orm/templates/risk_list_new.html:171
+msgid "Residual Score"
+msgstr "Υπολειμματική (Residual) Βαθμολογία"
+
+#: media/documents/risk_list_new.html:143 orm/templates/risk_detail.html:2004
+#: orm/templates/risk_list_new.html:172
+msgid "Targeted Score"
+msgstr "Στοχευμένη (Targeted) Βαθμολογία"
+
+#: media/documents/risk_list_new.html:144 orm/templates/risk_list_new.html:173
+msgid "Owners & Approvals"
+msgstr "Ιδιοκτήτες (Owners)& Εγκρίσεις"
+
+#: media/documents/risk_list_new.html:159 orm/templates/risk_list_new.html:189
+msgid "Open in new tab"
+msgstr "Άνοιγμα Metabase"
+
+#: media/documents/risk_list_new.html:175 orm/templates/risk_list_new.html:216
+msgid "No approvals"
+msgstr "Καμία εκκρεμής έγκριση."
+
+#: media/documents/risk_list_new.html:191 orm/templates/risk_list_new.html:232
+#, fuzzy
+#| msgid "Task Details"
+msgid "Risk Details"
+msgstr "Λεπτομέρειες Εργασίας"
+
+#: media/documents/risk_list_new.html:191
+#: orm/templates/actions/action_list.html:327
+#: orm/templates/calendar_view.html:346
+#: orm/templates/events/event_list.html:132
+#: orm/templates/indicators/indicator_list.html:171
+#: orm/templates/itassets_with_risks.html:271
+#: orm/templates/risk_detail.html:1324 orm/templates/risk_detail.html:1346
+#: orm/templates/risk_detail.html:1352 orm/templates/risk_detail.html:1569
+#: orm/templates/risk_detail.html:1797 orm/templates/risk_detail.html:2269
+#: orm/templates/risk_detail.html:2291 orm/templates/risk_detail.html:2297
+#: orm/templates/risk_detail.html:2471 orm/templates/risk_detail.html:2493
+#: orm/templates/risk_detail.html:2499 orm/templates/risk_detail.html:2699
+#: orm/templates/risk_detail.html:2705 orm/templates/risk_detail.html:2816
+#: orm/templates/risk_detail.html:2822 orm/templates/risk_detail.html:2864
+#: orm/templates/risk_detail.html:2870 orm/templates/risk_list_new.html:232
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/submit_line.html:23
+msgid "Close"
+msgstr "Κλείσιμο"
+
+#: media/documents/risk_list_new.html:287 orm/templates/risk_list_new.html:328
+msgid "Collapse All"
+msgstr "Σύμπτυξη Όλων"
+
+#: orm/forms.py:207 orm/templates/mitigation_detail.html:84
+#: orm/templates/risk_detail.html:1057
+msgid "Description"
+msgstr "Περιγραφή"
+
+#: orm/templates/actions/action_list.html:144
+msgid "Actions List"
+msgstr "Λίστα Ενεργειών"
+
+#: orm/templates/actions/action_list.html:148
+#, fuzzy, python-format
+#| msgid "Overdue Actions ({{ count }})"
+msgid "Overdue Actions (%(count)s)"
+msgstr "Καθυστερημένες Ενέργειες ({{ count }})"
+
+#: orm/templates/actions/action_list.html:152
+msgid "No overdue actions found."
+msgstr "Δεν βρέθηκαν καθυστερημένες ενέργειες."
+
+#: orm/templates/actions/action_list.html:159
+#: orm/templates/actions/action_list.html:219
+#: orm/templates/actions/action_list.html:279
+#, python-format
+msgid ""
+"\n"
+"            Owner: %(username)s (%(count)s actions)\n"
+"          "
+msgstr ""
+
+#: orm/templates/actions/action_list.html:169
+#: orm/templates/actions/action_list.html:229
+#: orm/templates/actions/action_list.html:289
+#: orm/templates/calendar_view.html:369
+msgid "Performer"
+msgstr "Εκτελεστής"
+
+#: orm/templates/actions/action_list.html:170
+#: orm/templates/actions/action_list.html:230
+#: orm/templates/actions/action_list.html:290
+msgid "Deadline"
+msgstr "Προθεσμία"
+
+#: orm/templates/actions/action_list.html:171
+#: orm/templates/actions/action_list.html:231
+msgid "Countdown"
+msgstr "Αντίστροφη Μέτρηση"
+
+#: orm/templates/actions/action_list.html:172
+#: orm/templates/actions/action_list.html:232
+#: orm/templates/actions/action_list.html:291
+#: orm/templates/indicators/indicator_form.html:107
+#: orm/templates/mitigation_detail.html:117
+msgid "Related Risks"
+msgstr "Συνδεδεμένοι Κίνδυνοι"
+
+#: orm/templates/actions/action_list.html:187
+#, fuzzy, python-format
+#| msgid "{{ days }} days overdue"
+msgid "%(days)s days overdue"
+msgstr "{{ days }} ημέρες καθυστέρηση"
+
+#: orm/templates/actions/action_list.html:194
+#: orm/templates/actions/action_list.html:254
+#: orm/templates/actions/action_list.html:310
+#: orm/templates/indicators/indicator_list.html:133
+#: orm/templates/indicators/indicator_list.html:143
+msgid "N/A"
+msgstr "Μ/Δ"
+
+# Greek abbreviation for "Not Applicable" (Μη Διαθέσιμο)
+#: orm/templates/actions/action_list.html:208
+#, fuzzy, python-format
+#| msgid "Pending Actions ({{ count }})"
+msgid "Pending Actions (%(count)s)"
+msgstr "Εκκρεμείς Ενέργειες ({{ count }})"
+
+#: orm/templates/actions/action_list.html:212
+msgid "No pending actions found."
+msgstr "Δεν βρέθηκαν εκκρεμείς ενέργειες."
+
+#: orm/templates/actions/action_list.html:247
+#, fuzzy, python-format
+#| msgid "{{ days }} days left"
+msgid "%(days)s days left"
+msgstr "{{ days }} ημέρες απομένουν"
+
+#: orm/templates/actions/action_list.html:268
+#, fuzzy, python-format
+#| msgid "✔ Completed Actions ({{ count }})\n"
+msgid "✔ Completed Actions (%(count)s)"
+msgstr ""
+"✔ Ολοκληρωμένες Ενέργειες ({{ count }})\n"
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-18 12:00+0000\n"
+"PO-Revision-Date: 2025-03-18 12:00+0000\n"
+"Last-Translator: Grok <grok@xai.com>\n"
+"Language-Team: Greek\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: orm/templates/actions/action_list.html:272
+#, fuzzy
+#| msgid "No overdue actions found."
+msgid "No completed actions found."
+msgstr "Δεν βρέθηκαν καθυστερημένες ενέργειες."
+
+#: orm/templates/actions/action_list.html:326
+#: orm/templates/risk_detail.html:1562
+msgid "Action Details"
+msgstr "Λεπτομέρειες Ενέργειας"
+
+#: orm/templates/calendar_view.html:9
+msgid "Risk Calendar - AVAX S.A."
+msgstr "Ημερολόγιο Κινδύνων - AVAX S.A."
+
+#: orm/templates/calendar_view.html:345
+msgid "Task Details"
+msgstr "Λεπτομέρειες Εργασίας"
+
+#: orm/templates/calendar_view.html:358
+msgid "Task Overview - AVAX S.A."
+msgstr "Επισκόπηση Εργασιών - AVAX S.A."
+
+#: orm/templates/calendar_view.html:376 orm/templates/landing_page.html:396
+msgid "Approvals"
+msgstr "Εγκρίσεις"
+
+#: orm/templates/calendar_view.html:418
+msgid "Error fetching events. Please try again."
+msgstr "Σφάλμα κατά την ανάκτηση γεγονότων. Παρακαλώ προσπαθήστε ξανά."
+
+#: orm/templates/calendar_view.html:434
+msgid "No owner tasks."
+msgstr ""
+
+#: orm/templates/calendar_view.html:435
+msgid "No performer tasks."
+msgstr ""
+
+#: orm/templates/calendar_view.html:436
+#, fuzzy
+#| msgid "No pending approvals."
+msgid "No approvals."
+msgstr "Καμία εκκρεμής έγκριση."
+
+#: orm/templates/calendar_view.html:492 orm/templates/risk_detail.html:697
+msgid "days"
+msgstr "ημέρες"
+
+#: orm/templates/counterparty_list.html:7
+#: orm/templates/counterparty_list.html:27
+msgid "Counterparty List"
+msgstr "Λίστα Αντισυμβαλλομένων"
+
+#: orm/templates/counterparty_list.html:29
+msgid "Add Counterparty"
+msgstr "Προσθήκη Αντισυμβαλλομένου"
+
+#: orm/templates/counterparty_list.html:31
+msgid "View KYC Standards"
+msgstr "Προβολή Προτύπων KYC"
+
+#: orm/templates/counterparty_list.html:39
+#: orm/templates/counterparty_list.html:62
+msgid "Type"
+msgstr "Τύπος"
+
+#: orm/templates/counterparty_list.html:41
+#: orm/templates/counterparty_list.html:49
+msgid "All"
+msgstr "Όλα"
+
+#: orm/templates/counterparty_list.html:42
+msgid "Client"
+msgstr "Πελάτης"
+
+#: orm/templates/counterparty_list.html:43
+msgid "Supplier"
+msgstr "Προμηθευτής"
+
+#: orm/templates/counterparty_list.html:47
+#: orm/templates/counterparty_list.html:63
+msgid "Entity"
+msgstr "Οντότητα"
+
+#: orm/templates/counterparty_list.html:50
+msgid "Legal Entity"
+msgstr "Νομική Οντότητα"
+
+#: orm/templates/counterparty_list.html:51
+msgid "Individual"
+msgstr "Φυσικό Πρόσωπο"
+
+#: orm/templates/counterparty_list.html:61
+#: orm/templates/documents/document_list.html:61
+msgid "Name"
+msgstr "Όνομα"
+
+#: orm/templates/counterparty_list.html:64
+msgid "Last Assessment Date"
+msgstr "Τελευταία Ημερομηνία Αξιολόγησης"
+
+#: orm/templates/counterparty_list.html:65
+msgid "Contact"
+msgstr "Επικοινωνία"
+
+#: orm/templates/counterparty_list.html:66
+msgid "Sanctioned"
+msgstr "Κυρώσεις"
+
+#: orm/templates/counterparty_list.html:67
+msgid "Risk Level"
+msgstr "Επίπεδο Κινδύνου"
+
+#: orm/templates/counterparty_list.html:68
+#: orm/templates/indicators/indicator_form.html:113
+#: orm/templates/landing_page.html:280 orm/templates/risk_detail.html:2005
+msgid "Score"
+msgstr "Βαθμολογία"
+
+#: orm/templates/counterparty_list.html:69
+msgid "Active Status"
+msgstr "Κατάσταση Ενεργότητας"
+
+#: orm/templates/counterparty_list.html:83
+msgid "No Assessments"
+msgstr "Δεν Υπάρχουν Αξιολογήσεις"
+
+#: orm/templates/counterparty_list.html:87
+msgid "Email"
+msgstr "Ηλεκτρονικό Ταχυδρομείο"
+
+#: orm/templates/counterparty_list.html:88
+msgid "Phone"
+msgstr "Τηλέφωνο"
+
+#: orm/templates/counterparty_list.html:92
+msgid "Yes"
+msgstr "Ναι"
+
+#: orm/templates/counterparty_list.html:94
+msgid "No"
+msgstr "Όχι"
+
+#: orm/templates/counterparty_list.html:101
+msgid "Active"
+msgstr "Ενεργό"
+
+#: orm/templates/counterparty_list.html:103
+msgid "Inactive"
+msgstr "Ανενεργό"
+
+#: orm/templates/counterparty_list.html:108
+#: orm/templates/documents/folder_item.html:38
+#: orm/templates/indicators/indicator_list.html:150
+#: orm/templates/procedures/procedure_list.html:116
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#: orm/templates/counterparty_list.html:109
+#: orm/templates/documents/folder_item.html:12
+#: orm/templates/documents/folder_item.html:46
+#: orm/templates/events/event_list.html:119
+#: orm/templates/indicators/indicator_list.html:152
+#: orm/templates/procedures/procedure_list.html:117
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_confirmation.html:193
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/submit_line.html:28
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: orm/templates/counterparty_list.html:116
+msgid "No counterparties found."
+msgstr "Δεν βρέθηκαν αντισυμβαλλόμενοι."
+
+#: orm/templates/documents/document_list.html:26
+msgid "Documents Management"
+msgstr "Διαχείριση Εγγράφων"
+
+#: orm/templates/documents/document_list.html:32
+msgid "Create New Folder"
+msgstr "Δημιουργία Νέου Φακέλου"
+
+#: orm/templates/documents/document_list.html:37
+msgid "Create a Folder"
+msgstr "Δημιουργία Φακέλου"
+
+#: orm/templates/documents/document_list.html:39
+msgid "Create"
+msgstr "Δημιουργία"
+
+#: orm/templates/documents/document_list.html:45
+#: orm/templates/documents/document_list.html:50
+msgid "Upload Document"
+msgstr "Ανέβασμα Εγγράφου"
+
+#: orm/templates/documents/document_list.html:52
+msgid "Upload"
+msgstr "Ανέβασμα"
+
+#: orm/templates/documents/document_list.html:57
+msgid "Folders"
+msgstr "Φάκελοι"
+
+#: orm/templates/documents/document_list.html:59
+msgid "Sort folders by"
+msgstr "Ταξινόμηση φακέλων κατά"
+
+#: orm/templates/documents/document_list.html:64
+msgid "Created At"
+msgstr "Ημερομηνία Δημιουργίας"
+
+#: orm/templates/documents/document_list.html:90
+msgid "Are you sure you want to delete this folder and all its contents?"
+msgstr ""
+"Είστε σίγουροι ότι θέλετε να διαγράψετε αυτόν τον φάκελο και όλο το "
+"περιεχόμενό του;"
+
+#: orm/templates/documents/document_list.html:98
+msgid "Cannot delete folder. It may contain files or subfolders."
+msgstr ""
+"Δεν μπορεί να διαγραφεί ο φάκελος. Μπορεί να περιέχει αρχεία ή υποφακέλους."
+
+#: orm/templates/documents/folder_item.html:9
+msgid "Rename"
+msgstr "Μετονομασία"
+
+#: orm/templates/documents/folder_item.html:34
+#, fuzzy
+#| msgid "Upload"
+msgid "Uploaded"
+msgstr "Ανέβασμα"
+
+#: orm/templates/documents/folder_item.html:41
+#, fuzzy
+#| msgid "Reports Options"
+msgid "Versions"
+msgstr "Επιλογές Αναφορών"
+
+#: orm/templates/events/event_list.html:7
+#: orm/templates/events/event_list.html:83
+msgid "Events"
+msgstr "Περιστατικά"
+
+#: orm/templates/events/event_list.html:88
+msgid "Add New Event"
+msgstr "Προσθήκη Περιστατικού"
+
+#: orm/templates/events/event_list.html:96 orm/templates/risk_detail.html:1719
+#: orm/templates/risk_detail.html:2199
+msgid "Date"
+msgstr "Ημερομηνία"
+
+msgid "Total Risks Included"
+msgstr "Συνολικοί Συμπεριλαμβανόμενοι Κίνδυνοι"
+
+
+
+msgid "Inherent Risk Heatmap"
+msgstr "Εγγενής (Inherent) Βαθμολογίες Κινδύνων"
+
+
+msgid "Click a number in the heatmap to view risks at that position."
+msgstr "Κάντε κλικ σε έναν αριθμό στον θερμικό χάρτη για να δείτε τους κινδύνους σε αυτή τη θέση."
+
+msgid "Select a Heatmap Cell"
+msgstr "Επιλέξτε ένα κελί στον θερμικό χάρτη."
+
+
+
+msgid "Residual Risk Heatmap"
+msgstr "Υπολειπόμενες (Residual) Βαθμολογίες Κινδύνων"
+
+
+
+
+msgid "Targeted Risk Heatmap"
+msgstr "Υπολειπόμενες (Targeted) Βαθμολογίες Κινδύνων"
+
+#: orm/templates/events/event_list.html:98
+msgid "Reporter"
+msgstr "Αναφέρων"
+
+#: orm/templates/events/event_list.html:131
+#, fuzzy
+#| msgid "Incident Details"
+msgid "Event Details"
+msgstr "Λεπτομέρειες Περιστατικού"
+
+#: orm/templates/frontend.html:271
+#, fuzzy
+#| msgid "ERM Manual"
+msgid "View ERM Manual"
+msgstr "Εγχειρίδιο ERM"
+
+#: orm/templates/frontend.html:324
+#, fuzzy
+#| msgid "Opportunities"
+msgid "View Opportunities"
+msgstr "Ευκαιρίες"
+
+#: orm/templates/frontend.html:413
+msgid "Photo Verification"
+msgstr ""
+
+#: orm/templates/frontend.html:414
+msgid "Loan"
+msgstr ""
+
+#: orm/templates/frontend.html:415
+msgid "AGENT"
+msgstr ""
+
+#: orm/templates/indicators/indicator_form.html:7
+#: orm/templates/indicators/indicator_form.html:92
+msgid "Edit Indicator"
+msgstr "Επεξεργασία Δείκτη"
+
+#: orm/templates/indicators/indicator_form.html:7
+#: orm/templates/indicators/indicator_form.html:92
+#: orm/templates/risk_detail.html:1749
+msgid "Add Indicator"
+msgstr "Προσθήκη Δείκτη"
+
+#: orm/templates/indicators/indicator_form.html:98
+#: orm/templates/opportunities/opportunity_detail.html:179
+#: orm/templates/risk_detail.html:722
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/pagination.html:47
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/submit_line.html:7
+msgid "Save"
+msgstr "Αποθήκευση"
+
+msgid "Save Risk Changes"
+msgstr "Αποθήκευση"
+
+
+#: orm/templates/indicators/indicator_form.html:100
+#: orm/templates/risk_detail.html:1333 orm/templates/risk_detail.html:1550
+#: orm/templates/risk_detail.html:1778 orm/templates/risk_detail.html:2278
+#: orm/templates/risk_detail.html:2480
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+#: orm/templates/indicators/indicator_form.html:118
+msgid "No related risks"
+msgstr "Δεν υπάρχουν συνδεδεμένοι κίνδυνοι"
+
+#: orm/templates/indicators/indicator_list.html:96
+#: orm/templates/risk_detail.html:1758
+msgid "Add New Indicator"
+msgstr "Προσθήκη Νέου Δείκτη"
+
+#: orm/templates/indicators/indicator_list.html:103
+msgid "Frequency"
+msgstr "Συχνότητα"
+
+#: orm/templates/indicators/indicator_list.html:158
+msgid "No indicators found."
+msgstr "Δεν βρέθηκαν δείκτες."
+
+#: orm/templates/indicators/indicator_list.html:169
+#: orm/templates/risk_detail.html:1790
+msgid "Indicator Details"
+msgstr "Λεπτομέρειες Δείκτη"
+
+#: orm/templates/itassets_with_risks.html:7
+msgid "IT Assets, Risks, Threats & Vulnerabilities"
+msgstr ""
+
+#: orm/templates/itassets_with_risks.html:174
+#, fuzzy
+#| msgid "IT Assets"
+msgid "IT Assets Overview"
+msgstr "IT Περιουσιακά Στοιχεία"
+
+#: orm/templates/itassets_with_risks.html:180
+#, fuzzy
+#| msgid "IT Assets"
+msgid "IT Asset"
+msgstr "IT Περιουσιακά Στοιχεία"
+
+#: orm/templates/itassets_with_risks.html:181
+msgid "CIA"
+msgstr ""
+
+#: orm/templates/itassets_with_risks.html:182
+msgid "Criticality"
+msgstr ""
+
+#: orm/templates/itassets_with_risks.html:183
+msgid "Risk"
+msgstr ""
+
+#: orm/templates/itassets_with_risks.html:222
+msgid "No risks"
+msgstr ""
+
+#: orm/templates/itassets_with_risks.html:237
+#, fuzzy
+#| msgid "Vulnerabilities"
+msgid "No vulnerabilities"
+msgstr "Ευπάθειες"
+
+#: orm/templates/itassets_with_risks.html:252
+#, fuzzy
+#| msgid "Threats"
+msgid "No threats"
+msgstr "Απειλές"
+
+#: orm/templates/itassets_with_risks.html:259
+msgid "No IT assets registered."
+msgstr ""
+
+#: orm/templates/itassets_with_risks.html:270
+#, fuzzy
+#| msgid "Task Details"
+msgid "Details"
+msgstr "Λεπτομέρειες Εργασίας"
+
+#: orm/templates/landing_page.html:7
+msgid "ERM Views | ermapp.avax.gr"
+msgstr "Προβολές ERM | ermapp.avax.gr"
+
+#: orm/templates/landing_page.html:237
+msgid "Enterprise Risk Management (ERM) Manual"
+msgstr "Εγχειρίδιο Διαχείρισης Κινδύνων Επιχειρήσεων (ERM)"
+
+#: orm/templates/landing_page.html:242
+msgid "Policy"
+msgstr "Πολιτική"
+
+#: orm/templates/landing_page.html:245
+msgid "Work Flow"
+msgstr "Ροή Εργασίας"
+
+#: orm/templates/landing_page.html:248
+msgid "ERD"
+msgstr "ERD (Διάγραμμα Σχέσεων Οντοτήτων)"
+
+#: orm/templates/landing_page.html:254
+msgid "Likelihood and Impact"
+msgstr "Πιθανότητα και Επίπτωση"
+
+#: orm/templates/landing_page.html:255 orm/templates/landing_page.html:281
+#: orm/templates/risk_detail.html:2012
+msgid "Likelihood"
+msgstr "Πιθανότητα"
+
+#: orm/templates/landing_page.html:255
+msgid "Assesses the probability of a risk event occurring on a scale of 1 to 5"
+msgstr ""
+"Αξιολογεί την πιθανότητα εμφάνισης ενός γεγονότος κινδύνου σε κλίμακα από 1 "
+"έως 5"
+
+#: orm/templates/landing_page.html:256 orm/templates/landing_page.html:282
+#: orm/templates/risk_detail.html:2027
+msgid "Impact"
+msgstr "Επίδραση"
+
+#: orm/templates/landing_page.html:256
+msgid ""
+"Evaluates the potential consequences of a risk event on a scale of 1 to 5"
+msgstr ""
+"Αξιολογεί τις πιθανές συνέπειες ενός γεγονότος κινδύνου σε κλίμακα από 1 έως "
+"5"
+
+#: orm/templates/landing_page.html:261
+msgid "Understanding Risk Scores"
+msgstr "Κατανόηση Βαθμολογιών Κινδύνου"
+
+#: orm/templates/landing_page.html:263
+msgid "Inherent Risk"
+msgstr "Εγγενής Κίνδυνος"
+
+#: orm/templates/landing_page.html:264
+msgid ""
+"Picture a construction site for a bridge over a busy highway with no safety "
+"measures – that’s Inherent Risk. It’s the raw danger of a crane collapse or "
+"worker injury before we put up barriers, install supports, or enforce safety "
+"rules. It’s the worst-case scenario we face without any controls, calculated "
+"as Likelihood × Impact."
+msgstr ""
+"Φανταστείτε ένα εργοτάξιο για μια γέφυρα πάνω από έναν πολυσύχναστο "
+"αυτοκινητόδρομο χωρίς μέτρα ασφαλείας – αυτό είναι ο Εγγενής Κίνδυνος. Είναι "
+"ο ακατέργαστος κίνδυνος κατάρρευσης γερανού ή τραυματισμού εργαζομένου πριν "
+"τοποθετήσουμε φράγματα, στηρίγματα ή επιβάλουμε κανόνες ασφαλείας. Είναι το "
+"χειρότερο σενάριο που αντιμετωπίζουμε χωρίς κανέναν έλεγχο, υπολογιζόμενο ως "
+"Πιθανότητα × Επίπτωση."
+
+#: orm/templates/landing_page.html:267
+msgid "Residual Risk"
+msgstr "Υπολειπόμενος Κίνδυνος"
+
+#: orm/templates/landing_page.html:268
+msgid ""
+"Now imagine that same bridge site, but with safety nets, guardrails, and "
+"trained workers – that’s Residual Risk. It’s what’s left after we’ve added "
+"protections like equipment checks and site inspections to reduce the danger. "
+"It’s the risk that remains even with our safety measures in place."
+msgstr ""
+"Τώρα φανταστείτε το ίδιο εργοτάξιο γέφυρας, αλλά με δίχτυα ασφαλείας, "
+"προστατευτικά κιγκλιδώματα και εκπαιδευμένους εργάτες – αυτό είναι ο "
+"Υπολειπόμενος Κίνδυνος. Είναι αυτό που απομένει αφού έχουμε προσθέσει "
+"προστασίες όπως ελέγχους εξοπλισμού και επιθεωρήσεις εργοταξίου για να "
+"μειώσουμε τον κίνδυνο. Είναι ο κίνδυνος που παραμένει ακόμα και με τα μέτρα "
+"ασφαλείας μας σε ισχύ."
+
+#: orm/templates/landing_page.html:271
+msgid "Targeted Risk"
+msgstr "Στοχευμένος Κίνδυνος"
+
+#: orm/templates/landing_page.html:272
+msgid ""
+"Think of Targeted Risk as the ideal bridge project – perfectly safe, on "
+"schedule, and within budget. It’s the risk level we strive for after "
+"optimizing all controls, like using top-grade materials and the best "
+"engineers, to achieve a construction site where accidents are nearly "
+"impossible and operations run smoothly."
+msgstr ""
+"Σκεφτείτε τον Στοχευμένο Κίνδυνο ως το ιδανικό έργο γέφυρας – απόλυτα "
+"ασφαλές, εντός χρονοδιαγράμματος και προϋπολογισμού. Είναι το επίπεδο "
+"κινδύνου που επιδιώκουμε μετά την πλήρη βελτιστοποίηση όλων των ελέγχων, "
+"όπως η χρήση υλικών κορυφαίας ποιότητας και οι καλύτεροι μηχανικοί, για να "
+"επιτύχουμε ένα εργοτάξιο όπου τα ατυχήματα είναι σχεδόν αδύνατα και οι "
+"εργασίες κυλούν ομαλά."
+
+#: orm/templates/landing_page.html:288
+#, fuzzy, python-format
+#| msgid "Almost certain (>80%), frequent events within a year"
+msgid "Almost certain (>80%%), frequent events within a year"
+msgstr "Σχεδόν βέβαιο (>80%), συχνά γεγονότα μέσα σε ένα έτος"
+
+#: orm/templates/landing_page.html:289
+msgid ""
+"Fatality/multiple severe injuries, major loss (>€10M), project cancellations"
+msgstr ""
+"Θανατηφόρο/πολλαπλοί σοβαροί τραυματισμοί, μεγάλη ζημιά (>€10M), ακυρώσεις "
+"έργων"
+
+#: orm/templates/landing_page.html:293
+#, fuzzy, python-format
+#| msgid "Likely (50%-80%), every 1-2 years"
+msgid "Likely (50%%-80%%), every 1-2 years"
+msgstr "Πιθανό (50%-80%), κάθε 1-2 χρόνια"
+
+#: orm/templates/landing_page.html:294
+msgid ""
+"Severe injury (e.g., disability), loss (€2M-€10M), multi-project disruptions"
+msgstr ""
+"Σοβαρός τραυματισμός (π.χ. αναπηρία), ζημιά (€2M-€10M), διακοπές πολλαπλών "
+"έργων"
+
+#: orm/templates/landing_page.html:298
+#, fuzzy, python-format
+#| msgid "Possible (20%-50%), every 2-5 years"
+msgid "Possible (20%%-50%%), every 2-5 years"
+msgstr "Πιθανό (20%-50%), κάθε 2-5 χρόνια"
+
+#: orm/templates/landing_page.html:299
+msgid ""
+"Non-critical injury, moderate loss (€500k-€2M), single project disruption"
+msgstr "Μη κρίσιμος τραυματισμός, μέτρια ζημιά (€500k-€2M), διακοπή ενός έργου"
+
+#: orm/templates/landing_page.html:303
+#, fuzzy, python-format
+#| msgid "Unlikely (5%-20%), every 5-10 years"
+msgid "Unlikely (5%%-20%%), every 5-10 years"
+msgstr "Απίθανο (5%-20%), κάθε 5-10 χρόνια"
+
+#: orm/templates/landing_page.html:304
+msgid "Minor injuries, small loss (<€500k), localized delays"
+msgstr "Μικροί τραυματισμοί, μικρή ζημιά (<€500k), τοπικές καθυστερήσεις"
+
+#: orm/templates/landing_page.html:308
+#, fuzzy, python-format
+#| msgid "Rare (<5%), once in 10 years"
+msgid "Rare (<5%%), once in 10 years"
+msgstr "Σπάνιο (<5%), μία φορά σε 10 χρόνια"
+
+#: orm/templates/landing_page.html:309
+msgid "Minor inconvenience, no injuries/loss/delays"
+msgstr "Μικρή ενόχληση, χωρίς τραυματισμούς/ζημιές/καθυστερήσεις"
+
+#: orm/templates/landing_page.html:316
+msgid "Risk Score Calculation"
+msgstr "Υπολογισμός Βαθμολογίας Κινδύνου"
+
+#: orm/templates/landing_page.html:316
+msgid "Likelihood Score × Impact Score"
+msgstr "Βαθμολογία Πιθανότητας × Βαθμολογία Επίπτωσης"
+
+#: orm/templates/landing_page.html:320
+msgid "Severity Table"
+msgstr "Πίνακας Σοβαρότητας"
+
+#: orm/templates/landing_page.html:324
+msgid "Score Range"
+msgstr "Εύρος Βαθμολογίας"
+
+#: orm/templates/landing_page.html:325
+msgid "Risk Severity"
+msgstr "Σοβαρότητα Κινδύνου"
+
+#: orm/templates/landing_page.html:331 orm/templates/risk_detail.html:607
+msgid "High"
+msgstr "Υψηλή"
+
+#: orm/templates/landing_page.html:335 orm/templates/risk_detail.html:604
+msgid "Medium"
+msgstr "Μεσαία"
+
+#: orm/templates/landing_page.html:339 orm/templates/risk_detail.html:601
+msgid "Low"
+msgstr "Χαμηλή"
+
+#: orm/templates/landing_page.html:345
+msgid "Heatmap Visualization"
+msgstr "Οπτικοποίηση Χάρτη Θερμότητας"
+
+#: orm/templates/landing_page.html:379
+msgid ""
+"REPORT an Incident: An unplanned, unwanted event that causes or has the "
+"potential to cause harm, damage, disruption, or a breach of objectives."
+msgstr ""
+"ΑΝΑΦΟΡΑ Περιστατικού: Ένα απρογραμμάτιστο, ανεπιθύμητο γεγονός που προκαλεί "
+"ή έχει τη δυνατότητα να προκαλέσει βλάβη, ζημιά, διακοπή ή παραβίαση στόχων."
+
+#: orm/templates/landing_page.html:386
+msgid "AVAX Risk Management Program"
+msgstr "Πρόγραμμα Διαχείρισης Κινδύνων AVAX"
+
+#: orm/templates/landing_page.html:390
+msgid "Identify Risks Proactively"
+msgstr "Προσδιορισμός Κινδύνων Προληπτικά"
+
+#: orm/templates/landing_page.html:391 orm/templates/risk_detail.html:1189
+msgid "Add"
+msgstr "Προσθήκη"
+
+#: orm/templates/landing_page.html:392
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/edit_inline/stacked.html:29
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/edit_inline/tabular.html:60
+msgid "View"
+msgstr "Προβολή"
+
+#: orm/templates/landing_page.html:395
+msgid "Approve Risk Management Program"
+msgstr "Έγκριση Προγράμματος Διαχείρισης Κινδύνων"
+
+#: orm/templates/mitigation_detail.html:9
+#: orm/templates/mitigation_detail.html:58
+msgid "Edit Mitigation"
+msgstr "Επεξεργασία Μέτρου Μετριασμού"
+
+#: orm/templates/mitigation_detail.html:73 orm/templates/risk_detail.html:1334
+msgid "Save Mitigation"
+msgstr "Αποθήκευση Μέτρου Μετριασμού"
+
+#: orm/templates/mitigation_detail.html:90
+msgid "Effectiveness"
+msgstr "Αποτελεσματικότητα"
+
+#: orm/templates/mitigation_detail.html:92
+msgid "Not Tested"
+msgstr "Μη Δοκιμασμένο"
+
+#: orm/templates/mitigation_detail.html:93
+msgid "Ineffective"
+msgstr "Αναποτελεσματικό"
+
+#: orm/templates/mitigation_detail.html:94
+msgid "Partially Effective"
+msgstr "Μερικώς Αποτελεσματικό"
+
+#: orm/templates/mitigation_detail.html:95
+msgid "Effective"
+msgstr "Αποτελεσματικό"
+
+#: orm/templates/mitigation_detail.html:107 orm/templates/risk_detail.html:1062
+msgid "Owners"
+msgstr "Ιδιοκτήτες"
+
+#: orm/templates/mitigation_detail.html:122
+#: orm/templates/mitigation_detail.html:213
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+#: orm/templates/mitigation_detail.html:126
+msgid "No related risks yet."
+msgstr "Δεν υπάρχουν ακόμα σχετικοί κίνδυνοι."
+
+#: orm/templates/mitigation_detail.html:131
+msgid "Select a risk to add"
+msgstr "Επιλέξτε έναν κίνδυνο για προσθήκη"
+
+#: orm/templates/mitigation_detail.html:138
+#, fuzzy
+#| msgid "Add Risk\n"
+msgid "Add Risk"
+msgstr ""
+"Προσθήκη Κινδύνου\n"
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-18 12:00+0000\n"
+"PO-Revision-Date: 2025-03-18 12:00+0000\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: Greek <el@example.com>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# JavaScript Messages from Edit Opportunity
+#: orm/templates/opportunities/opportunity_detail.html:41
+msgid "Please select a risk to link."
+msgstr "Παρακαλώ επιλέξτε έναν κίνδυνο για σύνδεση."
+
+#: orm/templates/opportunities/opportunity_detail.html:55
+msgid "Failed to link the risk."
+msgstr "Αποτυχία σύνδεσης του κινδύνου."
+
+#: orm/templates/opportunities/opportunity_detail.html:65
+#: orm/templates/opportunities/opportunity_detail.html:132
+#: orm/templates/risk_detail.html:1173 orm/templates/risk_detail.html:1508
+#: orm/templates/risk_detail.html:1723 orm/templates/risk_detail.html:2251
+#: orm/templates/risk_detail.html:2453 orm/templates/risk_detail.html:2802
+#: orm/templates/risk_detail.html:2839
+msgid "Unlink"
+msgstr "Αποσύνδεση"
+
+#: orm/templates/opportunities/opportunity_detail.html:74
+msgid "An error occurred while linking the risk."
+msgstr "Προέκυψε σφάλμα κατά τη σύνδεση του κινδύνου."
+
+#: orm/templates/opportunities/opportunity_detail.html:93
+msgid "Failed to unlink the risk."
+msgstr "Αποτυχία αποσύνδεσης του κινδύνου."
+
+#: orm/templates/opportunities/opportunity_detail.html:102
+msgid "An error occurred while unlinking the risk."
+msgstr "Προέκυψε σφάλμα κατά την αποσύνδεση του κινδύνου."
+
+# Edit Opportunity Template
+#: orm/templates/opportunities/opportunity_detail.html:120
+msgid "Edit Opportunity"
+msgstr "Επεξεργασία Ευκαιρίας"
+
+#: orm/templates/opportunities/opportunity_detail.html:125
+msgid "Linked Risks"
+msgstr "Συνδεδεμένοι Κίνδυνοι"
+
+#: orm/templates/opportunities/opportunity_detail.html:137
+msgid "No risks linked."
+msgstr "Δεν υπάρχουν συνδεδεμένοι κίνδυνοι."
+
+#: orm/templates/opportunities/opportunity_detail.html:145
+msgid "Available Risks"
+msgstr "Διαθέσιμοι Κίνδυνοι"
+
+#: orm/templates/opportunities/opportunity_detail.html:149
+msgid "Select a risk to link"
+msgstr "Επιλέξτε έναν κίνδυνο για σύνδεση"
+
+#: orm/templates/opportunities/opportunity_detail.html:155
+msgid "Link"
+msgstr "Σύνδεση"
+
+#: orm/templates/opportunities/opportunity_detail.html:158
+msgid "Select a risk from the dropdown and click 'Link.'"
+msgstr ""
+"Επιλέξτε έναν κίνδυνο από το αναπτυσσόμενο μενού και κάντε κλικ στο "
+"'Σύνδεση'."
+
+#: orm/templates/opportunities/opportunity_detail.html:181
+msgid "Back to List"
+msgstr "Επιστροφή στη Λίστα"
+
+# Opportunity List Template
+#: orm/templates/opportunities/opportunity_list.html:7
+#: orm/templates/opportunities/opportunity_list.html:104
+msgid "Opportunity List"
+msgstr "Λίστα Ευκαιριών"
+
+#: orm/templates/procedures/procedure_list.html:94
+#: orm/templates/risk_detail.html:2461 orm/templates/risk_detail.html:2470
+msgid "Add New Procedure"
+msgstr "Προσθήκη Νέας Διαδικασίας"
+
+#: orm/templates/procedures/procedure_list.html:99
+msgid "Department"
+msgstr "Τμήμα"
+
+#: orm/templates/registration/login.html:9
+#: orm/templates/registration/login.html:95
+msgid "Login"
+msgstr "Είσοδος"
+
+#: orm/templates/registration/login.html:90
+msgid "Enterprise Risk Management Application"
+msgstr "Εφαρμογή Διαχείρισης Επιχειρηματικών Κινδύνων"
+
+#: orm/templates/registration/login.html:96
+msgid "Reset Password"
+msgstr "Επαναφορά Κωδικού"
+
+#: orm/templates/registration/password_change.html:160
+msgid "Change Your Password"
+msgstr "Αλλαγή του Κωδικού σας"
+
+#: orm/templates/registration/password_change.html:162
+msgid ""
+"Keeping your account secure is important to us. Update your password "
+"regularly to protect your data and maintain access to ermapp.avax.gr."
+msgstr ""
+"Η διατήρηση της ασφάλειας του λογαριασμού σας είναι σημαντική για εμάς. "
+"Ενημερώστε τον κωδικό σας τακτικά για να προστατεύσετε τα δεδομένα σας και "
+"να διατηρήσετε την πρόσβαση στο ermapp.avax.gr."
+
+#: orm/templates/registration/password_change.html:165
+msgid "Tips for a Strong Password:"
+msgstr "Συμβουλές για Ισχυρό Κωδικό:"
+
+#: orm/templates/registration/password_change.html:167
+msgid "Use at least 12 characters."
+msgstr "Χρησιμοποιήστε τουλάχιστον 12 χαρακτήρες."
+
+#: orm/templates/registration/password_change.html:168
+msgid "Mix letters (upper and lower case), numbers, and symbols."
+msgstr "Αναμείξτε γράμματα (κεφαλαία και μικρά), αριθμούς και σύμβολα."
+
+#: orm/templates/registration/password_change.html:169
+msgid "Avoid common words or personal info (e.g., your name or birthday)."
+msgstr ""
+"Αποφύγετε κοινές λέξεις ή προσωπικές πληροφορίες (π.χ. το όνομα ή η "
+"ημερομηνία γέννησής σας)."
+
+#: orm/templates/registration/password_change.html:170
+msgid "Make it unique—don’t reuse passwords from other sites."
+msgstr ""
+"Κάντε το μοναδικό—μην επαναχρησιμοποιείτε κωδικούς από άλλες ιστοσελίδες."
+
+#: orm/templates/registration/password_change.html:187
+msgid "All rights reserved."
+msgstr "Με επιφύλαξη παντός δικαιώματος."
+
+#: orm/templates/risk_detail.html:438
+msgid "Only owners or superusers can delete risks"
+msgstr "Μόνο οι ιδιοκτήτες ή οι υπερχρήστες μπορούν να διαγράψουν κινδύνους"
+
+#: orm/templates/risk_detail.html:439
+msgid "Archive"
+msgstr "Αρχειοθέτηση"
+
+#: orm/templates/risk_detail.html:443
+msgid "Replicate"
+msgstr "Αναπαραγωγή"
+
+#: orm/templates/risk_detail.html:504
+msgid "Inherent"
+msgstr "Εγγενής (Inherent) Βαθμολογία"
+
+#: orm/templates/risk_detail.html:520
+msgid "Residual"
+msgstr "Υπολειμματική (Residual) Βαθμολογία"
+
+#: orm/templates/risk_detail.html:536
+msgid "Targeted"
+msgstr "Στοχευμένη (Targeted) Βαθμολογία"
+
+#: orm/templates/risk_detail.html:648
+msgid "Approval Cycle"
+msgstr "Συχνότητα Έγκρισης"
+
+#: orm/templates/risk_detail.html:660
+msgid "Treatment Type"
+msgstr "Τύπος Αντιμετώπισης"
+
+#: orm/templates/risk_detail.html:683
+msgid "Unknown Role"
+msgstr "Άγνωστος Ρόλος"
+
+#: orm/templates/risk_detail.html:684
+msgid "Unknown User"
+msgstr "Άγνωστος Χρήστης"
+
+#: orm/templates/risk_detail.html:686
+msgid "Due:"
+msgstr "Λήξη:"
+
+#: orm/templates/risk_detail.html:693
+msgid "days remaining"
+msgstr "υπολειπόμενες ημέρες"
+
+#: orm/templates/risk_detail.html:695
+msgid "Due today"
+msgstr "Λήγει σήμερα"
+
+#: orm/templates/risk_detail.html:697
+msgid "Overdue by"
+msgstr "Καθυστέρηση κατά"
+
+#: orm/templates/risk_detail.html:705
+msgid "No approvals have been requested for this risk."
+msgstr "Δεν έχουν ζητηθεί εγκρίσεις για αυτόν τον κίνδυνο."
+
+#: orm/templates/risk_detail.html:721 orm/templates/risk_detail.html:1312
+#: orm/templates/risk_detail.html:1530 orm/templates/risk_detail.html:1748
+#: orm/templates/risk_detail.html:2258 orm/templates/risk_detail.html:2460
+msgid "Only owners or superusers can save changes"
+msgstr "Μόνο οι ιδιοκτήτες ή οι υπερχρήστες μπορούν να αποθηκεύσουν αλλαγές"
+
+#: orm/templates/risk_detail.html:873
+msgid "This search uses"
+msgstr "Αυτή η αναζήτηση χρησιμοποιεί"
+
+#: orm/templates/risk_detail.html:874
+msgid "models."
+msgstr "μοντέλα."
+
+#: orm/templates/risk_detail.html:876
+msgid "Standard Mode: Uses GPT-4o static model, or"
+msgstr "Τυπική λειτουργία: Χρησιμοποιεί το στατικό μοντέλο GPT-4o, ή"
+
+#: orm/templates/risk_detail.html:877
+msgid ""
+"Web Mode: Uses GPT-4o (Search Preview) for live web-enabled searches, "
+"selection is automatic."
+msgstr ""
+"Λειτουργία Ιστού: Χρησιμοποιεί το GPT-4o (Προεπισκόπηση Αναζήτησης) για "
+"ζωντανές αναζητήσεις με δυνατότητα Ιστού, η επιλογή γίνεται αυτόματα."
+
+#: orm/templates/risk_detail.html:878
+msgid ""
+"To force Web Mode, start your query with keywords such as 'web', 'search', "
+"'latest', 'live'."
+msgstr ""
+"Για να επιβάλετε χειροκίνητα τη Λειτουργία Ιστού, ξεκινήστε την αναζήτησή "
+"σας με λέξεις-κλειδιά όπως 'web', 'search', 'latest', 'live'."
+
+#: orm/templates/risk_detail.html:882
+msgid "Enter search term"
+msgstr ""
+
+#: orm/templates/risk_detail.html:883
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/search_form.html:16
+msgid "Search"
+msgstr "Αναζήτηση"
+
+#: orm/templates/risk_detail.html:887
+msgid "Disclaimer:"
+msgstr "Αποποίηση ευθύνης:"
+
+#: orm/templates/risk_detail.html:887
+msgid ""
+"AI and Web Mode results may not always reflect the latest risk data. Verify "
+"critical information from official sources."
+msgstr ""
+"Τα αποτελέσματα της λειτουργίας AI ενδέχεται να μην αντανακλούν "
+"πάντα τα πιο πρόσφατα δεδομένα κινδύνου. Επαληθεύστε τις κρίσιμες "
+"πληροφορίες από επίσημες πηγές."
+
+#: orm/templates/risk_detail.html:893
+msgid "Web Mode: ON (Using GPT-4o)"
+msgstr "Λειτουργία Web: ΕΝΕΡΓΗ (Χρήση GPT-4o)"
+
+#: orm/templates/risk_detail.html:898
+msgid "Searching... Please wait."
+msgstr "Αναζήτηση… Παρακαλώ περιμένετε."
+
+#: orm/templates/risk_detail.html:903
+msgid "Search Results:"
+msgstr "Αποτελέσματα Αναζήτησης:"
+
+#: orm/templates/risk_detail.html:931
+msgid "No results found."
+msgstr "Δεν βρέθηκαν αποτελέσματα."
+
+#: orm/templates/risk_detail.html:949
+msgid "Please enter a search term."
+msgstr "Παρακαλώ εισαγάγετε έναν όρο αναζήτησης."
+
+#: orm/templates/risk_detail.html:973
+msgid "Search failed:"
+msgstr "Η αναζήτηση απέτυχε:"
+
+#: orm/templates/risk_detail.html:973
+#, fuzzy
+#| msgid "Unknown User"
+msgid "Unknown error"
+msgstr "Άγνωστος Χρήστης"
+
+#: orm/templates/risk_detail.html:977
+msgid "An error occurred:"
+msgstr "Προέκυψε σφάλμα:"
+
+#: orm/templates/risk_detail.html:1072 orm/templates/risk_detail.html:2205
+msgid "Scores"
+msgstr "Βαθμολογίες"
+
+#: orm/templates/risk_detail.html:1112
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/change_form_object_tools.html:5
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/object_history.html:187
+msgid "History"
+msgstr ""
+
+#: orm/templates/risk_detail.html:1127
+msgid "General Information"
+msgstr "Γενικές Πληροφορίες"
+
+#: orm/templates/risk_detail.html:1162
+msgid "Ownership & Associations"
+msgstr "Ιδιοκτησία & Συνδέσεις"
+
+#: orm/templates/risk_detail.html:1165
+msgid "Current Owners:"
+msgstr "Τρέχοντες Ιδιοκτήτες:"
+
+#: orm/templates/risk_detail.html:1182
+msgid "Add Owner:"
+msgstr "Προσθήκη Ιδιοκτήτη:"
+
+#: orm/templates/risk_detail.html:1297
+msgid "Link Existing Mitigation:"
+msgstr "Σύνδεση Υπάρχοντος Μέτρου Μετριασμού:"
+
+#: orm/templates/risk_detail.html:1300
+msgid "-- Select Mitigation --"
+msgstr "-- Επιλέξτε Μέτρο Μετριασμού --"
+
+#: orm/templates/risk_detail.html:1306
+msgid "Link Mitigation"
+msgstr "Σύνδεση Μέτρου Μετριασμού"
+
+#: orm/templates/risk_detail.html:1313 orm/templates/risk_detail.html:1323
+msgid "Add New Mitigation"
+msgstr "Προσθήκη Νέου Μέτρου Μετριασμού"
+
+#: orm/templates/risk_detail.html:1328
+msgid "Mitigation Title"
+msgstr "Τίτλος Μέτρου Μετριασμού"
+
+#: orm/templates/risk_detail.html:1329
+msgid "Enter Mitigation Title"
+msgstr "Εισαγάγετε Τίτλο Μέτρου Μετριασμού"
+
+#: orm/templates/risk_detail.html:1345
+msgid "Mitigation Details"
+msgstr "Λεπτομέρειες Μέτρου Μετριασμού"
+
+#: orm/templates/risk_detail.html:1498
+#, fuzzy
+#| msgid "Due:"
+msgid "Due"
+msgstr "Λήξη:"
+
+#: orm/templates/risk_detail.html:1500
+msgid "Completed"
+msgstr ""
+
+#: orm/templates/risk_detail.html:1502
+#, fuzzy
+#| msgid "Overdue by"
+msgid "Overdue"
+msgstr "Καθυστέρηση κατά"
+
+#: orm/templates/risk_detail.html:1504
+msgid "Pending"
+msgstr ""
+
+#: orm/templates/risk_detail.html:1511
+#, fuzzy
+#| msgid "View Actions"
+msgid "No linked actions."
+msgstr "Προβολή Ενεργειών"
+
+#: orm/templates/risk_detail.html:1517
+msgid "Link an Existing Action"
+msgstr "Σύνδεση υπάρχουσας ενέργειας"
+
+#: orm/templates/risk_detail.html:1519
+msgid "Select an action"
+msgstr "Επιλέξτε μια ενέργεια"
+
+#: orm/templates/risk_detail.html:1525
+msgid "Link Action"
+msgstr "Σύνδεση Ενέργειας"
+
+#: orm/templates/risk_detail.html:1531
+msgid "Add Action"
+msgstr "Προσθήκη Ενέργειας"
+
+#: orm/templates/risk_detail.html:1540
+msgid "Add New Action"
+msgstr "Προσθήκη Νέας Ενέργειας"
+
+#: orm/templates/risk_detail.html:1545
+msgid "Action Title"
+msgstr "Τίτλος Ενέργειας"
+
+#: orm/templates/risk_detail.html:1546
+msgid "Enter Action Title"
+msgstr "Εισαγάγετε τον Τίτλο της Ενέργειας"
+
+#: orm/templates/risk_detail.html:1551
+msgid "Save Action"
+msgstr "Αποθήκευση Ενέργειας"
+
+#: orm/templates/risk_detail.html:1718
+msgid "Value"
+msgstr ""
+
+#: orm/templates/risk_detail.html:1727
+msgid "No linked indicators."
+msgstr "Δεν υπάρχουν συνδεδεμένοι δείκτες."
+
+#: orm/templates/risk_detail.html:1733
+msgid "Link an Existing Indicator"
+msgstr "Σύνδεση Υπάρχοντος Δείκτη"
+
+#: orm/templates/risk_detail.html:1735
+msgid "Select an indicator"
+msgstr "Επιλέξτε έναν δείκτη"
+
+#: orm/templates/risk_detail.html:1742
+msgid "Link Indicator"
+msgstr "Σύνδεση Δείκτη"
+
+#: orm/templates/risk_detail.html:1763
+msgid "Indicator Title"
+msgstr "Τίτλος Δείκτη"
+
+#: orm/templates/risk_detail.html:1765
+msgid "Enter Indicator Title"
+msgstr "Εισαγάγετε τον τίτλο του δείκτη"
+
+#: orm/templates/risk_detail.html:1768
+msgid "Current Value"
+msgstr "Τρέχουσα Τιμή"
+
+#: orm/templates/risk_detail.html:1770
+msgid "Enter Current Value"
+msgstr "Εισαγάγετε την τρέχουσα τιμή"
+
+#: orm/templates/risk_detail.html:1773
+msgid "Reporting Date"
+msgstr "Ημερομηνία Αναφοράς"
+
+#: orm/templates/risk_detail.html:1779
+msgid "Save Indicator"
+msgstr "Αποθήκευση Δείκτη"
+
+#: orm/templates/risk_detail.html:2152
+msgid "Inherent Scores"
+msgstr "Εγγενής (Inherent) Βαθμολογία"
+
+#: orm/templates/risk_detail.html:2160
+msgid "Residual Scores"
+msgstr "Υπολειμματική (Residual) Βαθμολογία"
+
+#: orm/templates/risk_detail.html:2168
+msgid "Targeted Scores"
+msgstr "Στοχευμένη (Targeted) Βαθμολογία"
+
+#: orm/templates/risk_detail.html:2229
+msgid "Link Existing IT Asset"
+msgstr "Σύνδεση Υπάρχοντος Πόρου Πληροφορικής"
+
+#: orm/templates/risk_detail.html:2232
+msgid "-- Select IT Asset --"
+msgstr "-- Επιλέξτε Πόρο Πληροφορικής --"
+
+#: orm/templates/risk_detail.html:2238
+msgid "Link IT Asset"
+msgstr "Σύνδεση Πόρου Πληροφορικής"
+
+#: orm/templates/risk_detail.html:2259 orm/templates/risk_detail.html:2268
+msgid "Add New IT Asset"
+msgstr "Προσθήκη Νέου Πόρου Πληροφορικής"
+
+#: orm/templates/risk_detail.html:2273
+msgid "IT Asset Name"
+msgstr "Όνομα Πόρου Πληροφορικής"
+
+#: orm/templates/risk_detail.html:2274
+msgid "Enter IT Asset Name"
+msgstr "Εισαγάγετε Όνομα Πόρου Πληροφορικής"
+
+#: orm/templates/risk_detail.html:2279
+msgid "Save IT Asset"
+msgstr "Αποθήκευση Πόρου Πληροφορικής"
+
+#: orm/templates/risk_detail.html:2290
+msgid "IT Asset Details"
+msgstr "Λεπτομέρειες Πόρου Πληροφορικής"
+
+#: orm/templates/risk_detail.html:2322
+msgid "IT Asset name is required!"
+msgstr "Το όνομα του Πόρου Πληροφορικής είναι υποχρεωτικό!"
+
+#: orm/templates/risk_detail.html:2341 orm/templates/risk_detail.html:2344
+#: orm/templates/risk_detail.html:2371 orm/templates/risk_detail.html:2374
+#: orm/templates/risk_detail.html:2395 orm/templates/risk_detail.html:2398
+#: orm/templates/risk_detail.html:2540 orm/templates/risk_detail.html:2543
+#: orm/templates/risk_detail.html:2567 orm/templates/risk_detail.html:2570
+#: orm/templates/risk_detail.html:2591 orm/templates/risk_detail.html:2594
+msgid "Error"
+msgstr "Σφάλμα"
+
+#: orm/templates/risk_detail.html:2354
+msgid "Please select an IT Asset to link."
+msgstr "Παρακαλώ επιλέξτε έναν Πόρο Πληροφορικής για σύνδεση."
+
+#: orm/templates/risk_detail.html:2431
+msgid "Link Existing Procedure"
+msgstr "Σύνδεση Υπάρχουσας Διαδικασίας"
+
+#: orm/templates/risk_detail.html:2434
+msgid "-- Select Procedure --"
+msgstr "-- Επιλέξτε Υπάρχουσα Διαδικασία --"
+
+#: orm/templates/risk_detail.html:2440
+msgid "Link Procedure"
+msgstr "Σύνδεση Διαδικασίας"
+
+#: orm/templates/risk_detail.html:2475
+msgid "Procedure Title"
+msgstr "Τίτλος Διαδικασίας"
+
+#: orm/templates/risk_detail.html:2476
+msgid "Enter Procedure Title"
+msgstr "Εισαγάγετε Τίτλο Διαδικασίας"
+
+#: orm/templates/risk_detail.html:2481
+msgid "Save Procedure"
+msgstr "Αποθήκευση Διαδικασίας"
+
+#: orm/templates/risk_detail.html:2492
+msgid "Procedure Details"
+msgstr "Λεπτομέρειες Διαδικασίας"
+
+#: orm/templates/risk_detail.html:2523
+msgid "Title is required!"
+msgstr "Ο τίτλος είναι υποχρεωτικός!"
+
+#: orm/templates/risk_detail.html:2550
+msgid "Please select a Procedure to link."
+msgstr "Παρακαλώ επιλέξτε μια Διαδικασία για σύνδεση."
+
+#: orm/templates/risk_detail.html:2681
+msgid "Reported on"
+msgstr "Αναφέρθηκε στις"
+
+#: orm/templates/risk_detail.html:2685
+msgid "No incidents reported for this risk."
+msgstr "Δεν έχουν αναφερθεί περιστατικά για αυτόν τον κίνδυνο."
+
+#: orm/templates/risk_detail.html:2690
+msgid "Add Incident"
+msgstr "Προσθήκη Περιστατικού"
+
+#: orm/templates/risk_detail.html:2698
+msgid "Incident Details"
+msgstr "Λεπτομέρειες Περιστατικού"
+
+#: orm/templates/risk_detail.html:2739
+msgid "Risk ID is missing or undefined."
+msgstr "Το ID του κινδύνου λείπει ή δεν έχει οριστεί."
+
+#: orm/templates/risk_detail.html:2750
+msgid "Iframe loaded successfully"
+msgstr "Το iframe φορτώθηκε επιτυχώς"
+
+#: orm/templates/risk_detail.html:2754
+msgid "Failed to access iframe content."
+msgstr "Αποτυχία πρόσβασης στο περιεχόμενο του iframe."
+
+#: orm/templates/risk_detail.html:2761
+msgid "Save button clicked in iframe"
+msgstr "Κουμπί αποθήκευσης πατήθηκε στο iframe"
+
+#: orm/templates/risk_detail.html:2768
+msgid "Save button not found in the iframe."
+msgstr "Το κουμπί αποθήκευσης δεν βρέθηκε στο iframe."
+
+#: orm/templates/risk_detail.html:2773
+msgid "Failed to load iframe content."
+msgstr "Αποτυχία φόρτωσης περιεχομένου του iframe."
+
+#: orm/templates/risk_detail.html:2786
+msgid "Link Existing Opportunities"
+msgstr "Σύνδεση Υπάρχουσων Ευκαιριών"
+
+#: orm/templates/risk_detail.html:2788
+msgid "-- Select Opportunity --"
+msgstr "-- Επιλέξτε Ευκαιρία --"
+
+#: orm/templates/risk_detail.html:2793
+msgid "Link Opportunity"
+msgstr "Σύνδεση Ευκαιρίας"
+
+#: orm/templates/risk_detail.html:2807
+msgid "Add Opportunity"
+msgstr "Προσθήκη Ευκαιρίας"
+
+#: orm/templates/risk_detail.html:2815
+msgid "Opportunity Details"
+msgstr "Λεπτομέρειες Ευκαιρίας"
+
+#: orm/templates/risk_detail.html:2845
+msgid "Link Existing Threat"
+msgstr "Σύνδεση Υπάρχουσας Απειλής"
+
+#: orm/templates/risk_detail.html:2847
+msgid "-- Select Threat --"
+msgstr "-- Επιλέξτε Απειλή --"
+
+#: orm/templates/risk_detail.html:2852
+msgid "Link Threat"
+msgstr "Σύνδεση Απειλής"
+
+#: orm/templates/risk_detail.html:2855
+msgid "Add Threat"
+msgstr "Προσθήκη Απειλής"
+
+#: orm/templates/risk_detail.html:2863
+#, fuzzy
+#| msgid "Threat Details\n"
+msgid "Threat Details"
+msgstr ""
+"Λεπτομέρειες Απειλής\n"
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-17 12:00+0000\n"
+"PO-Revision-Date: 2025-03-17 12:00+0000\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: Greek\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: orm/templates/risk_detail.html:2889
+msgid "Please select an opportunity to link."
+msgstr "Παρακαλώ επιλέξτε μια ευκαιρία για σύνδεση."
+
+#: orm/templates/risk_detail.html:2903
+msgid "Error: Unable to link opportunity."
+msgstr "Σφάλμα: Αδυναμία σύνδεσης ευκαιρίας."
+
+#: orm/templates/risk_detail.html:2909
+msgid "Enter Opportunity Title:"
+msgstr "Εισαγάγετε Τίτλο Ευκαιρίας:"
+
+#: orm/templates/risk_detail.html:2922
+msgid "Error: Unable to add opportunity."
+msgstr "Σφάλμα: Αδυναμία προσθήκης ευκαιρίας."
+
+#: orm/templates/risk_detail.html:2941
+msgid "Error: Unable to unlink opportunity."
+msgstr "Σφάλμα: Αδυναμία αποσύνδεσης ευκαιρίας."
+
+# JavaScript Messages from Edit Opportunity
+#: orm/templates/risk_detail.html:2970
+#, fuzzy
+#| msgid "Please select a risk to link."
+msgid "Please select a threat to link."
+msgstr "Παρακαλώ επιλέξτε έναν κίνδυνο για σύνδεση."
+
+#: orm/templates/risk_detail.html:2984
+#, fuzzy
+#| msgid "Error: Unable to link opportunity."
+msgid "Error: Unable to link threat."
+msgstr "Σφάλμα: Αδυναμία σύνδεσης ευκαιρίας."
+
+#: orm/templates/risk_detail.html:2990
+#, fuzzy
+#| msgid "Enter Action Title"
+msgid "Enter Threat Title:"
+msgstr "Εισαγάγετε τον Τίτλο της Ενέργειας"
+
+#: orm/templates/risk_detail.html:3003
+#, fuzzy
+#| msgid "Error: Unable to add opportunity."
+msgid "Error: Unable to add threat."
+msgstr "Σφάλμα: Αδυναμία προσθήκης ευκαιρίας."
+
+#: orm/templates/risk_detail.html:3022
+#, fuzzy
+#| msgid "Error: Unable to unlink opportunity."
+msgid "Error: Unable to unlink threat."
+msgstr "Σφάλμα: Αδυναμία αποσύνδεσης ευκαιρίας."
+
+#: orm/templates/risk_list_new.html:154
+#, fuzzy
+#| msgid "Hide Mitigations Column"
+msgid "Mitigations Column"
+msgstr "Απόκρυψη Στήλης Μέτρων"
+
+#: orm/templates/risk_list_new.html:199
+#, fuzzy
+#| msgid "Mitigations"
+msgid "No mitigations"
+msgstr "Μέτρα Μετριασμού"
+
+#: orm/templates/risk_list_new.html:491
+msgid "Hide Mitigations Column"
+msgstr "Απόκρυψη Στήλης Μέτρων"
+
+#: orm/templates/risk_list_new.html:492
+msgid "Show Mitigations Column"
+msgstr "Εμφάνιση Στήλης Μέτρων"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/forms.py:9
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/forms.py:36
+msgid "Password"
+msgstr "Κωδικός Πρόσβασης"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/forms.py:13
+msgid "Password Confirmation"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/actions.html:14
+#, fuzzy
+#| msgid "Select an action"
+msgid "Run the selected action"
+msgstr "Επιλέξτε μια ενέργεια"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/actions.html:15
+msgid "Go"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/actions.html:25
+msgid "Click here to select the objects across all pages"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/actions.html:25
+#, python-format
+msgid ""
+"\n"
+"                            Select all %(total_count)s %(module_name)s"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/actions.html:28
+msgid "Clear selection"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/auth/user/add_form.html:6
+msgid ""
+"First, enter a username and password. Then, you'll be able to edit more user "
+"options."
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/auth/user/add_form.html:8
+msgid "Enter a username and password."
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/auth/user/change_password.html:41
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/password_change_done.html:172
+#, fuzzy
+#| msgid "Change Password"
+msgid "Change password"
+msgstr "Αλλαγή Κωδικού"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/auth/user/change_password.html:55
+#, python-format
+msgid ""
+"\n"
+"                            Enter a new password for the user\n"
+"                            <strong>%(username)s</strong>.\n"
+"                        "
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/auth/user/change_password.html:91
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/password_change_form.html:225
+#, fuzzy
+#| msgid "Change Password"
+msgid "Change my password"
+msgstr "Αλλαγή Κωδικού"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/auth/user/change_password.html:106
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/login.html:72
+msgid "Please correct the error below."
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/auth/user/change_password.html:108
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/login.html:74
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/password_change_form.html:240
+msgid "Please correct the errors below."
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/change_form.html:200
+#, python-format
+msgid ""
+"Add\n"
+"                                %(name)s"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/change_form.html:220
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/change_list_object_tools.html:8
+#, python-format
+msgid "Add %(name)s"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/change_form_object_tools.html:10
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/edit_inline/stacked.html:32
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/edit_inline/tabular.html:64
+#, fuzzy
+#| msgid "View Actions"
+msgid "View on site"
+msgstr "Προβολή Ενεργειών"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/change_list.html:268
+#, fuzzy
+#| msgid "Filters"
+msgid "Filter"
+msgstr "Φίλτρα"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/change_list_results.html:18
+msgid "Remove from sorting"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/change_list_results.html:20
+#, python-format
+msgid "Sorting priority: %(priority_number)s"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/change_list_results.html:22
+#, fuzzy
+#| msgid "Toggle Menu"
+msgid "Toggle sorting"
+msgstr "Εναλλαγή Μενού"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_confirmation.html:210
+#, python-format
+msgid ""
+"\n"
+"                                    Deleting the %(object_name)s "
+"'%(escaped_object)s' would result in deleting\n"
+"                                    related objects, but your account "
+"doesn't have permission to delete the\n"
+"                                    following types of objects:\n"
+"                                "
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_confirmation.html:228
+#, python-format
+msgid ""
+"\n"
+"                                    Deleting the %(object_name)s ' "
+"%(escaped_object)s' would require deleting\n"
+"                                    the following protected related "
+"objects:\n"
+"                                "
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_confirmation.html:245
+#, python-format
+msgid ""
+"\n"
+"                                    Are you sure you want to delete the "
+"%(object_name)s \"%(escaped_object)s\"?\n"
+"                                    All of the following related items will "
+"be deleted:\n"
+"                                "
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_confirmation.html:259
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_selected_confirmation.html:259
+msgid "Objects"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_confirmation.html:280
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_selected_confirmation.html:278
+msgid "Yes, I'm sure"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_confirmation.html:282
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_selected_confirmation.html:280
+msgid "No, take me back"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_selected_confirmation.html:193
+msgid "Delete multiple objects"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_selected_confirmation.html:210
+#, python-format
+msgid ""
+"\n"
+"                                        Deleting the selected "
+"%(objects_name)s would result in deleting related\n"
+"                                        objects, but your account doesn't "
+"have permission to delete the following\n"
+"                                        types of objects:\n"
+"                                    "
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_selected_confirmation.html:228
+#, python-format
+msgid ""
+"\n"
+"                                        Deleting the selected "
+"%(objects_name)s would require deleting the\n"
+"                                        following protected related "
+"objects:\n"
+"                                    "
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/delete_selected_confirmation.html:245
+#, python-format
+msgid ""
+"\n"
+"                                        Are you sure you want to delete the "
+"selected %(objects_name)s? All of the\n"
+"                                        following objects and their related "
+"items will be deleted:\n"
+"                                    "
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/edit_inline/stacked.html:29
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/edit_inline/tabular.html:60
+msgid "Change"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/edit_inline/tabular.html:37
+#, fuzzy
+#| msgid "Delete"
+msgid "Delete?"
+msgstr "Διαγραφή"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/filter.html:5
+#, python-format
+msgid " By %(filter_title)s "
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/includes/object_delete_summary.html:5
+msgid "Summary"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/invalid_setup.html:187
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/invalid_setup.html:209
+msgid ""
+"Something's wrong with your database installation. Make sure the appropriate "
+"database tables have been created, and make sure the database is readable by "
+"the appropriate user."
+msgstr ""
+
+# Form field labels (if defined in form class)
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/object_history.html:205
+#, fuzzy
+#| msgid "Username"
+msgid "User"
+msgstr "Όνομα Χρήστη"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/object_history.html:206
+#, fuzzy
+#| msgid "Actions"
+msgid "Action"
+msgstr "Ενέργειες"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/object_history.html:207
+msgid "Date/time"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/object_history.html:223
+msgid ""
+"This object doesn't have a change history. It probably wasn't added via this "
+"admin site."
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/pagination.html:31
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/search_form.html:32
+msgid "Show all"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/search_form.html:22
+#, python-format
+msgid ""
+"\n"
+"                                    %(counter)s result\n"
+"                                "
+msgid_plural ""
+"\n"
+"                                    %(counter)s results\n"
+"                                "
+msgstr[0] ""
+msgstr[1] ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/search_form.html:28
+#, python-format
+msgid ""
+"\n"
+"                                    %(full_result_count)s total\n"
+"                                "
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/submit_line.html:11
+msgid "Save as new"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/submit_line.html:15
+msgid "Save and add another"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/submit_line.html:19
+msgid "Save and continue editing"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/admin/submit_line.html:19
+msgid "Save and view"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/logged_out.html:16
+msgid "Log in"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/logged_out.html:17
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/logged_out.html:36
+msgid "Thanks for spending some quality time with the Web site today."
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/logged_out.html:21
+msgid "Log in again"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/password_change_done.html:169
+#, fuzzy
+#| msgid "Documents"
+msgid "Documentation"
+msgstr "Έγγραφα"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/password_change_done.html:173
+msgid "Log out"
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/password_change_done.html:190
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/password_change_form.html:178
+#, fuzzy
+#| msgid "Password"
+msgid "Password change"
+msgstr "Κωδικός Πρόσβασης"
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/password_change_done.html:205
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/password_change_done.html:225
+msgid "Your password was changed."
+msgstr ""
+
+#: ormprojectvenv/lib/python3.11/site-packages/admin_tabler/templates/registration/password_change_form.html:194
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+
+
+#~ msgid "Owner: {{ username }} ({{ count }} actions)"
+#~ msgstr "Ιδιοκτήτης: {{ username }} ({{ count }} ενέργειες)"
+
+# Form field labels (if defined in form classes)
+#~ msgid "File"
+#~ msgstr "Αρχείο"
+
+#~ msgid "Folder"
+#~ msgstr "Φάκελος"
+
+#~ msgid "Not Available"
+#~ msgstr "Δεν Διαθέσιμο"
+
+#~ msgid "Unknown"
+#~ msgstr "Άγνωστο"

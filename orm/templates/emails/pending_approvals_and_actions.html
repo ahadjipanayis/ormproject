@@ -1,0 +1,141 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Calibri, sans-serif; font-size: 14px; line-height: 1.6; color: #333; }
+        h3 { color: #003366; margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { padding: 8px 12px; border: 1px solid #ccc; text-align: left; }
+        th { background-color: #f2f2f2; }
+        details { margin-bottom: 20px; }
+        summary { font-size: 16px; font-weight: bold; cursor: pointer; color: #003366; }
+        ol { padding-left: 20px; }
+        a { color: #003366; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .signature { margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <p>Αγαπητέ/ή Κύριε/Κυρία {{ user }},</p>
+
+    <p>Ακολουθεί η αναλυτική αναφορά των εργασιών σας από την πλατφόρμα <strong>ermapp.avax.gr</strong>.</p>
+    <h3>Συνοπτικός Πίνακας</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Κατηγορία</th>
+                <th>Σύνολο</th>
+                <th>Εντός προθεσμίας</th>
+                <th>Εκτός προθεσμίας</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Εγκρίσεις</strong></td>
+                <td>{{ totals.approvals.total }}</td>
+                <td style="color: green;">{{ totals.approvals.future }}</td>
+                <td style="color: red;">{{ totals.approvals.overdue }}</td>
+
+            </tr>
+         
+            <tr>
+                <td><strong>Ενέργειες Ιδιοκτήτη</strong></td>
+                <td>{{ totals.owner.total }}</td>
+                <td style="color: green;">{{ totals.owner.future }}</td>
+                <td style="color: red;">{{ totals.owner.overdue }}</td>
+
+            </tr>
+
+            <tr>
+                <td><strong>Ενέργειες Εκτελεστή</strong></td>
+                <td>{{ totals.performer.total }}</td>
+                <td style="color: green;">{{ totals.performer.future }}</td>
+                <td style="color: red;">{{ totals.performer.overdue }}</td>
+
+            </tr>
+        </tbody>
+    </table>
+
+    {% if totals.approvals.total == 0 and totals.performer.total == 0 and totals.owner.total == 0 %}
+        <p style="color: green; font-weight: bold;">🎉 Δεν υπάρχουν εκκρεμείς ενέργειες ή αιτήσεις έγκρισης αυτή τη στιγμή!</p>
+    {% endif %}
+
+    <p>Παρακάτω παρατίθενται οι εργασίες που απαιτούν την προσοχή σας:</p>
+
+    {% if approval_links %}
+    <details open>
+        <summary> ✅ Εγκρίσεις ({{ approval_links|length }})</summary>
+        <ol>
+            {% for approval in approval_links %}
+                <li>
+                    <a href="{{ approval.url }}">{{ approval.risk_title | safe }}</a>
+                    {% if approval.days_until_due is not None %}
+                        {% if approval.days_until_due < 0 %}
+                            <span style="color: red;">🔴 Ληγμένο ({{ approval.due_date|date:"Y-m-d" }})</span>
+                        {% elif approval.days_until_due == 0 %}
+                            <span style="color: orange;">🟠 Λήγει σήμερα</span>
+                        {% else %}
+                            <span style="color: green;">🟢 Σε {{ approval.days_until_due }} ημέρες</span>
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </details>
+    {% endif %}
+
+    {% if action_performer_links %}
+    <details open>
+        <summary> 📋 Ενέργειες ως Εκτελεστής ({{ action_performer_links|length }})</summary>
+        <ol>
+            {% for action in action_performer_links %}
+                <li>
+                    <a href="{{ action.url }}">{{ action.title | safe}}</a>
+                    {% if action.days_until_deadline is not None %}
+                        {% if action.days_until_deadline < 0 %}
+                            <span style="color: red;">🔴 Ληγμένη ({{ action.deadline|date:"Y-m-d" }})</span>
+                        {% elif action.days_until_deadline == 0 %}
+                            <span style="color: orange;">🟠 Λήγει σήμερα</span>
+                        {% else %}
+                            <span style="color: green;">🟢 Σε {{ action.days_until_deadline }} ημέρες</span>
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </details>
+    {% endif %}
+
+    {% if action_owner_links %}
+    <details open>
+        <summary> 📋 Ενέργειες ως Ιδιοκτήτης ({{ action_owner_links|length }})</summary>
+        <ol>
+            {% for action in action_owner_links %}
+                <li>
+                    <a href="{{ action.url }}">{{ action.title | safe }}</a>
+                    {% if action.days_until_deadline is not None %}
+                        {% if action.days_until_deadline < 0 %}
+                            <span style="color: red;">🔴 Ληγμένη ({{ action.deadline|date:"Y-m-d" }})</span>
+                        {% elif action.days_until_deadline == 0 %}
+                            <span style="color: orange;">🟠 Λήγει σήμερα</span>
+                        {% else %}
+                            <span style="color: green;">🟢 Σε {{ action.days_until_deadline }} ημέρες</span>
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </details>
+    {% endif %}
+
+    <div class="signature">
+        <p>Με εκτίμηση,<br><strong>ermapp.avax.gr</strong> (Διαχειριστής)</p>
+        <img src="{% static 'images/email_signature.png' %}" alt="Email Signature" style="max-width: 100%; height: auto;">
+    </div>
+
+</body>
+</html>

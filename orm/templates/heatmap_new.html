@@ -1,0 +1,574 @@
+{% load static i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Heatmap</title>
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+    <style>
+        body {
+            font-family: 'Calibri', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: auto;
+            width: 100%;
+        }
+
+        .header {
+            margin: 0 0 20px 0;
+            padding: 10px 0;
+            background-color: #ffffff;
+            border-radius: 0;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1200px;
+            text-align: left;
+            padding-left: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header p {
+            font-size: 20px;
+            color: #3498db;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .legend {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            overflow-x: auto;
+        }
+
+        .legend div {
+            align-items: center;
+        }
+
+        .legend div span {
+            margin-left: 5px;
+            margin-right: 5px;
+            font-size: 14px;
+        }
+
+        .heatmap-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 10px;
+        }
+
+        .heatmap-section {
+            background-color: #ffffff;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .heatmap-section h2 {
+            font-size: 22px;
+            color: #f5f7f9;
+            margin: 10px 0;
+            background-color: #007bff;
+            padding: 15px;
+            width: 100%;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            max-width: 600px;
+            margin: 10px auto;
+            position: relative;
+            width: 100%;
+        }
+
+        .heatmap-cell {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: #e9eff7;
+            border-radius: 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+            overflow: visible;
+            z-index: 1; /* Lower than bubbles */
+        }
+
+        .heatmap-cell.green { background-color: #2ecc71; }
+        .heatmap-cell.orange { background-color: #f1c40f; }
+        .heatmap-cell.red { background-color: #e74c3c; }
+
+        .heatmap-cell:hover {
+            transform: scale(1.05);
+        }
+
+        .scale-label {
+            position: absolute;
+            font-size: 14px;
+            color: #2c3e50;
+            z-index: 2; /* Lower than bubbles */
+        }
+
+        .y-label {
+            left: -30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .x-label {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 10px;
+            margin-top: 10px;
+        }
+
+        .resizer {
+            width: 5px;
+            background-color: #ddd;
+            cursor: col-resize;
+            position: relative;
+        }
+
+        .resizer:hover {
+            background-color: #aaa;
+        }
+
+        .risk-details {
+            width: 320px;
+            min-width: 200px;
+            max-width: 600px;
+            background-color: #ffffff;
+            border-left: 3px solid #ddd;
+            padding: 0;
+            overflow-y: auto;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .risk-details h3 {
+            font-size: 20px;
+            color: #3498db;
+            margin: 0;
+            padding: 10px;
+            background: #ffffff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .risk-list-item {
+            margin: 0;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .risk-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .risk-link:hover {
+            text-decoration: underline;
+        }
+
+        .portfolio-info {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .bubble {
+            position: absolute;
+            border: 1px solid #007bff;
+            background-color: rgba(0, 123, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            transition: all 0.2s;
+            z-index: 10; /* Highest z-index to be on top */
+        }
+
+        #portfolio-select {
+            width: 100%;
+            height: 300px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        #filter-section {
+            display: none;
+            background-color: #ffffff;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            height: 400px;
+            width: 100%;
+            overflow-y: auto;
+            max-width: 1200px;
+            transition: all 0.3s ease;
+        }
+
+        #filter-section.open {
+            display: block;
+        }
+
+        #apply-filters {
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+
+        #apply-filters:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        #apply-filters:active {
+            background-color: #1e7e34;
+        }
+
+        .risk-totals {
+            padding: 10px;
+            background-color: #f8f9fa;
+            width: 200px;
+            text-align: left;
+            position: absolute;
+            left: calc(50% - 620px); /* Center minus half of heatmap width (600px/2 = 300px) minus totals width (200px) minus gap (20px) */
+            top: 62px; /* Below the h2 (height: 52px including padding and margin) */
+            z-index: 2; /* Lower than bubbles */
+        }
+
+        .risk-totals div {
+            margin: 5px 0;
+        }
+
+        .risk-totals .total-all { color: #2c3e50; }
+        .risk-totals .total-high { color: #e74c3c; }
+        .risk-totals .total-medium { color: #f1c40f; }
+        .risk-totals .total-low { color: #2ecc71; }
+    </style>
+</head>
+<body>
+    <div class="content" id="main-content">
+        <div class="header">
+            <p>{% trans "Total Risks Included" %}: {{ total_risks }}</p>
+            <div class="legend">
+                <div title="Likelihood x Impact = (1-6)">
+                    <div class="heatmap-cell green"></div>
+                    <span>L x I: (1-6)</span>
+                </div>
+                <div title="Likelihood x Impact = (8-12)">
+                    <div class="heatmap-cell orange"></div>
+                    <span>L x I: (8-12)</span>
+                </div>
+                <div title="Likelihood x Impact = (15-25)">
+                    <div class="heatmap-cell red"></div>
+                    <span>L x I: (15-25)</span>
+                </div>
+            </div>
+            <button id="toggle-filters" class="btn btn-primary">Toggle Filters</button>
+        </div>
+
+        <div class="header">
+            <div id="filter-section">
+                <p>Select Portfolios:</p>
+                <form id="filter-form" method="GET">
+                    <select id="portfolio-select" name="portfolios" multiple>
+                        {% if portfolios %}
+                            {% for portfolio in portfolios|dictsort:"name" %}
+                                <option value="{{ portfolio.id }}">{{ portfolio.name }}</option>
+                            {% endfor %}
+                        {% else %}
+                            <option value="" disabled>No portfolios available</option>
+                        {% endif %}
+                    </select>
+                    <button type="submit" id="apply-filters">Apply Filters</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="heatmap-container">
+            <!-- Inherent Risk Heatmap -->
+            <div class="heatmap-section">
+                <h2>{% trans "Inherent Risk Heatmap" %}</h2>
+                <div class="risk-totals">
+                    <div class="total-all">Total: <span data-type="inherent" data-total="all">0</span></div>
+                    <div class="total-high">High: <span data-type="inherent" data-total="high">0</span></div>
+                    <div class="total-medium">Medium: <span data-type="inherent" data-total="medium">0</span></div>
+                    <div class="total-low">Low: <span data-type="inherent" data-total="low">0</span></div>
+                </div>
+                <div class="heatmap-grid">
+                    <div class="y-label scale-label">
+                        {% for i in reversed_likelihood %}
+                            <span>Λ {{ i }}</span>
+                        {% endfor %}
+                    </div>
+                    {% for row in inherent_data %}
+                        {% for cell in row %}
+                            <div 
+                                class="heatmap-cell {{ cell.risk_level }}" 
+                                data-count="{{ cell.count }}"
+                                data-total="{{ inherent_total_risks }}"
+                                data-type="inherent"
+                                data-likelihood="{{ cell.likelihood }}"
+                                data-impact="{{ cell.impact }}"
+                                onclick="if({{ cell.count }} > 0) showRiskDetails('inherent', {{ cell.likelihood }}, {{ cell.impact }})">
+                                {% if cell.count > 0 %}{{ cell.count }}{% endif %}
+                                {% if cell.count > 0 %}
+                                    <div class="bubble" data-count="{{ cell.count }}"></div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                <div class="x-label scale-label">
+                    {% for i in impact_range %}
+                        <span>Ε {{ i }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Residual Risk Heatmap -->
+            <div class="heatmap-section">
+                <h2>{% trans "Residual Risk Heatmap" %}</h2>
+                <div class="risk-totals">
+                    <div class="total-all">Total: <span data-type="residual" data-total="all">0</span></div>
+                    <div class="total-high">High: <span data-type="residual" data-total="high">0</span></div>
+                    <div class="total-medium">Medium: <span data-type="residual" data-total="medium">0</span></div>
+                    <div class="total-low">Low: <span data-type="residual" data-total="low">0</span></div>
+                </div>
+                <div class="heatmap-grid">
+                    {% for row in residual_data %}
+                        {% for cell in row %}
+                            <div 
+                                class="heatmap-cell {{ cell.risk_level }}" 
+                                data-count="{{ cell.count }}"
+                                data-total="{{ residual_total_risks }}"
+                                data-type="residual"
+                                data-likelihood="{{ cell.likelihood }}"
+                                data-impact="{{ cell.impact }}"
+                                onclick="if({{ cell.count }} > 0) showRiskDetails('residual', {{ cell.likelihood }}, {{ cell.impact }})">
+                                {% if cell.count > 0 %}{{ cell.count }}{% endif %}
+                                {% if cell.count > 0 %}
+                                    <div class="bubble" data-count="{{ cell.count }}"></div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                <div class="x-label scale-label">
+                    {% for i in impact_range %}
+                        <span>Ε {{ i }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Targeted Risk Heatmap -->
+            <div class="heatmap-section">
+                <h2>{% trans "Targeted Risk Heatmap" %}</h2>
+                <div class="risk-totals">
+                    <div class="total-all">Total: <span data-type="targeted" data-total="all">0</span></div>
+                    <div class="total-high">High: <span data-type="targeted" data-total="high">0</span></div>
+                    <div class="total-medium">Medium: <span data-type="targeted" data-total="medium">0</span></div>
+                    <div class="total-low">Low: <span data-type="targeted" data-total="low">0</span></div>
+                </div>
+                <div class="heatmap-grid">
+                    {% for row in targeted_data %}
+                        {% for cell in row %}
+                            <div 
+                                class="heatmap-cell {{ cell.risk_level }}" 
+                                data-count="{{ cell.count }}"
+                                data-total="{{ targeted_total_risks }}"
+                                data-type="targeted"
+                                data-likelihood="{{ cell.likelihood }}"
+                                data-impact="{{ cell.impact }}"
+                                onclick="if({{ cell.count }} > 0) showRiskDetails('targeted', {{ cell.likelihood }}, {{ cell.impact }})">
+                                {% if cell.count > 0 %}{{ cell.count }}{% endif %}
+                                {% if cell.count > 0 %}
+                                    <div class="bubble" data-count="{{ cell.count }}"></div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                <div class="x-label scale-label">
+                    {% for i in impact_range %}
+                        <span>Ε {{ i }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resizer Divider -->
+    <div id="resizer" class="resizer"></div>
+
+    <!-- Detail Panel -->
+    <div id="risk-details" class="risk-details">
+        <h3>{% trans "Select a Heatmap Cell" %}</h3>
+        <p>{% trans "Click a number in the heatmap to view risks at that position." %}</p>
+    </div>
+    
+
+    <script>
+        function showRiskDetails(riskType, likelihood, impact) {
+            fetch(`/get-risk-details?type=${riskType}&likelihood=${likelihood}&impact=${impact}`)
+                .then(response => response.json())
+                .then(data => {
+                    const riskDetailsContainer = document.getElementById('risk-details');
+                    riskDetailsContainer.innerHTML = `<h3>Risks at Likelihood ${likelihood} - Impact ${impact}</h3>`;
+                    data.forEach(risk => {
+                        const adminUrl = risk.change_url.startsWith('/')
+                            ? risk.change_url
+                            : '/' + risk.change_url;
+                        riskDetailsContainer.innerHTML += `
+                            <div class="risk-list-item">
+                                <a href="${adminUrl}" class="risk-link" target="_blank">${risk.title}</a>
+                                <p class="portfolio-info">Portfolio: ${risk.portfolio}</p>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(error => console.error('Error fetching risk details:', error));
+        }
+
+        // Resizer Functionality
+        const resizer = document.getElementById('resizer');
+        const mainContent = document.getElementById('main-content');
+        const riskDetails = document.getElementById('risk-details');
+        let isResizing = false;
+
+        resizer.addEventListener('mousedown', () => {
+            isResizing = true;
+            document.body.style.cursor = 'col-resize';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const totalWidth = window.innerWidth;
+            let newRiskDetailsWidth = totalWidth - e.clientX;
+            const minWidth = 200;
+            const maxWidth = 600;
+
+            newRiskDetailsWidth = Math.max(minWidth, Math.min(maxWidth, newRiskDetailsWidth));
+
+            riskDetails.style.width = `${newRiskDetailsWidth}px`;
+            mainContent.style.width = `calc(100% - ${newRiskDetailsWidth}px)`;
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.cursor = 'default';
+            }
+        });
+
+        // Toggle Filter Section
+        document.getElementById('toggle-filters').addEventListener('click', function () {
+            const filterSection = document.getElementById('filter-section');
+            filterSection.classList.toggle('open');
+        });
+
+        // Bubble Scaling Function
+        function updateBubbles() {
+            const cells = document.querySelectorAll('.heatmap-cell');
+            const maxCounts = {};
+            ['inherent', 'residual', 'targeted'].forEach(type => {
+                const typeCells = document.querySelectorAll(`.heatmap-cell[data-type="${type}"]`);
+                maxCounts[type] = Math.max(...Array.from(typeCells).map(cell => parseInt(cell.dataset.count) || 0)) || 1;
+            });
+
+            cells.forEach(cell => {
+                const count = parseInt(cell.dataset.count) || 0;
+                const type = cell.dataset.type;
+                const maxCount = maxCounts[type];
+                const bubble = cell.querySelector('.bubble');
+
+                if (bubble && count > 0) {
+                    const maxBubbleSize = 200;
+                    const minBubbleSize = 20;
+                    const proportion = count / maxCount;
+                    const size = minBubbleSize + (proportion * (maxBubbleSize - minBubbleSize));
+
+                    bubble.style.width = `${size}px`;
+                    bubble.style.height = `${size}px`;
+                    bubble.style.left = `calc(50% - ${size/2}px)`;
+                    bubble.style.top = `calc(50% - ${size/2}px)`;
+                }
+            });
+        }
+
+        // Update Risk Totals Function
+        function updateRiskTotals() {
+            const types = ['inherent', 'residual', 'targeted'];
+            types.forEach(type => {
+                const cells = document.querySelectorAll(`.heatmap-cell[data-type="${type}"]`);
+                let total = 0, high = 0, medium = 0, low = 0;
+
+                cells.forEach(cell => {
+                    const count = parseInt(cell.dataset.count) || 0;
+                    total += count;
+                    if (cell.classList.contains('red')) high += count;
+                    else if (cell.classList.contains('orange')) medium += count;
+                    else if (cell.classList.contains('green')) low += count;
+                });
+
+                document.querySelector(`[data-type="${type}"][data-total="all"]`).textContent = total;
+                document.querySelector(`[data-type="${type}"][data-total="high"]`).textContent = high;
+                document.querySelector(`[data-type="${type}"][data-total="medium"]`).textContent = medium;
+                document.querySelector(`[data-type="${type}"][data-total="low"]`).textContent = low;
+            });
+        }
+
+        // Initialize bubbles and totals on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBubbles();
+            updateRiskTotals();
+        });
+    </script>
+</body>
+</html>

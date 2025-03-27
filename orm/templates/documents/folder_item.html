@@ -1,0 +1,53 @@
+{% load i18n %}
+
+<li class="list-group-item d-flex justify-content-between align-items-center">
+    <span class="folder-toggle" onclick="toggleFolder('{{ folder.id }}')">
+        <i class="fas fa-folder"></i> {{ folder.name }}
+    </span>
+    <span class="btn-group">
+        <a href="{% url 'edit_folder' folder.id %}" class="btn btn-sm btn-warning">
+            <i class="fas fa-edit"></i> {% trans "Rename" %}
+        </a>
+        <button class="btn btn-danger btn-sm" onclick="deleteFolder('{{ folder.id }}')">
+            <i class="fas fa-trash"></i> {% trans "Delete" %}
+        </button>
+    </span>
+</li>
+
+<ul class="folder-children list-group" id="folderChildren-{{ folder.id }}">
+    <!-- Loop through subfolders -->
+    {% for subfolder in folders %}
+        {% if subfolder.parent == folder %}
+            {% include 'documents/folder_item.html' with folder=subfolder %}
+        {% endif %}
+    {% endfor %}
+
+    <!-- Show files inside this folder -->
+    {% for document in documents %}
+        {% if document.folder == folder %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>
+                    <a href="{{ document.file.url }}" class="btn btn-sm btn-download" target="_blank">
+                        <i class="fas fa-download"></i>  
+                        <i class="{{ document.icon_class }}"></i> {{ document.title }}
+                    </a>
+                    <small class="text-muted ms-2">{% trans "Uploaded" %}: {{ document.uploaded_at|date:"Y-m-d H:i" }}</small>
+                </span>
+                <span class="btn-group">
+                    <a href="{% url 'edit_document' document.id %}" class="btn btn-sm btn-warning">
+                        <i class="fas fa-edit"></i> {% trans "Edit" %}
+                    </a>
+                    <a href="{% url 'document_versions' document.id %}" class="btn btn-sm btn-info">
+                        <i class="fas fa-history"></i> {% trans "Versions" %}
+                    </a>
+                    <form method="POST" action="{% url 'delete_document' document.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i> {% trans "Delete" %}
+                        </button>
+                    </form>
+                </span>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>

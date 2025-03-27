@@ -1,0 +1,738 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Μητρώο Κινδύνων (Risk Register)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+<!-- Bootstrap Multi-Select Plugin -->
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
+            color: #343a40;
+        }
+
+
+
+        .container {
+            width: 100%;       /* Full width of the window */
+            height: 100%;      /* Full height of the window */
+            margin: 0pt;         /* Remove default margins */
+            padding: 5pt;        /* Remove padding */
+            max-width: none;   /* Remove any inherited width constraints */
+            box-sizing: border-box; /* Include padding in width calculations */
+        }
+
+        .card-header {
+            background-color: #0056b3;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        table {
+    width: 100%; /* Ensure the table spans the full width of its container */
+    border-collapse: collapse; /* Merge table borders */
+    font-size: 1.2rem; /* Increase font size (adjust as needed) */
+    line-height: 1.5; /* Improve readability */
+    text-align: left; /* Align text to the left */
+}
+        .table th,
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .table td:first-child {
+            text-align: left;
+        }
+
+        a.risk-link {
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        a.risk-link:hover {
+            color: #003f88;
+            text-decoration: none;
+        }
+
+        .dropdown {
+    width: 100%; /* Ensure dropdown spans the full width of the column */
+    border: 2px solid #007bff; /* Blue border for visibility */
+    background: transparent;
+    font-size: 0.8rem; /* Smaller font size for compact appearance */
+    color: #343a40;
+    cursor: pointer;
+    text-align: center;
+    padding: 8px; /* Add padding for better usability */
+    border-radius: 4px; /* Rounded corners for a modern look */
+    height: 100%; /* Allow dropdown height to adjust dynamically */
+    line-height: 1.2; /* Adjust line height for wrapped text */
+    white-space: normal; /* Enable text wrapping */
+    word-wrap: break-word; /* Ensure long words wrap properly */
+    word-break: break-word; /* Ensure text breaks in modern browsers */
+}
+
+.dropdown:focus {
+    outline: none;
+    border-color: #0056b3; /* Darker blue when focused */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle focus glow */
+}
+
+option {
+    white-space: normal; /* Allow option text to wrap */
+    font-size: 0.8rem; /* Match font size to dropdown */
+    padding: 5px; /* Add spacing within options */
+}
+
+
+/* Explicit styles for scores */
+.low, .medium, .high {
+    font-weight: bold;
+}
+
+.low {
+    color: green;
+}
+
+.medium {
+    color: orange;
+}
+
+.high {
+    color: red;
+}
+
+/* Explicit styles for owner-card */
+.owner-card {
+    background-color: #ffffff; /* White background */
+    border: 1px solid #dee2e6; /* Light gray border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px;
+    width: 100%; /* Full width for small screens */
+    max-width: 300px; /* Limit card width */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+    color: #343a40; /* Dark text for readability */
+    font-size: 0.9rem; /* Slightly smaller text for compact appearance */
+}
+
+.owner-card.bg-success {
+    background-color: #e6f4ea; /* Light green for approved */
+    border: 1px solid #28a745; /* Green border */
+    color: #155724; /* Dark green text */
+}
+
+.owner-card.bg-danger {
+    background-color: #fcebe9; /* Light red for not approved */
+    border: 1px solid #dc3545; /* Red border */
+    color: #721c24; /* Dark red text */
+}
+
+.content {
+    display: none; /* Initially hidden */
+}
+
+.content.active {
+    display: block; /* Show when active */
+}
+
+
+#refreshButton {
+    position: fixed;
+    top: 250px; /* Adjust this value to move the button up/down */
+    left: 1px; /* Adjust this value to move the button left/right */
+    z-index: 1000; /* Ensures the button stays on top of other elements */
+}
+
+
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="{% url 'add_risk' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> New Risk
+            </a>
+        </div>
+     
+   
+    
+        <div class="mb-3">
+            <input type="text" id="risk-search" class="form-control" placeholder="Search risks by title...">
+        </div>
+    </div>
+    
+    <form id="filter-form" method="GET" class="p-3 mb-4 bg-light rounded shadow-sm">
+        <div class="row g-3">
+            <!-- Category Filter -->
+            <div class="col-md-4">
+                <label for="category" class="form-label fw-bold">Category:</label>
+                <select name="category" id="category" class="form-select border-primary">
+                    <option value="">All</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category.id|stringformat:"s" == selected_category_id %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+    
+            <!-- Owner Filter -->
+            <div class="col-md-4">
+                <label for="owner" class="form-label fw-bold">Owner:</label>
+                <select name="owner" id="owner" class="form-select border-primary">
+                    <option value="">All</option>
+                    {% for owner in all_owners %}
+                        <option value="{{ owner.id }}" {% if owner.id|stringformat:"s" == selected_owner_id %}selected{% endif %}>
+                            {{ owner.user.username }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+    
+            <!-- Approval Status Filter -->
+            <div class="col-md-4">
+                <label for="approval_status" class="form-label fw-bold">Approval Status:</label>
+                <select name="approval_status" id="approval_status" class="form-select border-primary">
+                    <option value="">All</option>
+                    <option value="pending" {% if selected_approval_status == "pending" %}selected{% endif %}>Pending</option>
+                    <option value="approved" {% if selected_approval_status == "approved" %}selected{% endif %}>Approved</option>
+                    <option value="rejected" {% if selected_approval_status == "rejected" %}selected{% endif %}>Rejected</option>
+                </select>
+            </div>
+        </div>
+    
+        <!-- Submit Button -->
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary px-4 py-2">
+                <i class="fas fa-filter"></i> Apply Filters
+            </button>
+        </div>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function filterRisks() {
+                const selectedCategory = document.getElementById("category").value;
+                const selectedOwner = document.getElementById("owner").value;
+                const selectedApprovalStatus = document.getElementById("approval_status").value;
+        
+                document.querySelectorAll('.card.mt-4').forEach(themeCard => { // Theme Level
+                    let themeHasVisiblePortfolio = false; // Track if any portfolio within this theme should be visible
+        
+                    themeCard.querySelectorAll('.portfolio-section').forEach(portfolio => { // Portfolio Level
+                        let portfolioHasVisibleRisk = false;
+                        const table = portfolio.querySelector('.risk-table');
+        
+                        if (table) {
+                            const rows = table.querySelectorAll('tbody tr');
+        
+                            rows.forEach(row => {
+                                const categoryId = row.getAttribute('data-category-id');
+                                const ownerIds = row.getAttribute('data-owner-ids') ? row.getAttribute('data-owner-ids').split(',') : [];
+                                const approvalStatus = row.querySelector('.approval-status') ? row.querySelector('.approval-status').getAttribute('data-approval-status') : "";
+        
+                                const categoryMatch = !selectedCategory || selectedCategory === categoryId;
+                                const ownerMatch = !selectedOwner || ownerIds.includes(selectedOwner);
+                                const approvalMatch = !selectedApprovalStatus || approvalStatus === selectedApprovalStatus;
+        
+                                const shouldShow = categoryMatch && ownerMatch && approvalMatch;
+                                row.style.display = shouldShow ? '' : 'none';
+        
+                                if (shouldShow) {
+                                    portfolioHasVisibleRisk = true; // At least one row in this portfolio is visible
+                                }
+                            });
+        
+                            // Expand/Collapse Portfolios
+                            const portfolioContent = portfolio.querySelector('.content');
+                            if (portfolioHasVisibleRisk) {
+                                portfolioContent.classList.add('active');
+                                portfolioContent.style.display = 'block';
+                                portfolioContent.previousElementSibling.classList.add('active'); // Expand the portfolio header
+                                themeHasVisiblePortfolio = true; 
+                            } else {
+                                portfolioContent.classList.remove('active');
+                                portfolioContent.style.display = 'none';
+                                portfolioContent.previousElementSibling.classList.remove('active'); // Collapse the portfolio header
+                            }
+                        }
+                    });
+        
+                    // Expand/Collapse Themes
+                    const themeContent = themeCard.querySelector('.content');
+                    if (themeHasVisiblePortfolio) {
+                        themeContent.classList.add('active');
+                        themeContent.style.display = 'block';
+                        themeContent.previousElementSibling.classList.add('active'); // Expand the theme header
+                    } else {
+                        themeContent.classList.remove('active');
+                        themeContent.style.display = 'none';
+                        themeContent.previousElementSibling.classList.remove('active'); // Collapse the theme header
+                    }
+                });
+            }
+        
+            // Attach event listeners to filters (excluding search)
+            document.getElementById("category").addEventListener("change", filterRisks);
+            document.getElementById("owner").addEventListener("change", filterRisks);
+            document.getElementById("approval_status").addEventListener("change", filterRisks);
+        });
+        </script>
+
+
+
+<div class="d-flex justify-content-start align-items-center gap-2 mb-3">
+    
+    <!-- <button class="btn btn-outline-primary btn-sm" onclick="window.location.href='/risks_new/'" id="refreshButton">
+        🔄 
+    </button> -->
+    
+    
+    <button id="toggle-all" class="btn btn-primary">
+        Expand All
+    </button>
+
+</div>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("toggle-all");
+    
+        toggleButton.addEventListener("click", function () {
+            const allContents = document.querySelectorAll('.content');
+            const isExpanding = toggleButton.textContent.includes("Expand");
+    
+            allContents.forEach(content => {
+                if (isExpanding) {
+                    content.classList.add('active');
+                    content.style.display = 'block';
+                } else {
+                    content.classList.remove('active');
+                    content.style.display = 'none';
+                }
+            });
+    
+            // Toggle button text
+            toggleButton.textContent = isExpanding ? "Collapse All" : "Expand All";
+        });
+    });
+    </script>
+
+
+
+
+
+    <div class="container">
+  
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Μητρώο Κινδύνων (Risk Register)</strong>
+                    Total Risks: {{ total_risks }}
+                </div>
+            </div>
+
+                <div class="card-body">
+                    {% for theme, portfolio_group in grouped_risks.items %}
+                    <!-- Theme Level -->
+                    <div class="card mt-4">
+                        <div class="card-header collapsible" onclick="toggleContent(this)" style="cursor: pointer; background-color: #007bff; color: white;">
+                            <i class="fas fa-folder-open"></i> <strong>{{ theme }}</strong>
+                            <span class="badge bg-secondary float-end" style="font-size: 1.2rem;">{{ portfolio_group|length }} Portfolios</span>
+                        </div>
+                        <div class="content {% if forloop.first %}active{% endif %}" style="margin-left: 5px; margin-right: 5px;padding-top: 5px;">
+                            {% for portfolio, risks in portfolio_group %}
+                            <!-- Portfolio Level -->
+                            <div class="card mt-3">
+                                <div class="card-header collapsible" onclick="toggleContent(this)" style="cursor: pointer; background-color: #f8f9fa; color: #343a40; font-weight: bold;">
+                                    <i class="fas fa-folder"></i> {{ portfolio.name }}
+                                    <span class="badge bg-info float-end" style="font-size: 1.2rem;">{{ risks|length }} Risks</span>
+                                </div>
+                                <div class="content" style="margin-left: 5px; margin-right: 5px;padding: 5px;">
+                                    <!-- Risks Table -->
+                                    <table class="table table-bordered risk-table">
+                                        <thead>
+                                            <tr data-category-id="{{ risk_data.risk.category.id }}" data-owner-ids="{% for owner in risk_data.risk.owners.all %}{{ owner.id }},{% endfor %}">
+                                             
+                                                <th style="width: 20%;">Category</th>
+                                                <th style="width: 45%; text-align: left;">Title</th>
+
+                                             
+                                                <th style="width: 5%;">Inherent Score</th>
+                                                <th style="width: 5%;">Residual Score</th>
+                                                <th style="width: 5%;">Targeted Score</th>
+                                                <th style="width: 20%;">Owners & Approvals</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for risk_data in risks %}
+                                            <tr>
+                                
+                                                <td>
+                                                    <select class="dropdown" id="category-dropdown-{{ risk_data.risk.id }}" onchange="autoSaveCategory({{ risk_data.risk.id }})">
+                                                        {% for category in categories %}
+                                                        <option value="{{ category.id }}" {% if category.id == risk_data.risk.category.id %}selected{% endif %}>
+                                                            {{ category.name }}
+                                                        </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                                
+                                                <td style="text-align: left;">
+
+                                                    <a href="javascript:void(0);" onclick="openRiskDetail({{ risk_data.risk.id }})" class="risk-link" style="margin-left: 10px;">
+                                                        {{ risk_data.risk.title|safe }}
+                                                    </a>
+                                                  
+                                              
+
+
+                                                    <button class="btn btn-sm btn-link p-0" onclick="window.open('{% url 'risk_detail' risk_data.risk.id %}', '_blank')" title="Open in new tab">
+                                                        <i class="fas fa-external-link-alt"></i>
+                                                    </button>
+                               
+                                                </td>
+
+                                         
+                                            
+
+                                     
+                                                  
+                                                <td>
+                                                    <div class="card {% if risk_data.risk.inherent_score > 12 %}bg-danger text-white{% elif risk_data.risk.inherent_score > 6 %}bg-warning text-dark{% else %}bg-success text-white{% endif %}">
+                                                        <div class="card-body p-2 text-center">
+                                                            <small><strong>Inherent</strong></small><br>
+                                                            <span>{{ risk_data.risk.inherent_likelihood }} × {{ risk_data.risk.inherent_impact }}</span><br>
+                                                            <strong>{{ risk_data.risk.inherent_score }}</strong>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                
+                                                <td>
+                                                    <div class="card {% if risk_data.risk.residual_score > 12 %}bg-danger text-white{% elif risk_data.risk.residual_score > 6 %}bg-warning text-dark{% else %}bg-success text-white{% endif %}">
+                                                        <div class="card-body p-2 text-center">
+                                                            <small><strong>Residual</strong></small><br>
+                                                            <span>{{ risk_data.risk.residual_likelihood }} × {{ risk_data.risk.residual_impact }}</span><br>
+                                                            <strong>{{ risk_data.risk.residual_score }}</strong>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                
+                                                <td>
+                                                    <div class="card {% if risk_data.risk.targeted_score > 12 %}bg-danger text-white{% elif risk_data.risk.targeted_score > 6 %}bg-warning text-dark{% else %}bg-success text-white{% endif %}">
+                                                        <div class="card-body p-2 text-center">
+                                                            <small><strong>Targeted</strong></small><br>
+                                                            <span>{{ risk_data.risk.targeted_likelihood }} × {{ risk_data.risk.targeted_impact }}</span><br>
+                                                            <strong>{{ risk_data.risk.targeted_score }}</strong>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+
+
+
+                                                <td>
+                                                    {% if risk_data.owner_approvals %}
+                                                    <div class="owners-container">
+                                                        {% for owner, approval in risk_data.owner_approvals.items %}
+                                                        <div class="owner-card">
+                                                            <strong>{{ owner.role }}</strong><br>
+                                                            <small> {{ owner.user }}</small><br>
+                                                            <small>Next Approval: {{ approval.next_approval|date:"d/m/Y"|default:"N/A" }}</small><br>
+                                                            <small>Status: 
+                                                                {% if approval.countdown > 0 %}
+                                                                <span class="badge bg-success">In {{ approval.countdown }} days</span>
+                                                                {% elif approval.countdown == 0 %}
+                                                                <span class="badge bg-warning">Today</span>
+                                                                {% else %}
+                                                                <span class="badge bg-danger">Overdue</span>
+                                                                {% endif %}
+                                                            </small>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% else %}
+                                                    <em>No approvals available</em>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+</div>
+    </div>
+
+    <script>
+        function toggleContent(element) {
+            const content = element.nextElementSibling;
+            content.classList.toggle('active');
+        }
+
+        function autoSaveCategory(riskId) {
+            const dropdown = document.getElementById(`category-dropdown-${riskId}`);
+            const categoryId = dropdown.value;
+
+            fetch(`/update-category/${riskId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ category_id: categoryId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Category updated successfully.');
+                } else {
+                    console.error('Error updating category:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        document.getElementById('risk-search').addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase();
+            const tables = document.querySelectorAll('.risk-table');
+
+            tables.forEach(table => {
+                const rows = table.querySelectorAll('tbody tr');
+                let portfolioHasMatch = false;
+
+                rows.forEach(row => {
+                    const titleCell = row.querySelector('td:first-child a');
+                    const title = titleCell ? titleCell.textContent.toLowerCase() : '';
+                    const isMatch = title.includes(searchTerm);
+                    row.style.display = isMatch ? '' : 'none';
+                    if (isMatch) {
+                        portfolioHasMatch = true;
+                    }
+                });
+
+                const content = table.closest('.content');
+                if (portfolioHasMatch) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        });
+    </script>
+
+
+
+
+<!-- Risk Detail Panel -->
+<div id="risk-detail-panel" style="
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100%;
+    background-color: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    z-index: 1050;
+    transition: right 0.3s ease-in-out;">
+    <div style="padding: 10px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;">
+        <h5>Risk Details</h5>
+        <button class="btn btn-sm btn-danger" onclick="closeRiskDetailPanel()">Close Details Panel</button>
+    </div>
+    <iframe id="risk-detail-iframe" style="width: 100%; height: calc(100% - 50px); border: none;"></iframe>
+</div>
+
+
+
+<script>
+// JavaScript for opening and closing the panel with iframe
+function openRiskDetail(riskId) {
+    const panel = document.getElementById('risk-detail-panel');
+    const iframe = document.getElementById('risk-detail-iframe');
+
+    if (!panel || !iframe) {
+        console.error("Panel or iframe element not found.");
+        return;
+    }
+
+    // Set the iframe source to the risk detail page
+    iframe.src = `/risk/${riskId}/`;
+
+    // Slide the panel into view
+    panel.style.right = '0';
+}
+
+function closeRiskDetailPanel() {
+    const panel = document.getElementById('risk-detail-panel');
+    const iframe = document.getElementById('risk-detail-iframe');
+
+    if (!panel || !iframe) {
+        console.error("Panel or iframe element not found.");
+        return;
+    }
+
+    // Clear the iframe source and hide the panel
+    iframe.src = '';
+    panel.style.right = '-100%'; // Slide the panel out of view
+}
+
+
+
+
+$(document).ready(function () {
+        console.log("Initializing Bootstrap Select...");
+        
+        if ($.fn.selectpicker) {
+            console.log("Bootstrap Select loaded successfully.");
+            $('#category-filter, #owner-filter').selectpicker(); 
+        } else {
+            console.error("Bootstrap Select did NOT load properly!");
+        }
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js" defer></script>
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Toggle collapsible content
+    function toggleContent(element) {
+        const content = element.nextElementSibling; // Select the next sibling (content div)
+        if (content.style.display === "block") {
+            content.style.display = "none"; // Collapse
+        } else {
+            content.style.display = "block"; // Expand
+        }
+    }
+
+    // Attach toggleContent to collapsible headers
+    document.querySelectorAll('.collapsible').forEach(header => {
+        header.addEventListener('click', function () {
+            toggleContent(this);
+        });
+    });
+
+    // Search Functionality
+    document.getElementById('risk-search').addEventListener('input', function () {
+        const searchTerm = this.value.toLowerCase();
+        const tables = document.querySelectorAll('.risk-table');
+
+        tables.forEach(table => {
+            const rows = table.querySelectorAll('tbody tr');
+            let portfolioHasMatch = false;
+
+            rows.forEach(row => {
+                const titleCell = row.querySelector('td:first-child a');
+                const title = titleCell ? titleCell.textContent.toLowerCase() : '';
+                const isMatch = title.includes(searchTerm);
+                row.style.display = isMatch ? '' : 'none';
+                if (isMatch) {
+                    portfolioHasMatch = true;
+                }
+            });
+
+            const content = table.closest('.content');
+            content.style.display = portfolioHasMatch ? 'block' : 'none';
+        });
+    });
+
+    // Open Risk Detail in Modal
+    function openRiskDetailModal(riskId) {
+        fetch(`/risk/${riskId}/detail/`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('risk-detail-modal-content').innerHTML = data;
+                const modal = new bootstrap.Modal(document.getElementById('riskDetailModal'));
+                modal.show();
+            })
+            .catch(error => console.error('Error fetching risk details:', error));
+    }
+
+    // Attach modal logic to buttons
+    document.querySelectorAll('.open-modal-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const riskId = this.dataset.riskId;
+            openRiskDetailModal(riskId);
+        });
+    });
+
+    // Auto-Save Category
+    function autoSaveCategory(riskId) {
+        const dropdown = document.getElementById(`category-dropdown-${riskId}`);
+        const categoryId = dropdown.value;
+
+        fetch(`/update-category/${riskId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ category_id: categoryId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Category updated successfully.');
+            } else {
+                console.error('Error updating category:', data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+        function filterRisks() {
+            const selectedCategories = $('#category-filter').val();
+            const selectedOwners = $('#owner-filter').val();
+            const searchTerm = document.getElementById("risk-search").value.toLowerCase();
+
+            document.querySelectorAll('.risk-table tbody tr').forEach(row => {
+                const categoryId = row.getAttribute('data-category-id');
+                const ownerIds = row.getAttribute('data-owner-ids') ? row.getAttribute('data-owner-ids').split(',') : [];
+                const title = row.querySelector('td:first-child a').textContent.toLowerCase();
+
+                const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(categoryId);
+const ownerMatch = selectedOwners.length === 0 || selectedOwners.some(ownerId => ownerIds.includes(ownerId));
+    const titleMatch = title.includes(searchTerm);
+
+                row.style.display = (categoryMatch && ownerMatch && titleMatch) ? '' : 'none';
+            });
+        }
+
+        document.getElementById("category-filter").addEventListener("change", filterRisks);
+        document.getElementById("owner-filter").addEventListener("change", filterRisks);
+        document.getElementById("risk-search").addEventListener("input", filterRisks);
+    });
+
+</script>
+
+</html>

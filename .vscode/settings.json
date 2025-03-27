@@ -1,0 +1,15 @@
+{
+    "git.ignoreLimitWarning": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "173.19.2.177",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "ermapp",
+            "database": "ermapp",
+            "username": "alexis",
+            "password": "Alexis1!"
+        }
+    ]
+}

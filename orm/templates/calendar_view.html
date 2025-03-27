@@ -1,0 +1,602 @@
+{% load static i18n %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Risk Calendar - AVAX S.A." %}</title>
+
+    <!-- External Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- External Scripts (Deferred) -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.min.js" defer></script>
+    <!-- Load FullCalendar locales -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/locales-all.min.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" defer></script>
+
+    <!-- Inline Styles -->
+    <style>
+        body, html {
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+            background: #f3f3f3;
+            overflow: hidden;
+        }
+
+        #container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            gap: 10px;
+            padding: 10px;
+            background: #fff;
+            position: relative;
+        }
+
+        .box {
+            background: #fff;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            padding: 10px;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        #task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            height: 100%;
+            min-width: 300px;
+        }
+
+        #calendar {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        .fc-daygrid-day-frame {
+            overflow-y: auto !important;
+            max-height: 150px;
+        }
+
+        .task-item {
+            background: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+            border: 1px solid #e1e1e1;
+            border-left: 4px solid;
+            min-height: 50px;
+            box-shadow: 0 1px 3px rgba(0,0,0,.1);
+        }
+
+        .task-item:hover {
+            background: #f5f6f5;
+            border-color: #c7c7c7;
+            box-shadow: 0 2px 5px rgba(0,0,0,.15);
+        }
+
+        .task-title {
+            flex: 1;
+            min-width: 150px;
+            font-size: 0.9rem;
+            color: #252525;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .task-item.owner.ok { border-left-color: #28a745; }
+        .task-item.owner.expired { border-left-color: #d13438; }
+        .task-item.performer.ok { border-left-color: #28a745; }
+        .task-item.performer.expired { border-left-color: #d13438; }
+        .task-item.approval.ok { border-left-color: #28a745; }
+        .task-item.approval.expired { border-left-color: #d13438; }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #e1e1e1;
+            cursor: pointer;
+        }
+
+        .task-count {
+            background: #0078d4;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #252525;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            font-size: 1rem;
+            font-weight: 400;
+            margin: 8px 0 4px;
+        }
+
+        .task-list-content {
+            overflow-y: auto;
+        }
+
+        .scrollable::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollable::-webkit-scrollbar-thumb {
+            background: #0078d4;
+            border-radius: 3px;
+        }
+
+        .scrollable::-webkit-scrollbar-track {
+            background: #f3f3f3;
+        }
+
+        .countdown {
+            font-size: 0.75rem;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+            background: #e9ecef;
+            color: #333;
+            border: 1px solid #d1d1d1;
+        }
+
+        .score-card {
+            font-size: 0.75rem;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,.2);
+            width: 60px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .score-card:hover {
+            transform: scale(1.05);
+        }
+
+        .score-low { background: #28a745; }
+        .score-medium { background: #fd7e14; }
+        .score-high { background: #dc3545; }
+
+        .fc-event {
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            border-radius: 4px;
+        }
+
+        .fc-event.owner.ok {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+        }
+
+        .fc-event.owner.expired {
+            background-color: #d13438;
+            border-color: #d13438;
+            color: #fff;
+        }
+
+        .fc-event.performer.ok {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+        }
+
+        .fc-event.performer.expired {
+            background-color: #d13438;
+            border-color: #d13438;
+            color: #fff;
+        }
+
+        .fc-event.approval.ok {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: #fff;
+        }
+
+        .fc-event.approval.expired {
+            background-color: #d13438;
+            border-color: #d13438;
+            color: #fff;
+        }
+
+        .fc-event .score-card {
+            font-size: 0.65rem;
+            margin: 1px 0;
+            width: 50px;
+        }
+
+        .fc-button {
+            background-color: #0078d4 !important;
+            border-color: #0078d4 !important;
+            text-transform: capitalize;
+            font-weight: 500;
+            border-radius: 4px;
+        }
+
+        .fc-button:hover {
+            background-color: #005ea2 !important;
+            border-color: #005ea2 !important;
+        }
+
+        .fc-header-toolbar {
+            padding: 8px;
+            background: #f3f3f3;
+            border-bottom: 1px solid #d1d1d1;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .fc .fc-toolbar-title {
+            font-size: 1.25rem;
+            color: #252525;
+        }
+
+        #detail-panel {
+            position: absolute;
+            right: -70vw;
+            top: 0;
+            width: 70vw;
+            height: 100%;
+            background: #fff;
+            border-left: 1px solid #d1d1d1;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #detail-panel.active {
+            right: 0;
+        }
+
+        #detail-header {
+            padding: 10px;
+            background: #f3f3f3;
+            border-bottom: 1px solid #d1d1d1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #detail-header h5 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #252525;
+        }
+
+        #detail-body {
+            flex: 1;
+            padding: 0;
+            overflow-y: auto;
+        }
+
+        #detail-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #close-detail {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #444;
+        }
+
+        #close-detail:hover {
+            color: #0078d4;
+        }
+
+        .language-switcher {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Container -->
+    <div id="container">
+        <!-- Detail Panel -->
+        <div id="detail-panel">
+            <div id="detail-header">
+                <h5>{% trans "Task Details" %}</h5>
+                <button id="close-detail" aria-label="{% trans 'Close' %}">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="detail-body">
+                <iframe id="detail-iframe"></iframe>
+            </div>
+        </div>
+
+        <!-- Task List Section -->
+        <div id="task-list" class="box">
+     
+            <h2>{% trans "Task Overview - AVAX S.A." %}</h2>
+
+            <!-- Owner -->
+            <div class="task-header" data-bs-toggle="collapse" data-bs-target="#owner-actions">
+                <h4 style="color: #0078d4;">{% trans "Owner" %}</h4>
+                <span class="task-count" id="owner-count">0</span>
+            </div>
+            <div id="owner-actions" class="task-list-content scrollable collapse"></div>
+
+            <!-- Performer -->
+            <div class="task-header" data-bs-toggle="collapse" data-bs-target="#performer-actions">
+                <h4 style="color: #ffb900;">{% trans "Performer" %}</h4>
+                <span class="task-count" id="performer-count">0</span>
+            </div>
+            <div id="performer-actions" class="task-list-content scrollable collapse"></div>
+
+            <!-- Approvals -->
+            <div class="task-header" data-bs-toggle="collapse" data-bs-target="#approval-items">
+                <h4 style="color: #28a745;">{% trans "Approvals" %}</h4>
+                <span class="task-count" id="approval-count">0</span>
+            </div>
+            <div id="approval-items" class="task-list-content scrollable collapse"></div>
+        </div>
+
+        <!-- Calendar Section -->
+        <div id="calendar" class="box">
+            <div id="calendar-inner"></div>
+        </div>
+    </div>
+
+    <!-- Inline JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const calendarEl = document.getElementById('calendar-inner');
+            const ownerActions = document.getElementById('owner-actions');
+            const performerActions = document.getElementById('performer-actions');
+            const approvalItems = document.getElementById('approval-items');
+            const ownerCount = document.getElementById('owner-count');
+            const performerCount = document.getElementById('performer-count');
+            const approvalCount = document.getElementById('approval-count');
+            const detailPanel = document.getElementById('detail-panel');
+            const detailIframe = document.getElementById('detail-iframe');
+            const closeDetail = document.getElementById('close-detail');
+    
+            let calendar;
+    
+            // Fetch Events from Server
+            function fetchEvents(fetchInfo, successCallback, failureCallback) {
+                $.ajax({
+                    url: '{% url "get_calendar_events" %}',
+                    method: 'GET',
+                    data: {
+                        start: fetchInfo.startStr,
+                        end: fetchInfo.endStr
+                    },
+                    success: function(data) {
+                        console.log('Fetched Events:', data); // Debug
+                        populateTaskLists(data, successCallback);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Fetch Events Error:', { status: xhr.status, statusText: status, error: error });
+                        alert("{% trans 'Error fetching events. Please try again.' %}");
+                        failureCallback();
+                    }
+                });
+            }
+    
+            // Populate Task Lists and Update Calendar
+            function populateTaskLists(events, calendarCallback) {
+                let owners = events.filter(e => e.type === 'action-owner');
+                let performers = events.filter(e => e.type === 'action-performer');
+                let approvals = events.filter(e => e.type === 'user-approval');
+    
+                owners.sort((a, b) => new Date(a.start) - new Date(b.start));
+                performers.sort((a, b) => new Date(a.start) - new Date(b.start));
+                approvals.sort((a, b) => new Date(a.start) - new Date(b.start));
+    
+                ownerActions.innerHTML = owners.map(event => createTaskItem(event, 'owner')).join('') || '<p>{% trans "No owner tasks." %}</p>';
+                performerActions.innerHTML = performers.map(event => createTaskItem(event, 'performer')).join('') || '<p>{% trans "No performer tasks." %}</p>';
+                approvalItems.innerHTML = approvals.map(event => createTaskItem(event, 'approval')).join('') || '<p>{% trans "No approvals." %}</p>';
+    
+                ownerCount.textContent = owners.length;
+                performerCount.textContent = performers.length;
+                approvalCount.textContent = approvals.length;
+    
+                const taskListEvents = [...owners, ...performers, ...approvals];
+                calendarCallback(taskListEvents);
+            }
+    
+            // Calculate Countdown for Tasks
+            function calculateCountdown(dateStr) {
+                const today = new Date();
+                const dueDate = new Date(dateStr);
+                const diffMs = dueDate - today;
+                const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+                return {
+                    days: diffDays,
+                    status: diffDays < 0 ? 'expired' : 'ok'
+                };
+            }
+    
+            // Determine score class based on value
+            function getScoreClass(score) {
+                if (score > 12) return 'score-high';
+                if (score > 6) return 'score-medium';
+                return 'score-low';
+            }
+    
+            // Create Task Item HTML
+            function createTaskItem(event, type) {
+                const countdown = calculateCountdown(event.start);
+                let scoresHTML = '';
+                
+                if (type === 'approval') {
+                    const inherentScore = (event.inherent_likelihood || 0) * (event.inherent_impact || 0);
+                    const residualScore = (event.residual_likelihood || 0) * (event.residual_impact || 0);
+                    const targetedScore = (event.targeted_likelihood || 0) * (event.targeted_impact || 0);
+    
+                    scoresHTML = `
+                        <span class="score-card ${getScoreClass(inherentScore)}">
+                            I: ${event.inherent_likelihood || 'N/A'}×${event.inherent_impact || 'N/A'}=${inherentScore || 'N/A'}
+                        </span>
+                        <span class="score-card ${getScoreClass(residualScore)}">
+                            R: ${event.residual_likelihood || 'N/A'}×${event.residual_impact || 'N/A'}=${residualScore || 'N/A'}
+                        </span>
+                        <span class="score-card ${getScoreClass(targetedScore)}">
+                            T: ${event.targeted_likelihood || 'N/A'}×${event.targeted_impact || 'N/A'}=${targetedScore || 'N/A'}
+                        </span>
+                    `;
+                }
+                
+                return `
+                    <div class="task-item ${type} ${countdown.status}" data-url="${event.url}">
+                        <span class="task-title">${event.title}</span>
+                        <div class="task-meta">
+                            <span class="countdown">${countdown.days} {% trans "days" %}</span>
+                            ${scoresHTML}
+                        </div>
+                    </div>
+                `;
+            }
+    
+            // Show Detail Panel
+            function showDetailPanel(url) {
+                detailIframe.src = url;
+                detailPanel.classList.add('active');
+            }
+    
+            // Hide Detail Panel
+            function hideDetailPanel() {
+                detailPanel.classList.remove('active');
+                detailIframe.src = '';
+            }
+    
+            // Task List Click Event
+            document.querySelectorAll('#task-list').forEach(list => {
+                list.addEventListener('click', (e) => {
+                    const taskItem = e.target.closest('.task-item');
+                    if (taskItem) {
+                        const url = taskItem.getAttribute('data-url');
+                        showDetailPanel(url);
+                    }
+                });
+            });
+    
+            // Close Detail Panel Event
+            closeDetail.addEventListener('click', hideDetailPanel);
+    
+            // Initialize FullCalendar with 24-hour format
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                height: '100%',
+                locale: '{{ LANGUAGE_CODE }}',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                slotLabelFormat: {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false // Forces 24-hour format for time slots
+                },
+                eventTimeFormat: {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false // Forces 24-hour format for event times
+                },
+                slotMinTime: '00:00:00', // Show full day starting at midnight
+                slotMaxTime: '24:00:00', // Show full day up to 24:00
+                events: fetchEvents,
+                eventClassNames: function(arg) {
+                    const countdown = calculateCountdown(arg.event.startStr);
+                    if (arg.event.extendedProps.type === 'action-owner') return ['owner', countdown.status];
+                    if (arg.event.extendedProps.type === 'action-performer') return ['performer', countdown.status];
+                    if (arg.event.extendedProps.type === 'user-approval') return ['approval', countdown.status];
+                    return [];
+                },
+                eventContent: function(arg) {
+                    const countdown = calculateCountdown(arg.event.startStr);
+                    let content = `<div>${arg.event.title}</div>`;
+                    
+                    if (arg.event.extendedProps.type === 'user-approval') {
+                        const inherentScore = (arg.event.extendedProps.inherent_likelihood || 0) * (arg.event.extendedProps.inherent_impact || 0);
+                        const residualScore = (arg.event.extendedProps.residual_likelihood || 0) * (arg.event.extendedProps.residual_impact || 0);
+                        const targetedScore = (arg.event.extendedProps.targeted_likelihood || 0) * (arg.event.extendedProps.targeted_impact || 0);
+    
+                        content += `
+                            <div>
+                                <span class="score-card ${getScoreClass(inherentScore)}">
+                                    I: ${arg.event.extendedProps.inherent_likelihood || 'N/A'}×${arg.event.extendedProps.inherent_impact || 'N/A'}=${inherentScore || 'N/A'}
+                                </span>
+                                <span class="score-card ${getScoreClass(residualScore)}">
+                                    R: ${arg.event.extendedProps.residual_likelihood || 'N/A'}×${arg.event.extendedProps.residual_impact || 'N/A'}=${residualScore || 'N/A'}
+                                </span>
+                                <span class="score-card ${getScoreClass(targetedScore)}">
+                                    T: ${arg.event.extendedProps.targeted_likelihood || 'N/A'}×${arg.event.extendedProps.targeted_impact || 'N/A'}=${targetedScore || 'N/A'}
+                                </span>
+                            </div>
+                        `;
+                    }
+                    return { html: content };
+                },
+                eventDidMount: function(info) {
+                    info.el.setAttribute('data-url', info.event.url);
+                },
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault();
+                    const url = info.el.getAttribute('data-url');
+                    showDetailPanel(url);
+                }
+            });
+    
+            calendar.render();
+    
+            // Optional: Refresh calendar on language change
+            document.querySelector('.language-switcher select')?.addEventListener('change', function() {
+                calendar.setOption('locale', this.value);
+                calendar.render();
+            });
+        });
+    </script>
+</body>
+</html>

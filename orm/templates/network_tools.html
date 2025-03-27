@@ -1,0 +1,523 @@
+ {% load static %}
+
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Εντοπισμός Συσκευών & Δοκιμή Exploits</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+    max-width: auto;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 3px solid #0056b3; /* Adds a blue border with specified thickness */
+}
+
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .section {
+            margin-top: 20px;
+        }
+
+        .section h2 {
+            color: #0056b3;
+        }
+
+        .results {
+            margin-top: 10px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #eef6f8;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .explanation {
+            background-color: #fdfef5;
+            padding: 10px;
+            border-left: 4px solid #ffe58f;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        .devices-list, .ports-list {
+            margin-top: 10px;
+        }
+
+        .device-item, .port-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        label {
+            margin-left: 5px;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .new-exploits {
+            background-color: #dbffdb;
+            border-left: 4px solid #1dd11d;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Styling for the Cytoscape visualization */
+        .legend {
+            margin-top: 20px;
+            background-color: #f7f7f7;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .device-node {
+            width: 120px;
+            height: 80px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding-top: 10px;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .port-node {
+            width: 60px;
+            height: 30px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        #cy {
+    width: 100vw; /* Full width of the viewport */
+    height: 500px; /* Adjust as needed */
+    border: 1px solid #ccc;
+    margin-top: 20px;
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Εντοπισμός Συσκευών & Δοκιμή Exploits</h1>
+
+        <div class="explanation">
+            <p><strong>Σημαντική Ενημέρωση:</strong> Ο εντοπισμός συσκευών, η σάρωση θυρών, και οι δοκιμές για exploits πρέπει να γίνονται μόνο με την έγγραφη άδεια του διαχειριστή του δικτύου ή του ιδιοκτήτη του συστήματος. Η μη εξουσιοδοτημένη σάρωση αποτελεί παράβαση της νομοθεσίας περί προστασίας δεδομένων και δικτύων.</p>
+            <p><strong>Βήμα 1:</strong> Πατήστε «Εντοπισμός Συσκευών» για να βρείτε όλες τις συσκευές στο δίκτυό σας. Θα εμφανιστούν ως λίστα με checkboxes.</p>
+            <p><strong>Βήμα 2:</strong> Επιλέξτε συσκευές και πατήστε «Σάρωση Θυρών» για να βρείτε ανοιχτές θύρες στις επιλεγμένες συσκευές.</p>
+            <p><strong>Βήμα 3:</strong> Επιλέξτε τις θύρες που θέλετε να ελέγξετε με exploits σε κάθε συσκευή και πατήστε «Δοκιμή Exploits».</p>
+            <p><strong>Υπενθύμιση:</strong> Η χρήση αυτού του εργαλείου χωρίς άδεια είναι παράνομη και μπορεί να επιφέρει ποινικές κυρώσεις.</p>
+        </div>
+        
+
+        <!-- Step 1: Discover Devices -->
+        <div class="section">
+            <h2>Βήμα 1: Εντοπισμός Συσκευών</h2>
+            <button onclick="discoverDevices()">Εντοπισμός Συσκευών</button>
+            <div id="devicesResults" class="results">
+                <!-- Device results will be shown here -->
+            </div>
+        </div>
+
+        <!-- Step 2: Scan Ports -->
+        <div class="section">
+            <h2>Βήμα 2: Σάρωση Θυρών</h2>
+            <button onclick="scanPorts()">Σάρωση Θυρών</button>
+            <div id="portResults" class="results"></div>
+        </div>
+
+        <!-- Step 3: Test Exploits -->
+        <div class="section">
+            <h2>Βήμα 3: Δοκιμή Exploits</h2>
+            <button onclick="testExploits()">Δοκιμή Exploits</button>
+            <div id="exploitResults" class="results"></div>
+        </div>
+
+        <!-- Step 4: Network Visualization -->
+        <div class="section">
+            <h2>Βήμα 4: Οπτικοποίηση Δικτύου</h2>
+            <button onclick="visualizeNetwork()">Οπτικοποίηση Δικτύου</button>
+            <div id="cy"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.23.0/cytoscape.min.js"></script>
+
+    <script>
+        let scannedPorts = {};
+    
+        // Step 1: Discover Devices
+        async function discoverDevices() {
+            const devicesResults = document.getElementById('devicesResults');
+            devicesResults.innerHTML = '<div class="loading-spinner"></div> Εντοπισμός συσκευών...';
+    
+            try {
+                const response = await fetch('/network-discovery/');
+                const data = await response.json();
+    
+                if (data.error) {
+                    devicesResults.innerHTML = `<p class="error">Σφάλμα: ${data.error}</p>`;
+                    return;
+                }
+    
+                const discoveredDevices = data.devices || [];
+                if (!discoveredDevices.length) {
+                    devicesResults.innerHTML = '<p>Δεν βρέθηκαν συσκευές.</p>';
+                    return;
+                }
+    
+                let devicesHTML = '<ul>';
+                discoveredDevices.forEach(device => {
+                    devicesHTML += `
+                        <li class="device-item">
+                            <input type="checkbox" class="device-checkbox" value="${device.ip}" />
+                            ${device.ip} (${device.vendor || 'Άγνωστο Κατασκευαστής'}) - MAC: ${device.mac || 'Άγνωστο'}
+                        </li>`;
+                });
+                devicesHTML += '</ul>';
+                devicesResults.innerHTML = devicesHTML;
+    
+            } catch (error) {
+                devicesResults.innerHTML = `<p class="error">Σφάλμα: ${error.message}</p>`;
+            }
+        }
+    
+        // Step 2: Scan Ports
+        async function scanPorts() {
+            const portResults = document.getElementById('portResults');
+            portResults.innerHTML = '<div class="loading-spinner"></div> Σάρωση θυρών...';
+    
+            const checkedDeviceIPs = getCheckedDeviceIPs();
+            if (!checkedDeviceIPs.length) {
+                portResults.innerHTML = '<p class="error">Παρακαλώ επιλέξτε τουλάχιστον μία συσκευή.</p>';
+                return;
+            }
+    
+            scannedPorts = {};
+            let resultsHTML = '';
+    
+            for (const deviceIP of checkedDeviceIPs) {
+                resultsHTML += `<h3>Συσκευή: ${deviceIP}</h3>`;
+                try {
+                    const response = await fetch(`/scan-ports/${deviceIP}/`);
+                    const data = await response.json();
+    
+                    if (data.error) {
+                        resultsHTML += `<p class="error">Σφάλμα: ${data.error}</p>`;
+                        continue;
+                    }
+    
+                    scannedPorts[deviceIP] = data.ports || [];
+                    if (!scannedPorts[deviceIP].length) {
+                        resultsHTML += '<p>Δε βρέθηκαν ανοιχτές θύρες.</p>';
+                        continue;
+                    }
+    
+                    let portsHTML = '<div class="ports-list">';
+                    scannedPorts[deviceIP].forEach((port, index) => {
+                        portsHTML += `
+                            <div class="port-item">
+                                <input type="checkbox" 
+                                       id="portCheck_${deviceIP}_${index}" 
+                                       value="${port.port}" 
+                                       data-deviceip="${deviceIP}">
+                                <label for="portCheck_${deviceIP}_${index}">
+                                    <strong>Port:</strong> ${port.port} (${port.protocol || 'N/A'}) - Service: ${port.service || 'Άγνωστο'}
+                                </label>
+                            </div>
+                        `;
+                    });
+                    portsHTML += '</div>';
+                    resultsHTML += portsHTML;
+    
+                } catch (error) {
+                    resultsHTML += `<p class="error">Σφάλμα: ${error.message}</p>`;
+                }
+            }
+    
+            portResults.innerHTML = resultsHTML;
+        }
+    
+        // Step 3: Test Exploits
+        async function testExploits() {
+            const exploitResults = document.getElementById('exploitResults');
+            exploitResults.innerHTML = '<p>Δοκιμή exploits... Παρακαλώ περιμένετε.</p>';
+    
+            const selectedPorts = getCheckedPorts();
+            if (Object.keys(selectedPorts).length === 0) {
+                exploitResults.innerHTML = '<p class="error">Παρακαλώ επιλέξτε τουλάχιστον μία θύρα.</p>';
+                return;
+            }
+    
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+            try {
+                const response = await fetch('/run-exploits/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({ selected_ports: selectedPorts })
+                });
+    
+                const data = await response.json();
+    
+                if (data.error) {
+                    exploitResults.innerHTML = `<p class="error">Σφάλμα: ${data.error}</p>`;
+                    return;
+                }
+    
+                let resultsHTML = '<div class="results-container">';
+                Object.keys(data.results).forEach(deviceIP => {
+                    resultsHTML += `<h3>Συσκευή: ${deviceIP}</h3>`;
+                    data.results[deviceIP].forEach(result => {
+                        const statusColor = result.status === 'success' && result.output?.includes("vulnerable") ? 'red' :
+                                            result.status === 'success' && !result.output?.includes("vulnerable") ? 'green' :
+                                            result.status === 'skipped' ? 'gray' : 'black';
+    
+                        resultsHTML += `
+                            <details>
+                                <summary style="color: ${statusColor};"><strong>Port ${result.port}:</strong> ${result.test_name}</summary>
+                                <div class="result-details">
+                                    <p><strong>Outcome:</strong> ${generateVulnerabilityMessage(result)}</p>
+                                    <pre>${result.output || "No output available"}</pre>
+                                </div>
+                            </details>
+                        `;
+                    });
+                });
+                resultsHTML += '</div>';
+                exploitResults.innerHTML = resultsHTML;
+    
+            } catch (error) {
+                exploitResults.innerHTML = `<p class="error">Σφάλμα: ${error.message}</p>`;
+            }
+        }
+    
+        // Helper function for exploit messages
+        function generateVulnerabilityMessage(result) {
+            if (result.status === 'skipped') {
+                return "This test was skipped as it's not applicable to the selected configuration.";
+            }
+    
+            if (result.output && result.output.includes("vulnerable")) {
+                return "The system is vulnerable to this exploit. Immediate action is recommended.";
+            } else if (result.output && result.output.includes("not vulnerable")) {
+                return "The system is not vulnerable to this exploit.";
+            }
+    
+            return "The test was conducted, but the results could not confirm the system's vulnerability status.";
+        }
+    
+        // Step 4: Visualize Network
+       // Step 4: Visualize Network with Icons
+// Step 4: Visualize Network with Shapes and Icons
+function visualizeNetwork() {
+const cy = cytoscape({
+    container: document.getElementById('cy'),
+    style: [
+        {
+            selector: 'node[category="device"]',
+            style: {
+                'shape': 'round-rectangle',
+                'background-image': 'data(image)',
+                'background-fit': 'cover',
+                'label': 'data(label)',
+                'text-valign': 'center',
+                'text-outline-width': 2,
+                'text-outline-color': '#007bff',
+                'color': '#fff',
+                'width': '100px',
+                'height': '50px',
+                'font-size': '12px',
+            },
+        },
+        {
+            selector: 'node[category="port"]',
+            style: {
+                'shape': 'ellipse',
+                'background-color': '#28a745',
+                'label': 'data(label)',
+                'color': '#fff',
+                'text-valign': 'center',
+                'width': '60px',
+                'height': '60px',
+                'font-size': '10px',
+            },
+        },
+        {
+            selector: 'edge',
+            style: {
+                'width': 2,
+                'line-color': '#999',
+                'target-arrow-color': '#999',
+                'target-arrow-shape': 'triangle',
+            },
+        },
+    ],
+    layout: { name: 'circle' },
+    zoomingEnabled: true, // Enable zooming
+    userZoomingEnabled: true, // Allow users to zoom
+    panningEnabled: true, // Enable panning
+    userPanningEnabled: true, // Allow users to pan
+    minZoom: 0.5, // Minimum zoom level
+    maxZoom: 2, // Maximum zoom level
+});
+
+    const elements = [];
+    const iconMapping = {
+        router: 'https://cdn-icons-png.flaticon.com/512/2917/2917999.png',
+        pc: 'https://cdn-icons-png.flaticon.com/512/893/893399.png',
+        mac: 'https://cdn-icons-png.flaticon.com/512/732/732221.png',
+        server: 'https://cdn-icons-png.flaticon.com/512/1995/1995503.png',
+        unknown: 'https://cdn-icons-png.flaticon.com/512/1828/1828490.png',
+    };
+
+    for (const [ip, ports] of Object.entries(scannedPorts)) {
+        // Determine device type based on MAC or vendor if available
+        const deviceType = determineDeviceType(ip); // Replace with actual logic
+        const icon = iconMapping[deviceType] || iconMapping.unknown;
+
+        // Add the device node with an icon and category
+        elements.push({
+            data: {
+                id: ip,
+                label: ip,
+                image: icon,
+                category: 'device',
+            },
+        });
+
+        // Add port nodes and connect them to the device
+        ports.forEach((port) => {
+            const portNode = `${ip}:${port.port}`;
+            elements.push({
+                data: {
+                    id: portNode,
+                    label: `Port ${port.port}`,
+                    category: 'port',
+                },
+            });
+            elements.push({
+                data: { source: ip, target: portNode },
+            });
+        });
+    }
+
+    cy.add(elements);
+    cy.layout({ name: scannedPorts.length > 20 ? 'grid' : 'circle' }).run();
+}
+
+// Helper function to determine device type (stub logic)
+function determineDeviceType(device) {
+    // Example logic to determine device type dynamically
+    const vendor = device.vendor?.toLowerCase() || '';
+    const mac = device.mac?.toLowerCase() || '';
+    const hostname = device.hostname?.toLowerCase() || '';
+
+    if (vendor.includes('cisco') || vendor.includes('tp-link') || vendor.includes('d-link')) {
+        return 'router';
+    }
+    if (vendor.includes('apple') || mac.startsWith('00:1c:b3')) {
+        return 'mac';
+    }
+    if (vendor.includes('hp') || vendor.includes('lenovo') || hostname.includes('pc')) {
+        return 'pc';
+    }
+    if (vendor.includes('dell') || vendor.includes('ibm') || hostname.includes('server')) {
+        return 'server';
+    }
+    return 'unknown';
+}
+
+        // Helper functions for checked devices and ports
+        function getCheckedDeviceIPs() {
+            const checkboxes = document.querySelectorAll('.device-checkbox:checked');
+            const checkedDeviceIPs = [];
+            checkboxes.forEach(cb => {
+                checkedDeviceIPs.push(cb.value);
+            });
+            return checkedDeviceIPs;
+        }
+    
+        function getCheckedPorts() {
+            const checkboxes = document.querySelectorAll('[id^="portCheck_"]:checked');
+            const selectedPorts = {};
+            checkboxes.forEach(cb => {
+                const deviceIP = cb.getAttribute('data-deviceip');
+                const portValue = cb.value;
+                if (!selectedPorts[deviceIP]) {
+                    selectedPorts[deviceIP] = [];
+                }
+                selectedPorts[deviceIP].push(portValue);
+            });
+            return selectedPorts;
+        }
+    </script>
+    
+</body>
+</html>

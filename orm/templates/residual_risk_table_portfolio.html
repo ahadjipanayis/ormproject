@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Κατάταξη Σοβαρότητας Υπολειπόμενου Κινδύνου</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>
+    <style>
+        body {
+            font-family: Calibri, sans-serif;
+            background-color: #f4f6f9;
+        }
+        .tabulator .tabulator-header {
+            background-color: #f8f9fa;
+        }
+        .container {
+            width: 100%;       /* Full width of the window */
+            height: 100%;      /* Full height of the window */
+            margin: 0pt;         /* Remove default margins */
+            padding: 5pt;        /* Remove padding */
+            max-width: none;   /* Remove any inherited width constraints */
+            box-sizing: border-box; /* Include padding in width calculations */
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .page-header p {
+            font-size: 1.2rem;
+            color: #6c757d;
+        }
+        #risk-table {
+            margin-top: 2rem;
+            border: 1px solid #000; /* Example: 1px solid black border */
+        }
+        .tabulator .tabulator-cell, 
+        .tabulator .tabulator-row {
+            border: none; /* Remove underlines between rows and columns */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>Κατάταξη Σοβαρότητας Υπολειπόμενου Κινδύνου</h1>
+            <p id="risk-count">Σύνολο Κινδύνων: 0</p>
+        </div>
+        <div id="risk-table"></div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Mock data from the server (replace with {{ pivot_data|safe }} in production)
+            const tableData = {{ pivot_data|safe }};
+            
+            // Update the total number of risks
+            document.getElementById("risk-count").textContent = `Σύνολο Κινδύνων: ${tableData.length}`;
+
+            // Get color based on risk level
+            const getColor = (level) => {
+                if (level === "Low") return "green";    // Light Green
+                if (level === "Medium") return "orange"; // Light orange
+                if (level === "High") return "red";   // Light Red
+                return "#FFFFFF";                         // Default White
+            };
+
+            // Initialize Tabulator
+            const table = new Tabulator("#risk-table", {
+                data: tableData,
+                layout: "fitColumns",
+                responsiveLayout: "collapse",
+                columns: [
+   
+                    { title: "#", formatter: "rownum", hozAlign: "center", headerSort: false },
+                    { title: "Portfolio", field: "portfolio", hozAlign: "center" },
+
+                    {
+                        title: "Title",
+                        field: "title",
+                        formatter: (cell) => {
+                            const id = cell.getData().id;
+                            const title = cell.getValue();
+                            return `<a href="/risk/${id}/" target="_blank">${title}</a>`;
+                        },
+                        widthGrow: 2
+                    },
+                    {
+                        title: "Inherent Score",
+                        field: "inherent_score",
+                        hozAlign: "center",
+                        formatter: (cell) => {
+                            const level = cell.getData().inherent_level;
+                            return `<div style="background-color: ${getColor(level)};">${cell.getValue()}</div>`;
+                        }
+                    },
+                    {
+                        title: "Residual Score",
+                        field: "residual_score",
+                        hozAlign: "center",
+                        formatter: (cell) => {
+                            const level = cell.getData().residual_level;
+                            return `<div style="background-color: ${getColor(level)};">${cell.getValue()}</div>`;
+                        }
+                    },
+                    {
+                        title: "Targeted Score",
+                        field: "targeted_score",
+                        hozAlign: "center",
+                        formatter: (cell) => {
+                            const level = cell.getData().targeted_level;
+                            return `<div style="background-color: ${getColor(level)};">${cell.getValue()}</div>`;
+                        }
+                    },
+                ]
+            });
+        });
+    </script>
+</body>
+</html>

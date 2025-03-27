@@ -1,0 +1,106 @@
+{% load static i18n %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% trans "Documents" %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { margin-top: 50px; width: 100%; height: 100%; margin: 0; padding: 5pt; max-width: none; box-sizing: border-box; }
+        .card { border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); }
+        .folder-toggle { cursor: pointer; font-weight: bold; }
+        .folder-children { margin-left: 20px; display: none; list-style: none; padding-left: 15px; }
+        .btn-group { float: right; }
+        .sort-link { cursor: pointer; text-decoration: underline; }
+        .language-switcher { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card p-4">
+        <h2 class="text-center mb-4">{% trans "Documents Management" %}</h2>
+
+   
+
+        <!-- Folder Creation Form -->
+        <button class="btn btn-primary mb-3" type="button" onclick="toggleForm('folderCreationForm')">
+            <i class="fas fa-folder-plus"></i> {% trans "Create New Folder" %}
+        </button>
+        <div id="folderCreationForm" class="collapse">
+            <form method="POST" action="{% url 'document_list' %}" class="mb-4">
+                {% csrf_token %}
+                <h4>{% trans "Create a Folder" %}</h4>
+                {{ folder_form.as_p }}
+                <button type="submit" name="create_folder" class="btn btn-primary">{% trans "Create" %}</button>
+            </form>
+        </div>
+
+        <!-- Upload Document Form -->
+        <button class="btn btn-success mb-3" type="button" onclick="toggleForm('uploadForm')">
+            <i class="fas fa-upload"></i> {% trans "Upload Document" %}
+        </button>
+        <div id="uploadForm" class="collapse">
+            <form method="POST" enctype="multipart/form-data" class="mb-4">
+                {% csrf_token %}
+                <h4>{% trans "Upload Document" %}</h4>
+                {{ doc_form.as_p }}
+                <button type="submit" name="upload_document" class="btn btn-success">{% trans "Upload" %}</button>
+            </form>
+        </div>
+
+        <!-- Folder Structure with Sorting -->
+        <h3 class="mt-4"><i class="fas fa-folder"></i> {% trans "Folders" %}</h3>
+        <div class="mb-3">
+            {% trans "Sort folders by" %}:
+            <a href="?sort=name&order={% if sort_by == 'name' and sort_order == 'asc' %}desc{% else %}asc{% endif %}&portfolio={{ selected_portfolio_id|default_if_none:'' }}" class="sort-link">
+                {% trans "Name" %} {% if sort_by == 'name' %}<i class="fas fa-sort-{{ sort_order }}"></i>{% endif %}
+            </a> |
+            <a href="?sort=created_at&order={% if sort_by == 'created_at' and sort_order == 'asc' %}desc{% else %}asc{% endif %}&portfolio={{ selected_portfolio_id|default_if_none:'' }}" class="sort-link">
+                {% trans "Created At" %} {% if sort_by == 'created_at' %}<i class="fas fa-sort-{{ sort_order }}"></i>{% endif %}
+            </a>
+        </div>
+        <ul class="list-group" id="folderList">
+            {% for folder in folders %}
+                {% if not folder.parent %}
+                    {% include 'documents/folder_item.html' with folder=folder %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    function toggleForm(formId) {
+        var form = document.getElementById(formId);
+        form.classList.toggle("show");
+    }
+
+    function toggleFolder(folderId) {
+        var folderChildren = document.getElementById("folderChildren-" + folderId);
+        folderChildren.style.display = folderChildren.style.display === "none" ? "block" : "none";
+    }
+
+    function deleteFolder(folderId) {
+        if (confirm("{% trans 'Are you sure you want to delete this folder and all its contents?' %}")) {
+            fetch("{% url 'delete_folder' 0 %}".replace("0", folderId), {
+                method: "POST",
+                headers: { "X-CSRFToken": "{{ csrf_token }}" }
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert("{% trans 'Cannot delete folder. It may contain files or subfolders.' %}");
+                }
+            });
+        }
+    }
+</script>
+
+</body>
+</html>

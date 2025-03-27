@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Risks for Mammoth DOCX Report</title>
+</head>
+<body>
+    <h1>Select Risks to Convert via Mammoth</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <p>Choose one or more risks:</p>
+        {% for risk in all_risks %}
+            <label>
+                <input type="checkbox" name="risks" value="{{ risk.id }}">
+                Risk #{{ risk.id }} | {{ risk.title|safe }}
+            </label><br>
+        {% endfor %}
+        <button type="submit">Generate Mammoth DOCX Report</button>
+    </form>
+</body>
+</html>

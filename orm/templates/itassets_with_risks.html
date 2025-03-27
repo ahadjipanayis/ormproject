@@ -1,0 +1,345 @@
+{% load i18n %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "IT Assets, Risks, Threats & Vulnerabilities" %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-fluid {
+            height: 100vh;
+            padding: 0;
+            position: relative;
+        }
+
+        .list-section {
+            width: 100%;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+            text-align: left;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            line-height: 1.5;
+            font-size: 16px;
+        }
+
+        .clickable {
+            color: #007bff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .clickable:hover {
+            text-decoration: underline;
+        }
+
+        /* Risk Colors */
+        .risk-low { background-color: #d4edda !important; border: 2px solid #28a745 !important; }
+        .risk-medium { background-color: #e29625a1 !important; border: 2px solid orange !important; }
+        .risk-high { background-color: #ee4553c8 !important; border: 2px solid #dc3545 !important; }
+
+        /* Criticality */
+        .criticality-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Column Sizes */
+        .column-narrow { width: 30%; }
+        .column-it-asset { width: 15%; }
+        .column-narrow-cia { width: 5%; }
+        .column-narrow-cr {
+            text-orientation: mixed;
+            font-weight: normal;
+            text-align: center;
+            padding: 5px;
+            white-space: nowrap;
+            width: 6%;
+        }
+
+        /* Overlay Panel */
+        .overlay-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 50%;
+            height: 100%;
+            background-color: white;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            z-index: 1050;
+            transition: right 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .overlay-header {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .overlay-iframe {
+            width: 100%;
+            height: calc(100% - 50px);
+            border: none;
+        }
+
+        .cia-box {
+            text-align: left;
+            vertical-align: middle;
+            height: 100%;
+            display: table-cell;
+        }
+
+        .cia-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            height: 100%;
+        }
+
+        .cia-box span {
+            font-weight: bold;
+            border-radius: 5px;
+            font-size: 16px;
+            padding: 8px 10px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Sortable Column Styles (First Column Only) */
+        .sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .sortable:hover {
+            background-color: #e9ecef;
+        }
+
+        .sortable::after {
+            content: " ↕";
+            font-size: 12px;
+        }
+
+        .sort-asc::after {
+            content: " ↑";
+        }
+
+        .sort-desc::after {
+            content: " ↓";
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- IT Asset List Section -->
+        <div id="listSection" class="list-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <button class="btn btn-outline-primary btn-sm" onclick="reloadListSection()">🔄 {% trans "Refresh" %}</button>
+                <h4 class="text-center flex-grow-1">{% trans "IT Assets Overview" %}</h4>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="column-it-asset sortable" id="sort-it-asset">{% trans "IT Asset" %}</th>
+                        <th class="column-narrow-cia">{% trans "CIA" %}</th>
+                        <th class="column-narrow-cr">{% trans "Criticality" %}</th>
+                        <th class="column-narrow">{% trans "Risk" %}</th>
+                        <th class="column-narrow">{% trans "Procedures" %}</th> <!-- New Column After Risk -->
+                        <th class="column-narrow">{% trans "Vulnerabilities" %}</th>
+                        <th class="column-narrow">{% trans "Threats" %}</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {% for asset in assets %}
+                        <tr>
+                            <!-- IT Asset -->
+                            <td data-value="{{ asset.name }}">
+                                <span class="clickable" onclick="openOverlay('{% url 'itasset_edit' asset.id %}')">
+                                    {{ asset.name }}
+                                </span>
+                            </td>
+            
+                            <!-- CIA Ratings -->
+                            <td class="cia-box">
+                                <div class="cia-column">
+                                    <span class="badge badge-pill {% if asset.confidentiality == 3 %}badge-danger{% elif asset.confidentiality == 2 %}badge-warning{% else %}badge-success{% endif %}">C</span>
+                                    <span class="badge badge-pill {% if asset.integrity == 3 %}badge-danger{% elif asset.integrity == 2 %}badge-warning{% else %}badge-success{% endif %}">I</span>
+                                    <span class="badge badge-pill {% if asset.availability == 3 %}badge-danger{% elif asset.availability == 2 %}badge-warning{% else %}badge-success{% endif %}">A</span>
+                                </div>
+                            </td>
+            
+                            <!-- Criticality -->
+                            <td>
+                                <span class="criticality-box {% if asset.criticality == 3 %}badge-danger{% elif asset.criticality == 2 %}badge-warning{% else %}badge-success{% endif %}"></span>
+                            </td>
+            
+                            <!-- Risks -->
+                            <td>
+                                <div style="max-height: 200px; overflow-y: auto; padding-right: 5px;">
+                                    {% for risk in asset.risks.all %}
+                                        <div class="p-2 rounded risk-box {% if risk.residual_score >= 15 %}risk-high{% elif risk.residual_score >= 8 %}risk-medium{% else %}risk-low{% endif %}">
+                                            <a href="javascript:void(0)" onclick="openOverlay('{% url 'risk_detail' risk.id %}')">
+                                                {{ risk.title|safe }}
+                                            </a>
+                                        </div>
+                                    {% empty %}
+                                        <span class="text-muted">{% trans "No risks" %}</span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+            
+                            <!-- Procedures (New Column After Risk) -->
+                            <td>
+                                <div style="max-height: 200px; overflow-y: auto; padding-right: 5px;">
+                                    {% for risk in asset.risks.all %}
+                                        {% for procedure in risk.procedures.all %}
+                                            <div class="border p-2 rounded mb-2 bg-light">
+                                                <a href="javascript:void(0)" onclick="openOverlay('{% url 'procedure_detail' procedure.id %}')" class="text-dark">
+                                                    {{ procedure.title|safe }}
+                                                </a>
+                                            </div>
+                                        {% empty %}
+                                            <!-- Only show "No procedures" if no procedures exist across all risks -->
+                                            {% if forloop.first and not risk.procedures.exists %}
+                                                <span class="text-muted">{% trans "No procedures" %}</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% empty %}
+                                        <span class="text-muted">{% trans "No procedures" %}</span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+            
+                            <!-- Vulnerabilities -->
+                            <td>
+                                <div style="max-height: 200px; overflow-y: auto; padding-right: 5px;">
+                                    {% for vulnerability in asset.vulnerabilities.all %}
+                                        <div class="border p-2 rounded mb-2 bg-light">
+                                            <a href="javascript:void(0)" onclick="openOverlay('{% url 'vulnerability_detail' vulnerability.id %}')" class="text-dark">
+                                                {{ vulnerability.description|safe }}
+                                            </a>
+                                        </div>
+                                    {% empty %}
+                                        <span class="text-muted">{% trans "No vulnerabilities" %}</span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+            
+                            <!-- Threats -->
+                            <td>
+                                <div style="max-height: 200px; overflow-y: auto; padding-right: 5px;">
+                                    {% for threat in asset.threats.all %}
+                                        <div class="border p-2 rounded mb-2">
+                                            <a href="javascript:void(0)" onclick="openOverlay('{% url 'itthreat_detail' threat.id %}')">
+                                                {{ threat.description|safe }}
+                                            </a>
+                                        </div>
+                                    {% empty %}
+                                        <span class="text-muted">{% trans "No threats" %}</span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">{% trans "No IT assets registered." %}</td> <!-- Updated colspan to 7 -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Overlay Panel -->
+    <div id="overlay-panel" class="overlay-panel">
+        <div class="overlay-header">
+            <h5>{% trans "Details" %}</h5>
+            <button class="btn btn-sm btn-danger" onclick="closeOverlay()">{% trans "Close" %}</button>
+        </div>
+        <iframe id="overlay-iframe" class="overlay-iframe"></iframe>
+    </div>
+
+    <!-- JavaScript for Sorting and Overlay -->
+    <script>
+        function openOverlay(url) {
+            const overlay = document.getElementById("overlay-panel");
+            const iframe = document.getElementById("overlay-iframe");
+            iframe.src = url;
+            overlay.style.right = "0";
+        }
+
+        function closeOverlay() {
+            const overlay = document.getElementById("overlay-panel");
+            overlay.style.right = "-100%";
+        }
+
+        function reloadListSection() {
+            location.reload();
+        }
+
+        // Sorting Functionality (First Column Only)
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableBody = document.getElementById('tableBody');
+            const sortHeader = document.getElementById('sort-it-asset');
+            let isAscending = true;
+
+            sortHeader.addEventListener('click', () => {
+                // Toggle sort direction
+                isAscending = !isAscending;
+
+                // Update sort indicator
+                sortHeader.classList.remove('sort-asc', 'sort-desc');
+                sortHeader.classList.add(isAscending ? 'sort-asc' : 'sort-desc');
+
+                // Sort rows
+                const rows = Array.from(tableBody.querySelectorAll('tr'));
+                rows.sort((a, b) => {
+                    const aValue = a.querySelector('td[data-value]')?.getAttribute('data-value') || '';
+                    const bValue = b.querySelector('td[data-value]')?.getAttribute('data-value') || '';
+                    return isAscending ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+                });
+
+                // Re-append sorted rows
+                rows.forEach(row => tableBody.appendChild(row));
+            });
+        });
+    </script>
+</body>
+</html>

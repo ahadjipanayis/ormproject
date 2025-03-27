@@ -1,0 +1,91 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if event %}Edit Event{% else %}Add Event{% endif %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>{% if event %}Edit Event{% else %}Add Event{% endif %}</h1>
+       
+               <!-- Select Risks to Link -->
+               {% if event %}
+               <!-- Select Risks to Link -->
+       
+        <div class="mt-4">
+            <h3>Link a Risk to Event</h3>
+            <form method="post" action="{% url 'link_risk_to_event' event.id %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <select name="risk_id" id="risk_id" class="form-select">
+                        <option value="" disabled selected>Select a risk</option>
+                        {% for risk in all_risks %}
+                            <option value="{{ risk.id }}">{{ risk.title |safe}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Link Risk</button>
+            </form>
+        </div>
+                {% endif %}
+        
+                <!-- Currently Linked Risks -->
+              <!-- Currently Linked Risks -->
+        <div class="mt-4">
+            <h3>Currently Linked Risks</h3>
+            <ul class="list-group">
+                {% for risk in related_risks %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <!-- Link the risk title to the risk detail page -->
+                        <a href="{% url 'risk_detail' risk.id %}" target="_blank">{{ risk.title |  safe }}</a>
+                        <a href="{% url 'unlink_risk' event.id risk.id %}" class="btn btn-danger btn-sm">Unlink</a>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-muted">No risks linked to this event.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- Event Form -->
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="title">Title</label>
+                {{ form.title }}
+            </div>
+            <div class="mb-3">
+                <label for="description">Description</label>
+                {{ form.description }}
+            </div>
+            <div class="mb-3">
+                <label for="date">Date</label>
+                {{ form.date }}
+            </div>
+            <div class="mb-3">
+                <label for="owner">Owner</label>
+                {{ form.owner }}
+            </div>
+            <div class="mb-3">
+                <label for="portfolio">Portfolio</label>
+                {{ form.portfolio }}
+            </div>
+            <div class="mb-3">
+                <label for="reporter">Reporter</label>
+                {{ form.reporter }}
+            </div>
+
+            <!-- Save Button -->
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="{% url 'event_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+
+
+
+    </div>
+</body>
+</html>

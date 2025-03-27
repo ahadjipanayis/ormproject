@@ -1,0 +1,1467 @@
+# Russian translation for ormproject
+# Copyright (C) 2025 AVAX
+# This file is distributed under the same license as the ormproject package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#: orm/templates/frontend.html:281 orm/templates/frontend.html:291
+#: orm/templates/frontend.html:309 orm/templates/frontend.html:332
+#: orm/templates/frontend.html:365 orm/templates/frontend.html:377
+#: orm/templates/frontend.html:415 orm/templates/risk_list_new.html:82
+msgid ""
+msgstr ""
+"Project-Id-Version: ormproject 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-17 14:41+0200\n"
+"PO-Revision-Date: 2025-03-18 12:00+0300\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: Russian <ru@li.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: media/documents/frontend.html:8 orm/templates/frontend.html:8
+msgid "Enterprise Risk Management - AVAX"
+msgstr "Управление корпоративными рисками - AVAX"
+
+#: media/documents/frontend.html:266 orm/templates/frontend.html:271
+msgid "AVAX Logo"
+msgstr "Логотип AVAX"
+
+#: media/documents/frontend.html:270 orm/templates/frontend.html:275
+msgid "Calendar"
+msgstr "Календарь"
+
+#: media/documents/frontend.html:270 orm/templates/frontend.html:275
+msgid "View Calendar"
+msgstr "Просмотреть календарь"
+
+#: media/documents/frontend.html:275 media/documents/frontend.html:276
+#: media/documents/frontend.html:340 orm/templates/frontend.html:280
+#: orm/templates/frontend.html:313 orm/templates/risk_detail.html:1102
+#: orm/templates/risk_detail.html:2427
+msgid "Procedures"
+msgstr "Процедуры"
+
+#: media/documents/frontend.html:275 orm/templates/frontend.html:280
+msgid "View Procedures"
+msgstr "Просмотреть процедуры"
+
+
+#: media/documents/frontend.html:280 orm/templates/frontend.html:285
+msgid "View Documents"
+msgstr "Просмотреть документы"
+
+#: media/documents/frontend.html:285 media/documents/frontend.html:286
+#: orm/templates/frontend.html:290
+msgid "Counterparties"
+msgstr "Контрагенты"
+
+#: media/documents/frontend.html:285 orm/templates/frontend.html:290
+msgid "View Counterparties"
+msgstr "Просмотреть контрагентов"
+
+#: media/documents/frontend.html:290 media/documents/frontend.html:291
+#: orm/templates/frontend.html:295 orm/templates/frontend.html:296
+#: orm/templates/risk_detail.html:1097
+msgid "Incidents"
+msgstr "Инциденты"
+
+#: media/documents/frontend.html:290 orm/templates/frontend.html:295
+msgid "View Incidents"
+msgstr "Просмотреть инциденты"
+
+#: media/documents/frontend.html:295 media/documents/frontend.html:296
+#: media/documents/risk_list_new.html:7 media/documents/risk_list_new.html:76
+#: orm/templates/frontend.html:300 orm/templates/frontend.html:301
+#: orm/templates/risk_list_new.html:7 orm/templates/risk_list_new.html:79
+msgid "Risk Registry"
+msgstr "Реестр рисков"
+
+#: media/documents/frontend.html:295 orm/templates/frontend.html:300
+msgid "View Risk Registry"
+msgstr "Просмотреть реестр рисков"
+
+#: media/documents/frontend.html:300 media/documents/frontend.html:301
+#: orm/templates/frontend.html:339 orm/templates/frontend.html:340
+msgid "KPIs/KRIs"
+msgstr "KPIs/KRIs"  # Оставлено как есть, часто используется в техническом контексте
+
+#: media/documents/frontend.html:300 orm/templates/frontend.html:339
+msgid "View KPIs/KRIs"
+msgstr "Просмотреть KPIs/KRIs"
+
+#: media/documents/frontend.html:305 media/documents/frontend.html:306
+#: media/documents/frontend.html:343 orm/templates/frontend.html:316
+#: orm/templates/frontend.html:344 orm/templates/frontend.html:345
+#: orm/templates/risk_detail.html:1087 orm/templates/risk_detail.html:1486
+msgid "Actions"
+msgstr "Действия"
+
+#: media/documents/frontend.html:305 orm/templates/frontend.html:344
+msgid "View Actions"
+msgstr "Просмотреть действия"
+
+#: media/documents/frontend.html:312 orm/templates/frontend.html:351
+msgid "IT Options"
+msgstr "ИТ-опции"
+
+#: media/documents/frontend.html:312 orm/templates/frontend.html:351
+msgid "IT"
+msgstr "ИТ"  # Оставлено как есть, широко используется в русском языке
+
+#: media/documents/frontend.html:314 orm/templates/frontend.html:353
+msgid "Risk per IT Asset"
+msgstr "Риск на ИТ-актив"
+
+#: media/documents/frontend.html:315 orm/templates/frontend.html:354
+#: orm/templates/risk_detail.html:1107 orm/templates/risk_detail.html:2225
+msgid "IT Assets"
+msgstr "ИТ-активы"
+
+#: media/documents/frontend.html:316 orm/templates/frontend.html:355
+msgid "IT Threats"
+msgstr "ИТ-угрозы"
+
+#: media/documents/frontend.html:317 orm/templates/frontend.html:356
+#: orm/templates/itassets_with_risks.html:184
+msgid "Vulnerabilities"
+msgstr "Уязвимости"
+
+#: media/documents/frontend.html:318 media/documents/frontend.html:398
+#: orm/templates/frontend.html:357 orm/templates/frontend.html:421
+msgid "Network Tools"
+msgstr "Сетевые инструменты"
+
+#: media/documents/frontend.html:326 orm/templates/frontend.html:365
+msgid "Audit Options"
+msgstr "Опции аудита"
+
+#: media/documents/frontend.html:326
+msgid "Audit"
+msgstr "Аудит"  # Оставлено как есть в техническом контексте
+
+#: media/documents/frontend.html:328 orm/templates/frontend.html:367
+msgid "S O A"
+msgstr "S O A"  # Оставлено как акроним
+
+#: media/documents/frontend.html:329 orm/templates/frontend.html:368
+msgid "Assessments"
+msgstr "Оценки"
+
+#: media/documents/frontend.html:336 orm/templates/frontend.html:309
+msgid "Tools Options"
+msgstr "Опции инструментов"
+
+#: media/documents/frontend.html:336
+msgid "Tools"
+msgstr "Инструменты"
+
+#: media/documents/frontend.html:338 media/documents/frontend.html:376
+#: orm/templates/frontend.html:311 orm/templates/frontend.html:399
+#: orm/templates/frontend.html:437
+msgid "Open AI"
+msgstr "Open AI"  # Оставлено как есть, название бренда
+
+#: media/documents/frontend.html:339 orm/templates/frontend.html:312
+msgid "User Input"
+msgstr "Ввод пользователя"
+
+#: media/documents/frontend.html:341 orm/templates/frontend.html:314
+msgid "Flow Charts"
+msgstr "Блок-схемы"
+
+#: media/documents/frontend.html:342 orm/templates/frontend.html:315
+#: orm/templates/risk_detail.html:1067 orm/templates/risk_detail.html:1280
+msgid "Mitigations"
+msgstr "Меры смягчения"
+
+#: media/documents/frontend.html:345 orm/templates/frontend.html:318
+#: orm/templates/frontend.html:331 orm/templates/risk_detail.html:1077
+msgid "Opportunities"
+msgstr "Возможности"
+
+#: media/documents/frontend.html:346 orm/templates/frontend.html:319
+#: orm/templates/itassets_with_risks.html:185
+#: orm/templates/risk_detail.html:1082
+msgid "Threats"
+msgstr "Угрозы"
+
+msgid "Hide Mitigations Column"
+msgstr "Скрыть столбец мер смягчения"
+
+msgid "Show Mitigations Column"
+msgstr "Показать столбец мер смягчения"
+
+#: media/documents/frontend.html:347 orm/templates/frontend.html:320
+msgid "Categories"
+msgstr "Категории"
+
+#: media/documents/frontend.html:348 media/documents/risk_list_new.html:130
+#: orm/templates/frontend.html:321 orm/templates/risk_list_new.html:131
+msgid "Portfolios"
+msgstr "Портфели"
+
+#: media/documents/frontend.html:354 orm/templates/frontend.html:377
+msgid "Reports Options"
+msgstr "Опции отчетов"
+
+#: media/documents/frontend.html:354
+msgid "Reports"
+msgstr "Отчеты"
+
+#: media/documents/frontend.html:356 orm/templates/frontend.html:379
+msgid "Portfolio Reports"
+msgstr "Отчеты по портфелям"
+
+#: media/documents/frontend.html:357 orm/templates/frontend.html:380
+msgid "Heatmaps"
+msgstr "Тепловые карты"
+
+#: media/documents/frontend.html:358 orm/templates/frontend.html:381
+msgid "Risk Per Owner"
+msgstr "Риск на владельца"
+
+#: media/documents/frontend.html:359 orm/templates/frontend.html:382
+msgid "Risk Per Category"
+msgstr "Риск на категорию"
+
+#: media/documents/frontend.html:360 orm/templates/frontend.html:383
+msgid "Risk Per Portfolio"
+msgstr "Риск на портфель"
+
+#: media/documents/frontend.html:361 orm/templates/frontend.html:384
+msgid "Pivots"
+msgstr "Сводные таблицы"
+
+#: media/documents/frontend.html:362 orm/templates/frontend.html:385
+msgid "IMF Reports"
+msgstr "Отчеты МВФ"  # МВФ = Международный валютный фонд
+
+#: media/documents/frontend.html:364 orm/templates/frontend.html:387
+msgid "Ranking"
+msgstr "Рейтинг"
+
+#: media/documents/frontend.html:365 orm/templates/frontend.html:388
+msgid "Ranking per Portfolio"
+msgstr "Рейтинг по портфелям"
+
+#: media/documents/frontend.html:366 orm/templates/frontend.html:389
+msgid "Risk Appetite"
+msgstr "Аппетит к риску"
+
+#: media/documents/frontend.html:367 orm/templates/frontend.html:390
+msgid "Admin Pivots"
+msgstr "Сводные таблицы администратора"
+
+#: media/documents/frontend.html:368 orm/templates/frontend.html:391
+msgid "Admin Reports"
+msgstr "Отчеты администратора"
+
+#: media/documents/frontend.html:370 orm/templates/frontend.html:393
+msgid "Risk Network"
+msgstr "Сеть рисков"
+
+#: media/documents/frontend.html:372 orm/templates/frontend.html:395
+msgid "Open Metabase"
+msgstr "Открыть Metabase"
+
+#: media/documents/frontend.html:373 orm/templates/frontend.html:396
+msgid "Metabase"
+msgstr "Metabase"  # Оставлено как есть, название бренда
+
+#: media/documents/frontend.html:375 orm/templates/frontend.html:398
+#: orm/templates/frontend.html:436
+msgid "Open AI Chat"
+msgstr "Чат Open AI"
+
+#: media/documents/frontend.html:378 orm/templates/frontend.html:401
+msgid "XAI Chat"
+msgstr "Чат XAI"
+
+#: media/documents/frontend.html:379 orm/templates/frontend.html:402
+msgid "XAI"
+msgstr "XAI"  # Оставлено как есть, название бренда
+
+#: media/documents/frontend.html:385 orm/templates/frontend.html:408
+#: orm/templates/risk_detail.html:679
+msgid "Approve"
+msgstr "Утвердить"
+
+#: media/documents/frontend.html:385 orm/templates/frontend.html:408
+msgid "View Approvals"
+msgstr "Просмотреть утверждения"
+
+#: media/documents/frontend.html:392 orm/templates/frontend.html:415
+msgid "Admin Tools"
+msgstr "Инструменты администратора"
+
+#: media/documents/frontend.html:394 orm/templates/frontend.html:417
+msgid "Admin Panel"
+msgstr "Панель администратора"
+
+#: media/documents/frontend.html:395 orm/templates/frontend.html:418
+msgid "Profiles"
+msgstr "Профили"
+
+#: media/documents/frontend.html:396 orm/templates/frontend.html:419
+msgid "Run Approvals"
+msgstr "Запустить утверждения"
+
+#: media/documents/frontend.html:397 orm/templates/frontend.html:420
+msgid "Status Per User"
+msgstr "Статус по пользователям"
+
+#: media/documents/frontend.html:399 orm/templates/frontend.html:422
+msgid "User Activity"
+msgstr "Активность пользователя"
+
+#: media/documents/frontend.html:400 orm/templates/frontend.html:423
+msgid "Email Tracking"
+msgstr "Отслеживание электронной почты"
+
+#: media/documents/frontend.html:401 orm/templates/frontend.html:424
+msgid "Setup Session"
+msgstr "Настройка сессии"
+
+#: media/documents/frontend.html:408 orm/templates/frontend.html:441
+msgid "User Options"
+msgstr "Опции пользователя"
+
+#: media/documents/frontend.html:410 orm/templates/frontend.html:443
+#: orm/templates/registration/password_change.html:8
+#: orm/templates/registration/password_change.html:184
+msgid "Change Password"
+msgstr "Сменить пароль"
+
+#: media/documents/frontend.html:411 orm/templates/frontend.html:444
+msgid "ERM Manual"
+msgstr "Руководство ERM"
+
+#: media/documents/frontend.html:415 media/documents/frontend.html:436
+#: orm/templates/frontend.html:448 orm/templates/frontend.html:476
+msgid "Select Language"
+msgstr "Выбрать язык"
+
+#: media/documents/frontend.html:427 orm/templates/frontend.html:467
+msgid "Logout"
+msgstr "Выйти"
+
+#: media/documents/frontend.html:447 orm/templates/frontend.html:487
+msgid "Toggle Menu"
+msgstr "Переключить меню"
+
+#: media/documents/risk_list_new.html:76 orm/templates/risk_list_new.html:79
+msgid "Total Risks"
+msgstr "Всего рисков"
+
+#: media/documents/risk_list_new.html:78 orm/templates/risk_list_new.html:77
+msgid "New Risk"
+msgstr "Новый риск"
+
+#: media/documents/risk_list_new.html:81
+#: orm/templates/itassets_with_risks.html:173
+msgid "Refresh"
+msgstr "Обновить"
+
+#: media/documents/risk_list_new.html:83 orm/templates/risk_list_new.html:84
+msgid "Search risks by title..."
+msgstr "Поиск рисков по названию..."
+
+#: media/documents/risk_list_new.html:87 orm/templates/risk_list_new.html:88
+msgid "Filters"
+msgstr "Фильтры"
+
+#: media/documents/risk_list_new.html:96 media/documents/risk_list_new.html:105
+#: media/documents/risk_list_new.html:114 orm/templates/risk_list_new.html:97
+#: orm/templates/risk_list_new.html:106 orm/templates/risk_list_new.html:115
+msgid "Select All"
+msgstr "Выбрать все"
+
+#: media/documents/risk_list_new.html:103
+#: media/documents/risk_list_new.html:140 orm/templates/risk_detail.html:622
+#: orm/templates/risk_list_new.html:104 orm/templates/risk_list_new.html:141
+msgid "Category"
+msgstr "Категория"
+
+#: media/documents/risk_list_new.html:112 orm/templates/calendar_view.html:355
+#: orm/templates/risk_list_new.html:113
+msgid "Owner"
+msgstr "Владелец"
+
+#: media/documents/risk_list_new.html:122 orm/templates/risk_list_new.html:123
+msgid "Apply Filters"
+msgstr "Применить фильтры"
+
+#: media/documents/risk_list_new.html:127
+#: media/documents/risk_list_new.html:274
+#: media/documents/risk_list_new.html:287 orm/templates/risk_list_new.html:128
+#: orm/templates/risk_list_new.html:275 orm/templates/risk_list_new.html:288
+msgid "Expand All"
+msgstr "Развернуть все"
+
+#: media/documents/risk_list_new.html:134 orm/templates/risk_list_new.html:135
+msgid "Risks"
+msgstr "Риски"
+
+#: media/documents/risk_list_new.html:141 orm/templates/risk_detail.html:2002
+#: orm/templates/risk_list_new.html:142
+msgid "Inherent Score"
+msgstr "Изначальный балл"
+
+#: media/documents/risk_list_new.html:142 orm/templates/risk_detail.html:2003
+#: orm/templates/risk_list_new.html:143
+msgid "Residual Score"
+msgstr "Остаточный балл"
+
+#: media/documents/risk_list_new.html:143 orm/templates/risk_detail.html:2004
+#: orm/templates/risk_list_new.html:144
+msgid "Targeted Score"
+msgstr "Целевой балл"
+
+#: media/documents/risk_list_new.html:144 orm/templates/risk_list_new.html:145
+msgid "Owners & Approvals"
+msgstr "Владельцы и утверждения"
+
+#: media/documents/risk_list_new.html:159 orm/templates/risk_list_new.html:160
+msgid "Open in new tab"
+msgstr "Открыть в новой вкладке"
+
+#: media/documents/risk_list_new.html:175 orm/templates/risk_list_new.html:176
+msgid "No approvals"
+msgstr "Нет утверждений"
+
+#: media/documents/risk_list_new.html:191 orm/templates/risk_list_new.html:192
+#, fuzzy
+#| msgid "Task Details"
+msgid "Risk Details"
+msgstr "Детали задачи"
+
+#: media/documents/risk_list_new.html:191 orm/templates/calendar_view.html:340
+#: orm/templates/itassets_with_risks.html:271
+#: orm/templates/risk_detail.html:1324 orm/templates/risk_detail.html:1346
+#: orm/templates/risk_detail.html:1352 orm/templates/risk_detail.html:1569
+#: orm/templates/risk_detail.html:1797 orm/templates/risk_detail.html:2269
+#: orm/templates/risk_detail.html:2291 orm/templates/risk_detail.html:2297
+#: orm/templates/risk_detail.html:2471 orm/templates/risk_detail.html:2493
+#: orm/templates/risk_detail.html:2499 orm/templates/risk_list_new.html:192
+msgid "Close"
+msgstr "Закрыть"
+
+#: media/documents/risk_list_new.html:287 orm/templates/risk_list_new.html:288
+msgid "Collapse All"
+msgstr "Свернуть все"
+
+#: orm/templates/actions/action_list.html:144
+msgid "Actions List"
+msgstr "Список действий"
+
+#: orm/templates/calendar_view.html:9
+msgid "Risk Calendar - AVAX S.A."
+msgstr "Календарь рисков - AVAX S.A."
+
+#: orm/templates/calendar_view.html:339
+msgid "Task Details"
+msgstr "Детали задачи"
+
+#: orm/templates/calendar_view.html:351
+msgid "Task Overview - AVAX S.A."
+msgstr "Обзор задач - AVAX S.A."
+
+#: orm/templates/calendar_view.html:362
+msgid "Performer"
+msgstr "Исполнитель"
+
+#: orm/templates/calendar_view.html:412
+msgid "Error fetching events. Please try again."
+msgstr "Ошибка при получении событий. Пожалуйста, попробуйте снова."
+
+#: orm/templates/calendar_view.html:430
+#, fuzzy
+#| msgid "No pending approvals."
+msgid "No approvals."
+msgstr "Нет ожидающих утверждений."
+
+#: orm/templates/calendar_view.html:486 orm/templates/risk_detail.html:697
+msgid "days"
+msgstr "дней"
+
+#: orm/templates/frontend.html:331
+#, fuzzy
+#| msgid "Opportunities"
+msgid "View Opportunities"
+msgstr "Возможности"
+
+#: orm/templates/frontend.html:426
+msgid "Photo Verification"
+msgstr "Проверка фото"  # Assuming this is untranslated in Italian
+
+#: orm/templates/frontend.html:427
+msgid "Loan"
+msgstr "Кредит"  # Assuming this is untranslated in Italian
+
+#: orm/templates/frontend.html:429
+msgid "AGENT"
+msgstr "АГЕНТ"  # Assuming this is untranslated in Italian, kept as-is
+
+#: orm/templates/itassets_with_risks.html:7
+msgid "IT Assets, Risks, Threats & Vulnerabilities"
+msgstr "ИТ-активы, риски, угрозы и уязвимости"
+
+#: orm/templates/itassets_with_risks.html:174
+#, fuzzy
+#| msgid "IT Assets"
+msgid "IT Assets Overview"
+msgstr "ИТ-активы"
+
+#: orm/templates/itassets_with_risks.html:180
+#, fuzzy
+#| msgid "IT Assets"
+msgid "IT Asset"
+msgstr "ИТ-актив"
+
+#: orm/templates/itassets_with_risks.html:181
+msgid "CIA"
+msgstr "CIA"  # Оставлено как акроним (Конфиденциальность, Целостность, Доступность)
+
+#: orm/templates/itassets_with_risks.html:182
+msgid "Criticality"
+msgstr "Критичность"
+
+#: orm/templates/itassets_with_risks.html:183
+msgid "Risk"
+msgstr "Риск"
+
+#: orm/templates/itassets_with_risks.html:222
+msgid "No risks"
+msgstr "Нет рисков"
+
+#: orm/templates/itassets_with_risks.html:237
+#, fuzzy
+#| msgid "Vulnerabilities"
+msgid "No vulnerabilities"
+msgstr "Уязвимости"
+
+#: orm/templates/itassets_with_risks.html:252
+#, fuzzy
+#| msgid "Threats"
+msgid "No threats"
+msgstr "Угрозы"
+
+#: orm/templates/itassets_with_risks.html:259
+msgid "No IT assets registered."
+msgstr "Нет зарегистрированных ИТ-активов."
+
+#: orm/templates/itassets_with_risks.html:270
+#, fuzzy
+#| msgid "Task Details"
+msgid "Details"
+msgstr "Детали задачи"
+
+#: orm/templates/registration/password_change.html:160
+msgid "Change Your Password"
+msgstr "Сменить ваш пароль"
+
+#: orm/templates/registration/password_change.html:162
+msgid ""
+"Keeping your account secure is important to us. Update your password "
+"regularly to protect your data and maintain access to ermapp.avax.gr."
+msgstr ""
+"Обеспечение безопасности вашего аккаунта важно для нас. Регулярно обновляйте "
+"пароль для защиты ваших данных и поддержания доступа к ermapp.avax.gr."
+
+#: orm/templates/registration/password_change.html:165
+msgid "Tips for a Strong Password:"
+msgstr "Советы по созданию надежного пароля:"
+
+#: orm/templates/registration/password_change.html:167
+msgid "Use at least 12 characters."
+msgstr "Используйте не менее 12 символов."
+
+#: orm/templates/registration/password_change.html:168
+msgid "Mix letters (upper and lower case), numbers, and symbols."
+msgstr "Смешивайте буквы (заглавные и строчные), цифры и символы."
+
+#: orm/templates/registration/password_change.html:169
+msgid "Avoid common words or personal info (e.g., your name or birthday)."
+msgstr ""
+"Избегайте использования общих слов или личной информации (например, вашего "
+"имени или даты рождения)."
+
+#: orm/templates/registration/password_change.html:170
+msgid "Make it unique—don’t reuse passwords from other sites."
+msgstr ""
+"Сделайте его уникальным — не используйте пароли от других сайтов."
+
+#: orm/templates/registration/password_change.html:187
+msgid "All rights reserved."
+msgstr "Все права защищены."
+
+#: orm/templates/risk_detail.html:438
+msgid "Only owners or superusers can delete risks"
+msgstr "Только владельцы или суперпользователи могут удалять риски"
+
+#: orm/templates/risk_detail.html:439
+msgid "Archive"
+msgstr "Архивировать"
+
+#: orm/templates/risk_detail.html:443
+msgid "Replicate"
+msgstr "Дублировать"
+
+#: orm/templates/risk_detail.html:504
+msgid "Inherent"
+msgstr "Изначальный"
+
+#: orm/templates/risk_detail.html:520
+msgid "Residual"
+msgstr "Остаточный"
+
+#: orm/templates/risk_detail.html:536
+msgid "Targeted"
+msgstr "Целевой"
+
+#: orm/templates/risk_detail.html:601
+msgid "Low"
+msgstr "Низкий"
+
+#: orm/templates/risk_detail.html:604
+msgid "Medium"
+msgstr "Средний"
+
+#: orm/templates/risk_detail.html:607
+msgid "High"
+msgstr "Высокий"
+
+#: orm/templates/risk_detail.html:648
+msgid "Approval Cycle"
+msgstr "Цикл утверждения"
+
+#: orm/templates/risk_detail.html:660
+msgid "Treatment Type"
+msgstr "Тип обработки"
+
+#: orm/templates/risk_detail.html:683
+msgid "Unknown Role"
+msgstr "Неизвестная роль"
+
+#: orm/templates/risk_detail.html:684
+msgid "Unknown User"
+msgstr "Неизвестный пользователь"
+
+#: orm/templates/risk_detail.html:686
+msgid "Due:"
+msgstr "Срок:"
+
+#: orm/templates/risk_detail.html:693
+msgid "days remaining"
+msgstr "дней осталось"
+
+#: orm/templates/risk_detail.html:695
+msgid "Due today"
+msgstr "Срок сегодня"
+
+#: orm/templates/risk_detail.html:697
+msgid "Overdue by"
+msgstr "Просрочено на"
+
+#: orm/templates/risk_detail.html:705
+msgid "No approvals have been requested for this risk."
+msgstr "Для этого риска не было запрошено утверждений."
+
+#: orm/templates/risk_detail.html:721 orm/templates/risk_detail.html:1312
+#: orm/templates/risk_detail.html:1530 orm/templates/risk_detail.html:1748
+#: orm/templates/risk_detail.html:2258 orm/templates/risk_detail.html:2460
+msgid "Only owners or superusers can save changes"
+msgstr "Только владельцы или суперпользователи могут сохранять изменения"
+
+#: orm/templates/risk_detail.html:722
+msgid "Save Changes in Risk"
+msgstr "Сохранить изменения в риске"
+
+#: orm/templates/risk_detail.html:873
+msgid "This search uses"
+msgstr "Этот поиск использует"
+
+#: orm/templates/risk_detail.html:874
+msgid "models."
+msgstr "модели."
+
+#: orm/templates/risk_detail.html:876
+msgid "Standard Mode: Uses GPT-4o static model, or"
+msgstr "Стандартный режим: Использует статическую модель GPT-4o, или"
+
+#: orm/templates/risk_detail.html:877
+msgid ""
+"Web Mode: Uses GPT-4o (Search Preview) for live web-enabled searches, "
+"selection is automatic."
+msgstr ""
+"Веб-режим: Использует GPT-4o (Предпросмотр поиска) для живых веб-поисков, "
+"выбор автоматический."
+
+#: orm/templates/risk_detail.html:878
+msgid ""
+"To force Web Mode, start your query with keywords such as 'web', 'search', "
+"'latest', 'live'."
+msgstr ""
+"Чтобы принудительно включить веб-режим, начните запрос с ключевых слов, таких "
+"как 'web', 'search', 'latest', 'live'."
+
+#: orm/templates/risk_detail.html:882
+msgid "Enter search term"
+msgstr "Введите поисковый запрос"
+
+#: orm/templates/risk_detail.html:883
+msgid "Search"
+msgstr "Поиск"
+
+#: orm/templates/risk_detail.html:887
+msgid "Disclaimer:"
+msgstr "Отказ от ответственности:"
+
+#: orm/templates/risk_detail.html:887
+msgid ""
+"AI and Web Mode results may not always reflect the latest risk data. Verify "
+"critical information from official sources."
+msgstr ""
+"Результаты AI и веб-режима не всегда отражают последние данные о рисках. "
+"Проверяйте критически важную информацию из официальных источников."
+
+#: orm/templates/risk_detail.html:893
+msgid "Web Mode: ON (Using GPT-4o)"
+msgstr "Веб-режим: ВКЛ (Используется GPT-4o)"
+
+#: orm/templates/risk_detail.html:898
+msgid "Searching... Please wait."
+msgstr "Поиск... Пожалуйста, подождите."
+
+#: orm/templates/risk_detail.html:903
+msgid "Search Results:"
+msgstr "Результаты поиска:"
+
+#: orm/templates/risk_detail.html:931
+msgid "No results found."
+msgstr "Результаты не найдены."
+
+#: orm/templates/risk_detail.html:949
+msgid "Please enter a search term."
+msgstr "Пожалуйста, введите поисковый запрос."
+
+#: orm/templates/risk_detail.html:973
+msgid "Search failed:"
+msgstr "Поиск не удался:"
+
+#: orm/templates/risk_detail.html:973
+#, fuzzy
+#| msgid "Unknown User"
+msgid "Unknown error"
+msgstr "Неизвестный пользователь"
+
+#: orm/templates/risk_detail.html:977
+msgid "An error occurred:"
+msgstr "Произошла ошибка:"
+
+#: orm/templates/risk_detail.html:1072 orm/templates/risk_detail.html:2205
+msgid "Scores"
+msgstr "Баллы"
+
+#: orm/templates/risk_detail.html:1112
+msgid "History"
+msgstr "История"
+
+#: orm/templates/risk_detail.html:1127
+msgid "General Information"
+msgstr "Общая информация"
+
+#: orm/templates/risk_detail.html:1162
+msgid "Ownership & Associations"
+msgstr "Владение и связи"
+
+#: orm/templates/risk_detail.html:1165
+msgid "Current Owners:"
+msgstr "Текущие владельцы:"
+
+#: orm/templates/risk_detail.html:1173 orm/templates/risk_detail.html:1508
+#: orm/templates/risk_detail.html:1723 orm/templates/risk_detail.html:2251
+#: orm/templates/risk_detail.html:2453
+msgid "Unlink"
+msgstr "Отсоединить"
+
+#: orm/templates/risk_detail.html:1182
+msgid "Add Owner:"
+msgstr "Добавить владельца:"
+
+#: orm/templates/risk_detail.html:1189
+msgid "Add"
+msgstr "Добавить"
+
+#: orm/templates/risk_detail.html:1297
+msgid "Link Existing Mitigation:"
+msgstr "Привязать существующую меру смягчения:"
+
+#: orm/templates/risk_detail.html:1300
+msgid "-- Select Mitigation --"
+msgstr "-- Выберите меру смягчения --"
+
+#: orm/templates/risk_detail.html:1306
+msgid "Link Mitigation"
+msgstr "Привязать меру смягчения"
+
+#: orm/templates/risk_detail.html:1313 orm/templates/risk_detail.html:1323
+msgid "Add New Mitigation"
+msgstr "Добавить новую меру смягчения"
+
+#: orm/templates/risk_detail.html:1328
+msgid "Mitigation Title"
+msgstr "Название меры смягчения"
+
+#: orm/templates/risk_detail.html:1329
+msgid "Enter Mitigation Title"
+msgstr "Введите название меры смягчения"
+
+#: orm/templates/risk_detail.html:1333 orm/templates/risk_detail.html:1550
+#: orm/templates/risk_detail.html:1778 orm/templates/risk_detail.html:2278
+#: orm/templates/risk_detail.html:2480
+msgid "Cancel"
+msgstr "Отмена"
+
+#: orm/templates/risk_detail.html:1345
+msgid "Mitigation Details"
+msgstr "Детали меры смягчения"
+
+#: orm/templates/risk_detail.html:1498
+#, fuzzy
+#| msgid "Due:"
+msgid "Due"
+msgstr "Срок:"
+
+#: orm/templates/risk_detail.html:1500
+msgid "Completed"
+msgstr "Завершено"
+
+#: orm/templates/risk_detail.html:1502
+#, fuzzy
+#| msgid "Overdue by"
+msgid "Overdue"
+msgstr "Просрочено на"
+
+#: orm/templates/risk_detail.html:1504
+msgid "Pending"
+msgstr "В ожидании"
+
+#: orm/templates/risk_detail.html:1511
+#, fuzzy
+#| msgid "View Actions"
+msgid "No linked actions."
+msgstr "Просмотреть действия"
+
+#: orm/templates/risk_detail.html:1517
+msgid "Link an Existing Action"
+msgstr "Привязать существующее действие"
+
+#: orm/templates/risk_detail.html:1519
+msgid "Select an action"
+msgstr "Выберите действие"
+
+#: orm/templates/risk_detail.html:1525
+msgid "Link Action"
+msgstr "Привязать действие"
+
+#: orm/templates/risk_detail.html:1531
+msgid "Add Action"
+msgstr "Добавить действие"
+
+#: orm/templates/risk_detail.html:1540
+msgid "Add New Action"
+msgstr "Добавить новое действие"
+
+#: orm/templates/risk_detail.html:1545
+msgid "Action Title"
+msgstr "Название действия"
+
+#: orm/templates/risk_detail.html:1546
+msgid "Enter Action Title"
+msgstr "Введите название действия"
+
+#: orm/templates/risk_detail.html:1551
+msgid "Save Action"
+msgstr "Сохранить действие"
+
+#: orm/templates/risk_detail.html:1562
+msgid "Action Details"
+msgstr "Детали действия"
+
+#: orm/templates/risk_detail.html:1718
+msgid "Value"
+msgstr "Значение"
+
+#: orm/templates/risk_detail.html:1719 orm/templates/risk_detail.html:2199
+msgid "Date"
+msgstr "Дата"
+
+#: orm/templates/risk_detail.html:1727
+msgid "No linked indicators."
+msgstr "Нет привязанных индикаторов."
+
+#: orm/templates/risk_detail.html:1733
+msgid "Link an Existing Indicator"
+msgstr "Привязать существующий индикатор"
+
+#: orm/templates/risk_detail.html:1735
+msgid "Select an indicator"
+msgstr "Выберите индикатор"
+
+#: orm/templates/risk_detail.html:1742
+msgid "Link Indicator"
+msgstr "Привязать индикатор"
+
+#: orm/templates/risk_detail.html:1749
+msgid "Add Indicator"
+msgstr "Добавить индикатор"
+
+#: orm/templates/risk_detail.html:1763
+msgid "Indicator Title"
+msgstr "Название индикатора"
+
+#: orm/templates/risk_detail.html:1765
+msgid "Enter Indicator Title"
+msgstr "Введите название индикатора"
+
+#: orm/templates/risk_detail.html:1768
+msgid "Current Value"
+msgstr "Текущее значение"
+
+#: orm/templates/risk_detail.html:1770
+msgid "Enter Current Value"
+msgstr "Введите текущее значение"
+
+#: orm/templates/risk_detail.html:1773
+msgid "Reporting Date"
+msgstr "Дата отчета"
+
+#: orm/templates/risk_detail.html:1779
+msgid "Save Indicator"
+msgstr "Сохранить индикатор"
+
+#: orm/templates/risk_detail.html:1790
+msgid "Indicator Details"
+msgstr "Детали индикатора"
+
+#: orm/templates/risk_detail.html:2012
+msgid "Likelihood"
+msgstr "Вероятность"
+
+#: orm/templates/risk_detail.html:2027
+msgid "Impact"
+msgstr "Воздействие"
+
+#: orm/templates/risk_detail.html:2152
+msgid "Inherent Scores"
+msgstr "Изначальные баллы"
+
+#: orm/templates/risk_detail.html:2160
+msgid "Residual Scores"
+msgstr "Остаточные баллы"
+
+#: orm/templates/risk_detail.html:2168
+msgid "Targeted Scores"
+msgstr "Целевые баллы"
+
+#: orm/templates/risk_detail.html:2229
+msgid "Link Existing IT Asset"
+msgstr "Привязать существующий ИТ-актив"
+
+#: orm/templates/risk_detail.html:2232
+msgid "-- Select IT Asset --"
+msgstr "-- Выберите ИТ-актив --"
+
+#: orm/templates/risk_detail.html:2238
+msgid "Link IT Asset"
+msgstr "Привязать ИТ-актив"
+
+#: orm/templates/risk_detail.html:2259 orm/templates/risk_detail.html:2268
+msgid "Add New IT Asset"
+msgstr "Добавить новый ИТ-актив"
+
+#: orm/templates/risk_detail.html:2273
+msgid "IT Asset Name"
+msgstr "Название ИТ-актива"
+
+#: orm/templates/risk_detail.html:2274
+msgid "Enter IT Asset Name"
+msgstr "Введите название ИТ-актива"
+
+#: orm/templates/risk_detail.html:2279
+msgid "Save IT Asset"
+msgstr "Сохранить ИТ-актив"
+
+#: orm/templates/risk_detail.html:2290
+msgid "IT Asset Details"
+msgstr "Детали ИТ-актива"
+
+#: orm/templates/risk_detail.html:2322
+msgid "IT Asset name is required!"
+msgstr "Название ИТ-актива обязательно!"
+
+#: orm/templates/risk_detail.html:2341 orm/templates/risk_detail.html:2344
+#: orm/templates/risk_detail.html:2371 orm/templates/risk_detail.html:2374
+#: orm/templates/risk_detail.html:2395 orm/templates/risk_detail.html:2398
+#: orm/templates/risk_detail.html:2540 orm/templates/risk_detail.html:2543
+#: orm/templates/risk_detail.html:2567 orm/templates/risk_detail.html:2570
+#: orm/templates/risk_detail.html:2591 orm/templates/risk_detail.html:2594
+msgid "Error"
+msgstr "Ошибка"
+
+#: orm/templates/risk_detail.html:2354
+msgid "Please select an IT Asset to link."
+msgstr "Пожалуйста, выберите ИТ-актив для привязки."
+
+#: orm/templates/risk_detail.html:2431
+#| msgid "Link Existing IT Asset"
+msgid "Link Existing Procedure"
+msgstr "Привязать существующую процедуру"
+
+#: orm/templates/risk_detail.html:2434
+#| msgid "-- Select IT Asset --"
+msgid "-- Select Procedure --"
+msgstr "-- Выберите процедуру --"
+
+#: orm/templates/risk_detail.html:2440
+msgid "Link Procedure"
+msgstr "Привязать процедуру"
+
+#: orm/templates/risk_detail.html:2461 orm/templates/risk_detail.html:2470
+msgid "Add New Procedure"
+msgstr "Добавить новую процедуру"
+
+#: orm/templates/risk_detail.html:2475
+msgid "Procedure Title"
+msgstr "Название процедуры"
+
+#: orm/templates/risk_detail.html:2476
+msgid "Enter Procedure Title"
+msgstr "Введите название процедуры"
+
+#: orm/templates/risk_detail.html:2481
+msgid "Save Procedure"
+msgstr "Сохранить процедуру"
+
+#: orm/templates/risk_detail.html:2492
+msgid "Procedure Details"
+msgstr "Детали процедуры"
+
+#: orm/templates/risk_detail.html:2523
+msgid "Title is required!"
+msgstr "Название обязательно!"
+
+#: orm/templates/risk_detail.html:2550
+msgid "Please select a Procedure to link."
+msgstr "Пожалуйста, выберите процедуру для привязки."
+
+#: orm/templates/risk_detail.html
+msgid "Reported on"
+msgstr "Сообщено"
+
+#: orm/templates/risk_detail.html
+msgid "No incidents reported for this risk."
+msgstr "Для этого риска не сообщалось об инцидентах."
+
+#: orm/templates/risk_detail.html
+msgid "Add Incident"
+msgstr "Добавить инцидент"
+
+#: orm/templates/risk_detail.html
+msgid "Incident Details"
+msgstr "Детали инцидента"
+
+#: orm/templates/risk_detail.html
+msgid "Risk ID is missing or undefined."
+msgstr "ID риска отсутствует или не определен."
+
+#: orm/templates/risk_detail.html
+msgid "Iframe loaded successfully"
+msgstr "Iframe успешно загружен"
+
+#: orm/templates/risk_detail.html
+msgid "Failed to access iframe content."
+msgstr "Не удалось получить доступ к содержимому iframe."
+
+#: orm/templates/risk_detail.html
+msgid "Save button clicked in iframe"
+msgstr "Кнопка сохранения нажата в iframe"
+
+#: orm/templates/risk_detail.html
+msgid "Save button not found in the iframe."
+msgstr "Кнопка сохранения не найдена в iframe."
+
+#: orm/templates/risk_detail.html
+msgid "Failed to load iframe content."
+msgstr "Не удалось загрузить содержимое iframe."
+
+#: orm/templates/risk_detail.html
+msgid "Link Existing Opportunities"
+msgstr "Привязать существующие возможности"
+
+#: orm/templates/risk_detail.html
+msgid "-- Select Opportunity --"
+msgstr "-- Выберите возможность --"
+
+#: orm/templates/risk_detail.html
+msgid "Link Opportunity"
+msgstr "Привязать возможность"
+
+#: orm/templates/risk_detail.html
+msgid "Add Opportunity"
+msgstr "Добавить возможность"
+
+#: orm/templates/risk_detail.html
+msgid "Opportunity Details"
+msgstr "Детали возможности"
+
+#: orm/templates/risk_detail.html
+msgid "Please select an opportunity to link."
+msgstr "Пожалуйста, выберите возможность для привязки."
+
+#: orm/templates/risk_detail.html
+msgid "Enter Opportunity Title:"
+msgstr "Введите название возможности:"
+
+#: orm/templates/risk_detail.html
+msgid "Error: Unable to link opportunity."
+msgstr "Ошибка: Невозможно привязать возможность."
+
+#: orm/templates/risk_detail.html
+msgid "Error: Unable to add opportunity."
+msgstr "Ошибка: Невозможно добавить возможность."
+
+#: orm/templates/risk_detail.html
+msgid "Error: Unable to unlink opportunity."
+msgstr "Ошибка: Невозможно отсоединить возможность."
+
+#: orm/templates/risk_detail.html
+msgid "Link Existing Threat"
+msgstr "Привязать существующую угрозу"
+
+#: orm/templates/risk_detail.html
+msgid "-- Select Threat --"
+msgstr "-- Выберите угрозу --"
+
+#: orm/templates/risk_detail.html
+msgid "Link Threat"
+msgstr "Привязать угрозу"
+
+#: orm/templates/risk_detail.html
+msgid "Add Threat"
+msgstr "Добавить угрозу"
+
+#: orm/templates/risk_detail.html
+msgid "Threat Details\n"
+msgstr "Детали угрозы\n"
+
+msgid "ERM Views | ermapp.avax.gr"
+msgstr "Представления ERM | ermapp.avax.gr"
+
+msgid "Enterprise Risk Management (ERM) Manual"
+msgstr "Руководство по управлению корпоративными рисками (ERM)"
+
+msgid "Policy"
+msgstr "Политика"
+
+msgid "Work Flow"
+msgstr "Рабочий процесс"
+
+msgid "ERD"
+msgstr "ERD (Диаграмма сущностей и связей)"
+
+msgid "Likelihood and Impact"
+msgstr "Вероятность и воздействие"
+
+msgid "Assesses the probability of a risk event occurring on a scale of 1 to 5"
+msgstr "Оценивает вероятность возникновения рискового события по шкале от 1 до 5"
+
+msgid "Evaluates the potential consequences of a risk event on a scale of 1 to 5"
+msgstr "Оценивает потенциальные последствия рискового события по шкале от 1 до 5"
+
+msgid "Understanding Risk Scores"
+msgstr "Понимание баллов риска"
+
+msgid "Inherent Risk"
+msgstr "Изначальный риск"
+
+msgid "Picture a construction site for a bridge over a busy highway with no safety measures – that’s Inherent Risk. It’s the raw danger of a crane collapse or worker injury before we put up barriers, install supports, or enforce safety rules. It’s the worst-case scenario we face without any controls, calculated as Likelihood × Impact."
+msgstr "Представьте строительную площадку для моста над оживленной трассой без мер безопасности – это Изначальный риск. Это чистая опасность обрушения крана или травмы работника до установки барьеров, опор или введения правил безопасности. Это худший сценарий, с которым мы сталкиваемся без каких-либо мер контроля, рассчитанный как Вероятность × Воздействие."
+
+msgid "Residual Risk"
+msgstr "Остаточный риск"
+
+msgid "Now imagine that same bridge site, but with safety nets, guardrails, and trained workers – that’s Residual Risk. It’s what’s left after we’ve added protections like equipment checks and site inspections to reduce the danger. It’s the risk that remains even with our safety measures in place."
+msgstr "Теперь представьте ту же строительную площадку моста, но с сетками безопасности, перилами и обученными рабочими – это Остаточный риск. Это то, что остается после добавления защитных мер, таких как проверки оборудования и инспекции площадки, чтобы уменьшить опасность. Это риск, который остается даже при наличии наших мер безопасности."
+
+msgid "Targeted Risk"
+msgstr "Целевой риск"
+
+msgid "Think of Targeted Risk as the ideal bridge project – perfectly safe, on schedule, and within budget. It’s the risk level we strive for after optimizing all controls, like using top-grade materials and the best engineers, to achieve a construction site where accidents are nearly impossible and operations run smoothly."
+msgstr "Думайте о Целевом риске как об идеальном проекте моста – полностью безопасном, в срок и в рамках бюджета. Это уровень риска, к которому мы стремимся после оптимизации всех мер контроля, таких как использование материалов высшего качества и лучших инженеров, чтобы достичь строительной площадки, где аварии почти невозможны, а операции проходят гладко."
+
+msgid "Almost certain (>80%), frequent events within a year"
+msgstr "Практически наверняка (>80%), частые события в течение года"
+
+msgid "Fatality/multiple severe injuries, major loss (>€10M), project cancellations"
+msgstr "Смерть/множественные тяжелые травмы, крупные потери (>€10M), отмены проектов"
+
+msgid "Likely (50%-80%), every 1-2 years"
+msgstr "Вероятно (50%-80%), каждые 1-2 года"
+
+msgid "Severe injury (e.g., disability), loss (€2M-€10M), multi-project disruptions"
+msgstr "Тяжелая травма (например, инвалидность), потери (€2M-€10M), срывы нескольких проектов"
+
+msgid "Possible (20%-50%), every 2-5 years"
+msgstr "Возможно (20%-50%), каждые 2-5 лет"
+
+msgid "Non-critical injury, moderate loss (€500k-€2M), single project disruption"
+msgstr "Некритическая травма, умеренные потери (€500k-€2M), срыв одного проекта"
+
+msgid "Unlikely (5%-20%), every 5-10 years"
+msgstr "Маловероятно (5%-20%), каждые 5-10 лет"
+
+msgid "Minor injuries, small loss (<€500k), localized delays"
+msgstr "Незначительные травмы, небольшие потери (<€500k), локальные задержки"
+
+msgid "Rare (<5%), once in 10 years"
+msgstr "Редко (<5%), раз в 10 лет"
+
+msgid "Minor inconvenience, no injuries/loss/delays"
+msgstr "Небольшое неудобство, без травм/потерь/задержек"
+
+msgid "Risk Score Calculation"
+msgstr "Расчет балла риска"
+
+msgid "Likelihood Score × Impact Score"
+msgstr "Балл вероятности × Балл воздействия"
+
+msgid "Severity Table"
+msgstr "Таблица серьезности"
+
+msgid "Score Range"
+msgstr "Диапазон баллов"
+
+msgid "Risk Severity"
+msgstr "Серьезность риска"
+
+msgid "Heatmap Visualization"
+msgstr "Визуализация тепловой карты"
+
+msgid "REPORT an Incident: An unplanned, unwanted event that causes or has the potential to cause harm, damage, disruption, or a breach of objectives."
+msgstr "СООБЩИТЬ об инциденте: Неспланированное, нежелательное событие, которое вызывает или может вызвать вред, ущерб, срыв или нарушение целей."
+
+msgid "AVAX Risk Management Program"
+msgstr "Программа управления рисками AVAX"
+
+msgid "Identify Risks Proactively"
+msgstr "Проактивно выявлять риски"
+
+msgid "View"
+msgstr "Просмотреть"
+
+msgid "Approve Risk Management Program"
+msgstr "Утвердить программу управления рисками"
+
+msgid "Approvals"
+msgstr "Утверждения"
+
+msgid "Overdue Actions ({{ count }})"
+msgstr "Просроченные действия ({{ count }})"
+
+msgid "No overdue actions found."
+msgstr "Просроченные действия не найдены."
+
+msgid "Owner: {{ username }} ({{ count }} actions)"
+msgstr "Владелец: {{ username }} ({{ count }} действий)"
+
+msgid "Deadline"
+msgstr "Срок"
+
+msgid "Countdown"
+msgstr "Обратный отсчет"
+
+msgid "{{ days }} days overdue"
+msgstr "{{ days }} дней просрочки"
+
+msgid "N/A"
+msgstr "Н/Д"  # Русская аббревиатура для "Нет данных" (Not Available)
+
+msgid "Pending Actions ({{ count }})"
+msgstr "Ожидающие действия ({{ count }})"
+
+msgid "No pending actions found."
+msgstr "Ожидающие действия не найдены."
+
+msgid "{{ days }} days left"
+msgstr "{{ days }} дней осталось"
+
+msgid "✔ Completed Actions ({{ count }})\n"
+msgstr "✔ Завершенные действия ({{ count }})\n"
+
+msgid "Edit Mitigation"
+msgstr "Редактировать меру смягчения"
+
+msgid "Save Mitigation"
+msgstr "Сохранить меру смягчения"
+
+msgid "Title"
+msgstr "Название"
+
+msgid "Effectiveness"
+msgstr "Эффективность"
+
+msgid "Not Tested"
+msgstr "Не протестировано"
+
+msgid "Ineffective"
+msgstr "Неэффективно"
+
+msgid "Partially Effective"
+msgstr "Частично эффективно"
+
+msgid "Effective"
+msgstr "Эффективно"
+
+msgid "Owners"
+msgstr "Владельцы"
+
+msgid "Remove"
+msgstr "Удалить"
+
+msgid "No related risks yet."
+msgstr "Связанных рисков пока нет."
+
+msgid "Select a risk to add"
+msgstr "Выберите риск для добавления"
+
+msgid "Add Risk\n"
+msgstr "Добавить риск\n"
+
+# Opportunity List Template
+msgid "Opportunity List"
+msgstr "Список возможностей"
+
+# Edit Opportunity Template
+msgid "Edit Opportunity"
+msgstr "Редактировать возможность"
+
+msgid "Linked Risks"
+msgstr "Связанные риски"
+
+msgid "No risks linked."
+msgstr "Риски не связаны."
+
+msgid "Available Risks"
+msgstr "Доступные риски"
+
+msgid "Select a risk to link"
+msgstr "Выберите риск для привязки"
+
+msgid "Link"
+msgstr "Привязать"
+
+msgid "Select a risk from the dropdown and click 'Link.'"
+msgstr "Выберите риск из выпадающего списка и нажмите 'Привязать.'"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Back to List"
+msgstr "Вернуться к списку"
+
+# JavaScript Messages from Edit Opportunity
+msgid "Please select a risk to link."
+msgstr "Пожалуйста, выберите риск для привязки."
+
+msgid "Failed to link the risk."
+msgstr "Не удалось привязать риск."
+
+msgid "An error occurred while linking the risk."
+msgstr "Произошла ошибка при привязке риска."
+
+msgid "Failed to unlink the risk."
+msgstr "Не удалось отсоединить риск."
+
+msgid "An error occurred while unlinking the risk."
+msgstr "Произошла ошибка при отсоединении риска."
+
+msgid "Indicators"
+msgstr "Индикаторы"
+
+msgid "Add New Indicator"
+msgstr "Добавить новый индикатор"
+
+msgid "Edit"
+msgstr "Редактировать"
+
+msgid "No indicators found."
+msgstr "Индикаторы не найдены."
+
+msgid "Edit Indicator"
+msgstr "Редактировать индикатор"
+
+msgid "Related Risks"
+msgstr "Связанные риски"
+
+msgid "Score"
+msgstr "Балл"
+
+msgid "No related risks"
+msgstr "Нет связанных рисков"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Frequency"
+msgstr "Частота"
+
+msgid "Documents"
+msgstr "Документы"
+
+msgid "Documents Management"
+msgstr "Управление документами"
+
+msgid "Create New Folder"
+msgstr "Создать новую папку"
+
+msgid "Create a Folder"
+msgstr "Создать папку"
+
+msgid "Create"
+msgstr "Создать"
+
+msgid "Upload Document"
+msgstr "Загрузить документ"
+
+msgid "Upload"
+msgstr "Загрузить"
+
+msgid "Folders"
+msgstr "Папки"
+
+msgid "Sort folders by"
+msgstr "Сортировать папки по"
+
+msgid "Name"
+msgstr "Название"
+
+msgid "Created At"
+msgstr "Дата создания"
+
+msgid "Are you sure you want to delete this folder and all its contents?"
+msgstr "Вы уверены, что хотите удалить эту папку и всё её содержимое?"
+
+msgid "Cannot delete folder. It may contain files or subfolders."
+msgstr "Нельзя удалить папку. Она может содержать файлы или подпапки."
+
+# Form field labels (if defined in form classes)
+msgid "File"
+msgstr "Файл"
+
+msgid "Folder"
+msgstr "Папка"

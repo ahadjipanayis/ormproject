@@ -1,0 +1,3351 @@
+{% load static %}
+{% load custom_filters %}
+{% load static i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ risk.title|striptags }}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+
+    <style>
+        /* Reset margins and padding globally */
+        html, body {
+            margin: 0%;
+            padding: 0%;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box; /* Include padding and border in total dimensions */
+        }
+    
+        /* Ensure body and container stretch to full screen */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+    
+
+        /* Debugging outline for testing (optional) */
+       
+    
+        /* Card Styles */
+        .card {
+            width: 100%;       /* Make cards span full width */
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin: 0;
+        }
+    
+        .card-body {
+            padding: 1rem;
+        }
+    
+        /* Full-width card header */
+        .card-header {
+            background-color: #0056b3;
+            color: white;
+            font-weight: bold;
+            width: 100%;      /* Stretch across full width */
+            padding: 10px;
+            box-sizing: border-box;
+        }
+    
+.nav-tabs {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 999;
+    padding: 5px 0;
+    border-bottom: 2px solid #ddd;
+}
+
+.nav-tabs .nav-link {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.nav-tabs .nav-link i {
+    margin-right: 5px;
+}
+    
+        /* Button Styles */
+        button {
+            padding: 10px 20px;
+            margin: 0;
+        }
+    
+        /* Dropdown styling */
+        .form-select {
+            max-width: 300px;  /* Constrain dropdown width */
+        }
+    
+        /* Owner Container Styling */
+        #owners-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+    
+        /* Heatmap */
+        .heatmap-container {
+            width: 100%;       /* Ensure heatmap takes up full width */
+            margin: 0;
+            padding: 0;
+        }
+    
+        .heatmap {
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+    
+        .heatmap-row {
+            display: flex;
+        }
+    
+        .heatmap-cell {
+            flex: 1;           /* Equal width for heatmap cells */
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+    
+        .heatmap-cell:hover {
+            outline: 2px solid black;
+        }
+    
+        /* Marker Styles */
+        .marker-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+    
+        .marker {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+    
+        .marker:hover {
+            background-color: rgba(0, 0, 0, 1);
+            transform: scale(1.2);
+            transition: all 0.2s ease;
+        }
+    
+        /* Traffic Light Indicators */
+        .traffic-light {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+    
+        .traffic-light.low {
+            background-color: green;
+        }
+    
+        .traffic-light.medium {
+            background-color: orange;
+        }
+    
+        .traffic-light.high {
+            background-color: red;
+        }
+    
+        /* Score Display */
+        .score-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    
+        .score-box h1 {
+            font-size: 3rem;
+            color: #333;
+        }
+    
+        /* Additional Debugging and Flexbox Adjustments */
+        * {
+            box-sizing: border-box;
+        }
+    
+        /* Optional scroll behavior for large content */
+        .scrollable-container {
+            overflow: auto;
+            height: auto;
+        }
+    
+        #owners-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+    
+        .card {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+    
+        .card-body {
+            padding: 1rem;
+        }
+    
+        .btn-danger {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+    
+        .form-select {
+            max-width: 300px;
+        }
+    
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0; /* Ensure no margin around the body */
+            padding: 0; /* Ensure no padding around the body */
+        }
+    
+        .container {
+            width: 100%; /* Take the full width of the window */
+            margin: 0; /* Remove margin */
+            padding: 20px; /* Add padding for content */
+        }
+    
+        .card-header {
+            background-color: #0056b3;
+            color: white;
+            font-weight: bold;
+        }
+    
+        .form-select-lg.text-center {
+            text-align: center;
+        }
+    
+        /* Heatmap styling */
+        .heatmap-container {
+            width: 100%;
+            margin: 0 auto;
+        }
+    
+        .heatmap {
+            border: 1px solid #ddd;
+        }
+    
+        .heatmap-row {
+            display: flex;
+        }
+    
+        .heatmap-cell {
+            flex: 1;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 10px; /* Rounded corners */
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+    
+        .heatmap-cell:hover {
+            outline: 2px solid black;
+        }
+    
+        /* Marker container for multiple markers */
+        .marker-container {
+            display: flex;
+            flex-direction: column; /* Arrange markers vertically */
+            gap: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+    
+        .marker {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px; /* Larger size */
+            height: 30px;
+            border-radius: 50%; /* Circle shape */
+            font-size: 1.2rem; /* Larger font */
+            font-weight: bold;
+            color: white; /* Ensure contrast */
+            background-color: rgba(0, 0, 0, 0.8); /* Dark background for better visibility */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Add shadow for emphasis */
+            cursor: pointer; /* Indicate interactivity */
+        }
+    
+        /* Add hover effect for markers */
+        .marker:hover {
+            background-color: rgba(0, 0, 0, 1); /* Slightly darker on hover */
+            transform: scale(1.2); /* Make it pop out */
+            transition: all 0.2s ease;
+        }
+    
+        /* Traffic Light Colors */
+        .traffic-light {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+    
+        .traffic-light.low {
+            background-color: green;
+        }
+    
+        .traffic-light.medium {
+            background-color: orange;
+        }
+    
+        .traffic-light.high {
+            background-color: red;
+        }
+    
+        .score-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    
+        .score-box h1 {
+            font-size: 3rem;
+            color: #333;
+        }
+    
+        .traffic-light {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+    
+        .traffic-light.low {
+            background-color: green;
+        }
+    
+        .traffic-light.medium {
+            background-color: orange;
+        }
+    
+        .traffic-light.high {
+            background-color: red;
+        }
+        .alert {
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 1em;
+}
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.list-group {
+    display: flex; /* Align items horizontally */
+    flex-wrap: wrap; /* Wrap items if they exceed the container's width */
+    gap: 1rem; /* Add spacing between items */
+}
+
+.list-group-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Spacing between the content inside each list item */
+}
+
+.badge {
+    margin-top: 0.5rem; /* Optional: Add some space above badges */
+}
+
+        /* Main container spans full width and height */
+        .container {
+            width: 100%;       /* Full width of the window */
+            height: 100%;      /* Full height of the window */
+            margin: 0%;         /* Remove default margins */
+            padding: 10px;        /* Remove padding */
+            max-width: none;   /* Remove any inherited width constraints */
+            box-sizing: border-box; /* Include padding in width calculations */
+        }
+    
+    </style>
+    
+</head>
+
+<body>
+    <div class="container">
+        
+        <div id="message-container" style="
+        position: fixed;
+        top: 160px;
+        right: 18px;
+        z-index: 1050;
+        background: rgba(0, 123, 255, 0.9);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        display: none;
+        max-width: 1200px;
+        font-size: 24px;
+        font-weight: bold;
+    ">
+    </div>
+    
+    <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
+   
+        <h5>{{ risk.title|safe }}</h5>
+    
+        <!-- Button Section on the right -->
+        <!-- Button Section on the right -->
+<div class="d-flex gap-2">
+    <button class="btn btn-danger" id="delete-risk" 
+            data-risk-id="{{ risk.id }}"
+            {% if not is_owner_or_superuser %}disabled title="{% trans 'Only owners or superusers can delete risks' %}"{% endif %}>
+        {% trans "Archive" %}
+    </button>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#replicateRiskModal">
+            {% trans "Replicate" %}
+        </button>
+    </div>
+</div>
+   
+    
+    </div>
+
+    <script>
+       document.getElementById('delete-risk').addEventListener('click', function () {
+    const riskId = this.getAttribute('data-risk-id');
+
+    if (confirm('Are you sure you want to archive this risk?')) {
+        fetch(`/risk/${riskId}/delete/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(), // Include CSRF token for security
+            },
+            body: JSON.stringify({
+                action: 'archive' // Optional: Include action type if needed
+            }),
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Risk archived successfully!');
+                    location.reload(); // Reload the page to reflect changes
+                } else {
+                    alert('Failed to archive the risk. Ensure you have permission.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+    }
+});
+
+// Function to get CSRF token from the template
+function getCSRFToken() {
+    return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+    </script>
+
+   
+<div class="risk-card">
+    <div class="scores">
+        <a href="#scores" class="score" onclick="openScoresTab(event)" id="inherent-score-box">
+            <span class="score-title">{% trans "Inherent" %}</span>
+            <span class="score-num" id="inherent-score-text">2×2=4</span>
+            <span class="score-tag" id="inherent-level-text">-</span>
+        </a>
+        <a href="#scores" class="score" onclick="openScoresTab(event)" id="residual-score-box">
+            <span class="score-title">{% trans "Residual" %}</span>
+            <span class="score-num" id="residual-score-text">3×3=9</span>
+            <span class="score-tag" id="residual-level-text">-</span>
+        </a>
+        <a href="#scores" class="score" onclick="openScoresTab(event)" id="targeted-score-box">
+            <span class="score-title">{% trans "Targeted" %}</span>
+            <span class="score-num" id="targeted-score-text">4×4=16</span>
+            <span class="score-tag" id="targeted-level-text">-</span>
+        </a>
+    </div>
+
+    <div class="filters">
+        <div class="filter-long">
+            <label for="risk-category">{% trans "Category" %}</label>
+            <select id="risk-category" class="f-select">
+                <option value="" {% if not risk.category %}selected{% endif %}>--</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if risk.category and risk.category.id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-long">
+            <label for="risk-portfolio">{% trans "Portfolio" %}</label>
+            <select id="risk-portfolio" class="f-select">
+                <option value="" {% if not risk.portfolio %}selected{% endif %}>--</option>
+                {% for portfolio in portfolios %}
+                <option value="{{ portfolio.id }}" {% if risk.portfolio and risk.portfolio.id == portfolio.id %}selected{% endif %}>{{ portfolio.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-short">
+            <label for="approval-cycle">{% trans "Approval Cycle" %}</label>
+            <select id="approval-cycle" class="f-select">
+                <option value="" {% if not risk.approval_cycle %}selected{% endif %}>--</option>
+                <option value="weekly" {% if risk.approval_cycle == 'weekly' %}selected{% endif %}>Weekly</option>
+                <option value="monthly" {% if risk.approval_cycle == 'monthly' %}selected{% endif %}>Monthly</option>
+                <option value="quarterly" {% if risk.approval_cycle == 'quarterly' %}selected{% endif %}>Quarterly</option>
+                <option value="biannual" {% if risk.approval_cycle == 'biannual' %}selected{% endif %}>Biannual</option>
+            </select>
+        </div>
+        <div class="filter-short">
+            <label for="treatment-type">{% trans "Treatment Type" %}</label>
+            <select id="treatment-type" class="f-select">
+                <option value="" {% if not risk.treatment_type %}selected{% endif %}>--</option>
+                {% for key, value in risk.TREATMENT_CHOICES %}
+                <option value="{{ key }}" {% if risk.treatment_type == key %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="approvals">
+        {% for approval_data in approvals %}
+        {% if approval_data.approval.status == 'pending' %}
+        <div class="approval">
+            <button class="btn-a complete-approval-btn" data-id="{{ approval_data.approval.id }}">✓</button>
+            <span>{{ approval_data.approval.user.role|default:"Unknown Role" }} - {{ approval_data.approval.user.user.username|default:"Unknown User" }}
+                {% if approval_data.approval.due_date %}<br>{% trans "Due:" %} {{ approval_data.approval.due_date|date:"F j, Y" }}{% endif %}
+                {% if approval_data.countdown is not None %}<span class="badge {% if approval_data.countdown > 0 %}bg-s{% elif approval_data.countdown < 0 %}bg-d{% else %}bg-w{% endif %}">
+                    {% if approval_data.countdown > 0 %}{{ approval_data.countdown }}
+                    {% elif approval_data.countdown == 0 %}0
+                    {% else %}{{ approval_data.countdown|add:"0"|slice:"1:" }}{% endif %}
+                </span>{% endif %}
+            </span>
+        </div>
+        {% endif %}
+        {% empty %}
+        <div class="approval no-data">No approvals</div>
+        {% endfor %}
+    </div>
+
+    <button class="btn-s" id="save-risk" {% if not is_owner_or_superuser %}disabled title="{% trans 'Only owners or superusers can save changes' %}"{% endif %}>
+        <i class="fa fa-save"></i> {% trans "Save Risk Changes" %}
+    </button>
+    
+    <style>
+        .btn-s {
+            position: fixed;
+            top: 85px;
+            right: 8px;
+            z-index: 1050;
+            padding: 8px 12px; /* Increased from 5px 8px for a larger button */
+            background: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px; /* Slightly increased from 4px for better spacing */
+            font-size: 1rem; /* Increased from 0.85rem for larger text */
+        }
+    
+        .btn-s:hover {
+            background: #218838;
+        }
+    
+        .btn-s:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+    
+        .btn-s i {
+            font-size: 1.2rem; /* Increased from 0.9rem for a larger icon */
+        }
+    </style>
+
+</div>
+
+<style>
+  .risk-card {
+    background: #e6f0fa; /* Light blue background */
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    position: relative;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
+
+    .scores {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        margin-bottom: 8px;
+        justify-items: center; /* Centers the cards horizontally */
+    }
+
+    .score {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centers content vertically */
+        justify-content: center; /* Centers content horizontally */
+        background: #fff;
+        border-radius: 4px;
+        padding: 6px;
+        text-decoration: none;
+        color: #333;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        width: 100%; /* Ensures consistent width */
+        text-align: center; /* Centers text */
+    }
+
+    .score:hover {
+        background: #f0f0f0;
+    }
+
+    .score-title {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #040404;
+        margin-bottom: 2px;
+    }
+
+    .score-num {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #007bff;
+    }
+
+    .score-tag {
+        font-size: 0.7rem;
+        color: #050505;
+    }
+
+    .filters {
+        display: grid;
+        grid-template-columns: 2fr 2fr 1fr 1fr;
+        gap: 6px;
+        margin-bottom: 8px;
+    }
+
+    .filter-long, .filter-short {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-long label, .filter-short label {
+        font-size: 0.8rem;
+        color: #555;
+        margin-bottom: 2px;
+    }
+
+    .f-select {
+        padding: 4px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        background: #fff;
+        color: #555;
+        font-size: 0.85rem;
+    }
+
+    .filter-long .f-select {
+        width: 100%;
+    }
+
+    .filter-short .f-select {
+        width: 100%;
+    }
+
+    .f-select:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    .approvals {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .approval {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border-radius: 4px;
+        padding: 6px 10px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        font-size: 0.85rem;
+        color: #444;
+        min-width: 220px;
+    }
+
+    .no-data {
+        background: none;
+        padding: 4px 6px;
+        color: #999;
+        font-style: italic;
+    }
+
+    .btn-a {
+        padding: 2px 6px;
+        font-size: 0.75rem;
+        background: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        margin-right: 6px;
+        cursor: pointer;
+    }
+
+    .btn-a:hover {
+        background: #218838;
+    }
+
+    .badge {
+        font-size: 0.65rem;
+        padding: 2px 4px;
+        margin-left: 4px;
+        border-radius: 3px;
+    }
+
+    .bg-s { background: #28a745; color: #fff; }
+    .bg-d { background: #dc3545; color: #fff; }
+    .bg-w { background: #ffc107; color: #333; }
+
+    .btn-s {
+        position: fixed;
+        top: 85px;
+        right: 8px;
+        z-index: 1050;
+        padding: 5px 8px;
+        background: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+
+    .btn-s:hover {
+        background: #218838;
+    }
+
+    .btn-s:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+    }
+</style>
+
+<!-- JavaScript (unchanged) -->
+<script>
+    function openScoresTab(event) {
+        event.preventDefault();
+        if (typeof bootstrap === "undefined") {
+            console.error("Bootstrap is not loaded.");
+            return;
+        }
+        let scoresTab = document.querySelector('#risk-tabs a[href="#scores"]');
+        if (scoresTab) {
+            let bootstrapTab = new bootstrap.Tab(scoresTab);
+            bootstrapTab.show();
+        }
+        let scoresSection = document.getElementById("scores");
+        if (scoresSection) {
+            scoresSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const inherentLikelihood = {{ risk.inherent_likelihood|default:0 }};
+        const inherentImpact = {{ risk.inherent_impact|default:0 }};
+        const residualLikelihood = {{ risk.residual_likelihood|default:0 }};
+        const residualImpact = {{ risk.residual_impact|default:0 }};
+        const targetedLikelihood = {{ risk.targeted_likelihood|default:0 }};
+        const targetedImpact = {{ risk.targeted_impact|default:0 }};
+
+        function updateScoreBox(type, likelihood, impact) {
+            const scoreBox = document.getElementById(`${type}-score-box`);
+            const scoreText = document.getElementById(`${type}-score-text`);
+            const levelText = document.getElementById(`${type}-level-text`);
+            const score = likelihood * impact;
+            // Update the score text to show "Likelihood × Impact = Score"
+            scoreText.textContent = `${likelihood}×${impact}=${score}`;
+            scoreBox.style.backgroundColor = score <= 6 ? "#28a745" : score <= 15 ? "orange" : "#dc3545";
+            levelText.textContent = score <= 6 ? "{% trans 'Low' %}" : score <= 15 ? "{% trans 'Medium' %}" : "{% trans 'High' %}";
+        }
+
+        updateScoreBox('inherent', inherentLikelihood, inherentImpact);
+        updateScoreBox('residual', residualLikelihood, residualImpact);
+        updateScoreBox('targeted', targetedLikelihood, targetedImpact);
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const csrfToken = '{{ csrf_token }}';
+
+        document.getElementById('treatment-type')?.addEventListener('change', function () {
+            fetch(`/risk/{{ risk.id }}/update_treatment/`, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': csrfToken, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ treatment_type: this.value })
+            })
+            .then(response => response.json())
+            .then(data => alert(data.success ? "Treatment updated!" : `Error: ${data.error}`));
+        });
+
+        document.querySelectorAll('.complete-approval-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                fetch(`/approval/${this.dataset.id}/approve/`, {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrfToken, 'Content-Type': 'application/json' }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        this.closest('.approval').classList.add('bg-light');
+                        this.remove();
+                        alert('Approval completed!');
+                    } else {
+                        alert(`Error: ${data.error}`);
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+    <!-- Message Display Section -->
+
+
+ <!-- Replicate Risk Modal -->
+<div class="modal fade" id="replicateRiskModal" tabindex="-1" aria-labelledby="replicateRiskModalLabel" aria-hidden="true">
+    
+
+
+    
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="replicateRiskModalLabel">Replicate Risk</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'replicate_risk' risk.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="portfolio">Select Portfolio:</label>
+                        <select name="portfolio" id="portfolio" class="form-select" required>
+                            {% for portfolio in portfolios %}
+                                <option value="{{ portfolio.id }}">{{ portfolio.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Replicate</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div>
+
+    {% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+            <div class="alert alert-dismissible fade show 
+                {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' or message.tags == 'danger' %}alert-danger{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %}" 
+                role="alert">
+                {{ message|safe }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<!-- ---------------- -->
+
+<!-- ---------------- -->
+<!-- ---------------- -->
+<div class="w-100" style="font-size: 16px;">
+    <div class="mb-3">
+        <label for="search-risk"></label>
+        <div style="border: 2px solid #0056b3; background-color: #e6f0fa; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <p class="text-muted">
+                {% trans "This search uses" %} 
+                <a href="https://openai.com/" target="_blank" rel="noopener noreferrer">OpenAI</a> {% trans "models." %}
+                <em>{% trans "Disclaimer:" %}</em> {% trans "AI and Web Mode results may not always reflect the latest risk data. Verify critical information from official sources." %}
+            </p>
+        </div>
+        <br>
+        <div class="input-group">
+            <textarea id="search-risk" class="form-control" placeholder="{% trans 'Enter search term' %}" rows="2" style="font-size: 16px;"></textarea>
+            <button class="btn btn-primary" id="search-risk-btn" style="font-size: 16px;">{% trans "Search" %}</button>
+        </div>
+    </div>
+    <div id="web-mode-indicator" style="display: none; color: #0b3d91; font-weight: bold; margin-top: 5px;">
+        🌍 {% trans "Web Mode: ON (Using GPT-4o)" %}
+    </div>
+    <div id="search-loading" style="display: none;">
+        <p>🔄 {% trans "Searching... Please wait." %}</p>
+    </div>
+    <div id="search-results" style="display: block; margin-top: 15px;">
+        <!-- <h5>{% trans "Search Results:" %}</h5> -->
+        <ul id="search-output" class="list-group">
+            {% for result in search_results %}
+                <li class="list-group-item">
+                    <p class="text-muted">{{ result.interpretation|safe }}</p>
+                    {% if result.link %}{{ result.link|safe }}{% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function stripHTML(html) {
+        let tempDiv = document.createElement("div");
+        tempDiv.innerHTML = html;
+        return tempDiv.textContent || tempDiv.innerText || "";
+    }
+
+    const searchInput = document.getElementById("search-risk");
+    if (!searchInput.value) {
+        searchInput.value = stripHTML(`{{ risk.title|safe }}`);
+    }
+
+    function formatSearchResults(results) {
+        let formattedOutput = "";
+        results.forEach(item => {
+            if (item.interpretation) {  // Check for interpretation only, link is optional
+                formattedOutput += `
+                    <li class="list-group-item">
+                        <p class="text-muted" style="font-size: 16px;">${item.interpretation}</p>
+                        ${item.link ? item.link : ""}
+                    </li>`;
+            }
+        });
+        return formattedOutput || `<li class="list-group-item text-muted" style="font-size: 16px;">{% trans "No results found." %}</li>`;
+    }
+
+    searchInput.addEventListener("input", function () {
+        let query = this.value.trim().toLowerCase();
+        let webModeIndicator = document.getElementById("web-mode-indicator");
+
+        if (query.startsWith("web") || query.startsWith("search") || query.startsWith("latest") || query.startsWith("live")) {
+            webModeIndicator.style.display = "block";
+        } else {
+            webModeIndicator.style.display = "none";
+        }
+    });
+
+    document.getElementById("search-risk-btn").addEventListener("click", function () {
+        let query = searchInput.value.trim();
+        if (!query) {
+            alert("{% trans 'Please enter a search term.' %}");
+            return;
+        }
+
+        let useWebMode = query.toLowerCase().startsWith("web") || query.toLowerCase().startsWith("search");
+        let modelType = useWebMode ? "gpt-4o-search-preview" : "gpt-3.5-turbo";
+
+        document.getElementById("search-loading").style.display = "block";
+        document.getElementById("search-results").style.display = "none";
+
+        fetch("/risk/search/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({ query: query, model: modelType })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("search-loading").style.display = "none";
+            if (data.success) {
+                let formattedResults = formatSearchResults(data.results);
+                document.getElementById("search-output").innerHTML = formattedResults;
+                document.getElementById("search-results").style.display = "block";
+            } else {
+                alert("{% trans 'Search failed:' %} " + (data.error || "{% trans 'Unknown error' %}"));
+            }
+        })
+        .catch(error => {
+            document.getElementById("search-loading").style.display = "none";
+            alert("{% trans 'An error occurred:' %} " + error);
+        });
+    });
+});
+</script>
+
+
+<!-- ---------------- -->
+
+
+<!-- ------------------ -->
+
+<ul class="nav nav-pills" id="risk-tabs" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#description" role="tab">
+            <i class="fas fa-info-circle"></i> {% trans "Description" %}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#owners" role="tab">
+            <i class="fas fa-users"></i> {% trans "Owners" %}
+            <span class="badge bg-secondary" data-tab="owners">{{ owners|length }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#mitigations" role="tab">
+            <i class="fas fa-shield-alt"></i> {% trans "Mitigations" %}
+            <span class="badge bg-secondary" data-tab="mitigations">{{ mitigations|length }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#scores" role="tab">
+            <i class="fas fa-chart-bar"></i> {% trans "Scores" %}
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#opportunities" role="tab">
+            <i class="fas fa-lightbulb"></i> {% trans "Opportunities" %}
+            <span class="badge bg-secondary" data-tab="opportunities">{{ opportunities|length }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#threats" role="tab">
+            <i class="fas fa-exclamation-triangle"></i> {% trans "Threats" %}
+            <span class="badge bg-secondary" data-tab="threats">{{ threats|length }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#actions" role="tab">
+            <i class="fas fa-tasks"></i> {% trans "Actions" %}
+            <span class="badge bg-secondary" data-tab="actions">{{ actions|length }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#indicators" role="tab">
+            <i class="fas fa-chart-line"></i> {% trans "Indicators" %}
+            <span class="badge bg-secondary" data-tab="indicators">{{ indicators|length }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#events" role="tab">
+            <i class="fas fa-calendar"></i> {% trans "Incidents" %}
+            <span class="badge bg-secondary" data-tab="events">{{ events|length }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#procedures" role="tab">
+            <i class="fas fa-book"></i> {% trans "Procedures" %}
+            <span class="badge bg-secondary" data-tab="procedures">{{ procedures|length }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#it-assets" role="tab">
+            <i class="fas fa-server"></i> {% trans "IT Assets" %}
+            <span class="badge bg-secondary" data-tab="it-assets">{{ it_assets|length }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#approvals" role="tab">
+            <i class="fas fa-history"></i> {% trans "History" %}
+            <span class="badge bg-secondary" data-tab="approvals">{{ approvals|length }}</span>
+        </a>
+    </li>
+</ul>
+</div>
+<!-- ----------------------------- -->
+  
+<!-- Tab Content -->
+
+
+<div class="tab-content mt-3">
+
+            <div class="tab-pane fade show active" id="description">
+                <!-- General Information: Title, Description, Category, and Portfolio -->
+                <div class="card mb-3">
+                    <div class="card-header">{% trans "General Information" %}</div>
+                                        <div class="card-body">
+                        <!-- Title -->
+
+
+                        
+                        <script>
+                        function openChatPage() {
+                            const chatWindow = window.open('/chat-page/', 'AIChat', 'width=400,height=400,resizable=yes,scrollbars=yes');
+                            chatWindow.focus();
+                        }
+                        </script>
+
+                        <div class="mb-3">
+                            <label for="risk-title">Title:</label>
+                            <textarea id="risk-title" class="form-control">{{ risk.title|safe }}</textarea>
+                        </div>
+            
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="risk-description">Description:</label>
+                            <textarea id="risk-description" class="form-control">{{ risk.description|safe }}</textarea>
+                        </div>
+            
+    
+
+                    </div>
+                </div>
+            </div>
+ 
+            
+<!-- ---------------------// -->
+
+<div class="tab-pane fade" id="owners">
+    <div class="card mb-3">
+        <div class="card-header">{% trans "Ownership & Associations" %}</div>        <div class="card-body">
+            <!-- Current Owners -->
+            <div class="mb-3">
+                <h5>{% trans "Current Owners:" %}</h5>                <div id="owners-container" class="d-flex flex-wrap gap-3">
+                    {% for owner in owners %}
+                    <div class="card shadow-sm owner-card" style="width: 12rem; border-radius: 10px;">
+                        <div class="card-body text-center">
+                            <i class="fas fa-user-circle fa-4x text-primary mb-3"></i>
+                            <h6 class="card-title mb-1">{{ owner.user.username }}</h6>
+                            <p class="text-muted mb-2">Role: {{ owner.role }}</p>
+                            <button data-id="{{ owner.id }}" class="btn btn-danger btn-sm remove-owner-btn"{% if not is_owner_or_superuser %}disabled{% endif %}>
+                                <i class="fas fa-user-minus"></i> {% trans "Unlink" %}                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Add Owner -->
+            <div class="mb-3">
+                <label for="owner-select">{% trans "Add Owner:" %}</label>                <div class="d-flex">
+                    <select id="owner-select" class="form-select me-2">
+                        {% for profile in all_user_profiles %}
+                        <option value="{{ profile.id }}">{{ profile.user.username }}</option>
+                        {% endfor %}
+                    </select>
+                    <button id="add-owner-btn" class="btn btn-success" {% if not is_owner_or_superuser %}disabled{% endif %}>
+                        {% trans "Add" %}
+                    </button>                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const csrfToken = '{{ csrf_token }}';
+
+        // Add Owner Event
+        document.getElementById('add-owner-btn').addEventListener('click', function () {
+            const ownerSelect = document.getElementById('owner-select');
+            const userProfileId = ownerSelect.value;
+            const userName = ownerSelect.options[ownerSelect.selectedIndex].text;
+
+            if (!userProfileId) {
+                alert('Please select a user to add as an owner.');
+                return;
+            }
+
+            fetch(`/risk/{{ risk.id }}/update_owners/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ action: 'add', user_profile_id: userProfileId }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const container = document.getElementById('owners-container');
+                        const card = document.createElement('div');
+                        card.className = 'card shadow-sm owner-card';
+                        card.style = 'width: 12rem; border-radius: 10px;';
+                        card.innerHTML = `
+                            <div class="card-body text-center">
+                                <i class="fas fa-user-circle fa-4x text-primary mb-3"></i>
+                                <h6 class="card-title mb-1">${userName}</h6>
+                                <p class="text-muted mb-2">Role: Default</p>
+                                <button data-id="${userProfileId}" class="btn btn-danger btn-sm remove-owner-btn">
+                                    <i class="fas fa-user-minus"></i> Unlink
+                                </button>
+                            </div>`;
+                        container.appendChild(card);
+                        ownerSelect.value = ''; // Reset dropdown
+                        attachRemoveEvent(card.querySelector('.remove-owner-btn'));
+                    } else {
+                        alert('Failed to add owner: ' + data.error);
+                    }
+                })
+                .catch(error => console.error('Error adding owner:', error));
+        });
+
+        // Remove Owner Event
+        function attachRemoveEvent(button) {
+            button.addEventListener('click', function () {
+                const userProfileId = button.dataset.id;
+
+                fetch(`/risk/{{ risk.id }}/update_owners/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action: 'remove', user_profile_id: userProfileId }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            button.closest('.owner-card').remove();
+                        } else {
+                            alert('Failed to remove owner: ' + data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error removing owner:', error));
+            });
+        }
+
+        // Attach remove event to existing buttons
+        document.querySelectorAll('.remove-owner-btn').forEach(attachRemoveEvent);
+    });
+</script>
+
+
+
+<!-- ------------------------    -->
+
+<div class="tab-pane fade" id="mitigations">
+    <div class="card-header">{% trans "Mitigations" %}</div>    <!-- List of Linked Mitigations -->
+    <ul id="mitigations-list" class="list-group mb-3">
+        {% for mitigation in mitigations %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <!-- Open mitigation details in a full-screen modal -->
+            <a href="#" class="mitigation-link" data-bs-toggle="modal" data-bs-target="#mitigationDetailModal" data-url="/mitigations/{{ mitigation.id }}">
+                {{ mitigation.title|safe }}
+            </a>
+            <button class="btn btn-danger btn-sm unlink-mitigation" data-id="{{ mitigation.id }}">
+                Unlink
+            </button>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Link Existing Mitigation -->
+    <div class="mb-3">
+        <label for="mitigation-select">{% trans "Link Existing Mitigation:" %}</label>
+        <div class="d-flex">
+            <select id="mitigation-select" class="form-select me-2">
+                <option value="">{% trans "-- Select Mitigation --" %}</option>
+                {% for mitigation in all_mitigations %}
+                <option value="{{ mitigation.id }}">{{ mitigation.title|safe }}</option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-success" id="link-mitigation" {% if not is_owner_or_superuser %}disabled{% endif %}>
+                {% trans "Link Mitigation" %}
+            </button>
+        </div>
+    </div>
+    
+    <!-- Add New Mitigation -->
+    <button class="btn btn-primary" id="add-mitigation" {% if not is_owner_or_superuser %}disabled title="{% trans 'Only owners or superusers can save changes' %}"{% endif %}>
+        {% trans "Add New Mitigation" %}
+    </button>
+</div>
+
+<!-- Modal for Adding Mitigation (unchanged) -->
+<!-- Modal for Adding Mitigation (Multilingual) -->
+<div class="modal fade" id="addMitigationModal" tabindex="-1" aria-labelledby="addMitigationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMitigationModalLabel">{% trans "Add New Mitigation" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="mitigation-title" class="form-label">{% trans "Mitigation Title" %}</label>
+                    <input type="text" class="form-control" id="mitigation-title" placeholder="{% trans 'Enter Mitigation Title' %}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-primary" id="save-mitigation">{% trans "Save Mitigation" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Full-Screen Modal for Viewing Mitigation Details (Multilingual) -->
+<div class="modal fade" id="mitigationDetailModal" tabindex="-1" aria-labelledby="mitigationDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" style="margin: 0; max-width: 100%;">
+        <div class="modal-content" style="background: rgba(255, 255, 255, 0.9); height: 100vh;">
+            <div class="modal-header" style="background: rgba(0, 86, 179, 0.9); color: white;">
+                <h5 class="modal-title" id="mitigationDetailModalLabel">{% trans "Mitigation Details" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="mitigation-detail-iframe" style="width: 100%; height: 100%; border: none;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer" style="background: rgba(255, 255, 255, 0.9);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrfToken = '{{ csrf_token }}';
+
+    // Add new mitigation using a modal
+    const addMitigationButton = document.getElementById('add-mitigation');
+    const saveMitigationButton = document.getElementById('save-mitigation');
+
+    // Show Add Mitigation Modal
+    addMitigationButton.addEventListener('click', function () {
+        new bootstrap.Modal(document.getElementById('addMitigationModal')).show();
+    });
+
+    // Save Mitigation
+    saveMitigationButton.addEventListener('click', function () {
+        const titleInput = document.getElementById('mitigation-title');
+        const title = titleInput.value.trim();
+
+        if (!title) {
+            alert("Title is required!");
+            return;
+        }
+
+        saveMitigationButton.disabled = true;
+
+        fetch('/mitigation/add/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                risk_id: "{{ risk.id }}",
+                title: title,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(`Error: ${data.error}`);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("An error occurred while adding the mitigation.");
+        })
+        .finally(() => {
+            saveMitigationButton.disabled = false;
+        });
+    });
+
+    // Unlink Mitigation
+    document.getElementById('mitigations-list').addEventListener('click', function (e) {
+        if (e.target.classList.contains('unlink-mitigation')) {
+            const mitigationId = e.target.dataset.id;
+
+            fetch(`/risk/{{ risk.id }}/unlink_mitigation/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ mitigation_id: mitigationId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    e.target.closest('li').remove();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    });
+
+    // Link Existing Mitigation
+    document.getElementById('link-mitigation').addEventListener('click', function () {
+        const mitigationId = document.getElementById('mitigation-select').value;
+        if (!mitigationId) {
+            alert('Please select a mitigation to link.');
+            return;
+        }
+
+        fetch(`/risk/{{ risk.id }}/link_mitigation/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ mitigation_id: mitigationId }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // Show Mitigation Details in Full-Screen Modal
+    document.querySelectorAll('.mitigation-link').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default link behavior
+            const url = this.getAttribute('data-url');
+            const iframe = document.getElementById('mitigation-detail-iframe');
+            iframe.src = url; // Set iframe source to mitigation detail URL
+        });
+    });
+
+    // Clear iframe src when modal is hidden
+    const mitigationDetailModal = document.getElementById('mitigationDetailModal');
+    mitigationDetailModal.addEventListener('hidden.bs.modal', function () {
+        const iframe = document.getElementById('mitigation-detail-iframe');
+        iframe.src = ''; // Clear iframe content
+    });
+});
+</script>
+
+<!-- ---------------------------------         -->
+            
+<!-- Actions -->
+<div class="tab-pane fade" id="actions">
+    <div class="card-header">{% trans "Actions" %}</div>
+
+    <!-- List of Linked Actions -->
+    <ul id="actions-list" class="list-group mb-3">
+        {% for action in actions %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <a href="#" class="open-action" data-bs-toggle="modal" data-bs-target="#actionDetailModal" data-url="{% url 'action_detail' action.id %}">
+                    {{ action.title | safe }}
+                </a>
+                <br>
+                <small class="text-muted">
+                    📅 {% trans "Due" %}: <strong>{{ action.deadline|date:"d M Y" }}</strong>
+                    {% if action.status == "completed" %}
+                        <span class="badge bg-success fs-6 px-3 py-2">✔ {% trans "Completed" %}</span>
+                    {% elif action.deadline and action.deadline < today %}
+                        <span class="badge bg-danger fs-6 px-3 py-2">{% trans "Overdue" %}</span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark fs-6 px-3 py-2">{% trans "Pending" %}</span>
+                    {% endif %}
+                </small>
+            </div>
+            <button class="btn btn-danger btn-sm unlink-action" data-action-id="{{ action.id }}">{% trans "Unlink" %}</button>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">{% trans "No linked actions." %}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Dropdown to Link Actions -->
+    <div class="mb-3">
+        <label for="link-action-dropdown" class="form-label">{% trans "Link an Existing Action" %}</label>
+        <select id="link-action-dropdown" class="form-select">
+            <option value="">{% trans "Select an action" %}</option>
+            {% for action in all_actions %}
+            <option value="{{ action.id }}">{{ action.title |safe }}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-primary mt-2" id="link-action-button" {% if not is_owner_or_superuser %}disabled{% endif %}>
+            {% trans "Link Action" %}
+        </button>
+    </div>
+
+    <!-- Add New Action -->
+    <button class="btn btn-primary" id="add-action" {% if not is_owner_or_superuser %}disabled title="{% trans 'Only owners or superusers can save changes' %}"{% endif %}>
+        {% trans "Add Action" %}
+    </button>
+</div>
+
+<!-- Modal for Adding Action -->
+<div class="modal fade" id="addActionModal" tabindex="-1" aria-labelledby="addActionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addActionModalLabel">{% trans "Add New Action" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="action-title" class="form-label">{% trans "Action Title" %}</label>
+                    <input type="text" class="form-control" id="action-title" placeholder="{% trans 'Enter Action Title' %}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-primary" id="save-action">{% trans "Save Action" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Full-Screen Modal for Viewing Action Details -->
+<div class="modal fade" id="actionDetailModal" tabindex="-1" aria-labelledby="actionDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" style="margin: 0; max-width: 100%;">
+        <div class="modal-content" style="background: rgba(255, 255, 255, 0.9); height: 100vh;">
+            <div class="modal-header" style="background: rgba(0, 86, 179, 0.9); color: white;">
+                <h5 class="modal-title" id="actionDetailModalLabel">{% trans "Action Details" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="action-detail-iframe" style="width: 100%; height: 100%; border: none;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer" style="background: rgba(255, 255, 255, 0.9);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrfToken = '{{ csrf_token }}';
+    const actionsList = document.getElementById('actions-list');
+    const addActionButton = document.getElementById('add-action');
+    const saveActionButton = document.getElementById('save-action');
+    const linkActionButton = document.getElementById('link-action-button');
+    const linkDropdown = document.getElementById('link-action-dropdown');
+
+    // Show modal for adding action
+    addActionButton.addEventListener('click', function () {
+        const modal = new bootstrap.Modal(document.getElementById('addActionModal'));
+        modal.show();
+    });
+
+    // Save New Action
+    saveActionButton.addEventListener('click', function () {
+        const titleInput = document.getElementById('action-title');
+        const title = titleInput.value.trim();
+
+        if (!title) {
+            alert("Title is required!");
+            return;
+        }
+
+        saveActionButton.disabled = true;
+
+        fetch('/action/add/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                risk_id: "{{ risk.id }}",
+                title: title
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            })
+            .catch(error => console.error("Error:", error))
+            .finally(() => {
+                saveActionButton.disabled = false;
+            });
+    });
+
+    // Show Action Details in Full-Screen Modal
+    actionsList.addEventListener('click', function (e) {
+        const link = e.target.closest('.open-action');
+        if (link) {
+            e.preventDefault();
+            const url = link.getAttribute('data-url');
+            const iframe = document.getElementById('action-detail-iframe');
+            iframe.src = url;
+        }
+    });
+
+    // Clear iframe src when modal is hidden
+    const actionDetailModal = document.getElementById('actionDetailModal');
+    actionDetailModal.addEventListener('hidden.bs.modal', function () {
+        const iframe = document.getElementById('action-detail-iframe');
+        iframe.src = '';
+    });
+
+    // Unlink Action
+    actionsList.addEventListener('click', function (e) {
+        if (e.target.classList.contains('unlink-action')) {
+            const actionId = e.target.dataset.actionId;
+
+            fetch('/actions/unlink/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ risk_id: "{{ risk.id }}", action_id: actionId }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert(`Error unlinking action: ${data.error}`);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        }
+    });
+
+    // Link Existing Action
+    linkActionButton.addEventListener('click', function () {
+        const actionId = linkDropdown.value;
+
+        if (!actionId) {
+            alert("Please select an action to link.");
+            return;
+        }
+
+        fetch('/actions/link/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                risk_id: "{{ risk.id }}",
+                action_id: actionId,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+    });
+});
+</script>
+
+<!-- ----------------- -->
+            <!-- Indicators -->
+
+<!-- Indicators Section -->
+<!-- Indicators Section -->
+<div class="tab-pane fade" id="indicators">
+    <div class="card-header">{% trans "Indicators" %}</div>
+
+    <!-- List of Linked Indicators -->
+    <ul id="indicators-list" class="list-group mb-3">
+        {% for indicator in indicators %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <a href="#" class="open-indicator" data-bs-toggle="modal" data-bs-target="#indicatorDetailModal" 
+                   data-url="{% url 'indicator_edit' indicator.id %}">
+                    {{ indicator.title }} ({% trans "Value" %}: {{ indicator.current_value }}, 
+                    {% trans "Date" %}: {{ indicator.reporting_date|date:"d M Y" }})
+                </a>
+            </div>
+            <button class="btn btn-danger btn-sm unlink-indicator" data-indicator-id="{{ indicator.id }}">
+                {% trans "Unlink" %}
+            </button>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">{% trans "No linked indicators." %}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Dropdown to Link Indicators -->
+    <div class="mb-3">
+        <label for="link-indicator-dropdown" class="form-label">{% trans "Link an Existing Indicator" %}</label>
+        <select id="link-indicator-dropdown" class="form-select">
+            <option value="">{% trans "Select an indicator" %}</option>
+            {% for indicator in all_indicators %}
+            <option value="{{ indicator.id }}">{{ indicator.title }}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-primary mt-2" id="link-indicator-button" 
+                {% if not is_owner_or_superuser %}disabled{% endif %}>
+            {% trans "Link Indicator" %}
+        </button>
+    </div>
+
+    <!-- Add New Indicator -->
+    <button class="btn btn-success" id="add-indicator" 
+            {% if not is_owner_or_superuser %}disabled title="{% trans 'Only owners or superusers can save changes' %}"{% endif %}>
+        {% trans "Add Indicator" %}
+    </button>
+</div>
+
+<!-- Modal HTML for Adding Indicator -->
+<div class="modal fade" id="addIndicatorModal" tabindex="-1" aria-labelledby="addIndicatorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addIndicatorModalLabel">{% trans "Add New Indicator" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="indicator-title" class="form-label">{% trans "Indicator Title" %}</label>
+                    <input type="text" class="form-control" id="indicator-title" 
+                           placeholder="{% trans 'Enter Indicator Title' %}">
+                </div>
+                <div class="mb-3">
+                    <label for="indicator-value" class="form-label">{% trans "Current Value" %}</label>
+                    <input type="number" class="form-control" id="indicator-value" 
+                           placeholder="{% trans 'Enter Current Value' %}" step="any">
+                </div>
+                <div class="mb-3">
+                    <label for="indicator-date" class="form-label">{% trans "Reporting Date" %}</label>
+                    <input type="date" class="form-control" id="indicator-date" value="{{ now|date:'Y-m-d' }}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-primary" id="save-indicator">{% trans "Save Indicator" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Full-Screen Modal for Viewing Indicator Details -->
+<div class="modal fade" id="indicatorDetailModal" tabindex="-1" aria-labelledby="indicatorDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" style="margin: 0; max-width: 100%;">
+        <div class="modal-content" style="background: rgba(255, 255, 255, 0.9); height: 100vh;">
+            <div class="modal-header" style="background: rgba(0, 86, 179, 0.9); color: white;">
+                <h5 class="modal-title" id="indicatorDetailModalLabel">{% trans "Indicator Details" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="indicator-detail-iframe" style="width: 100%; height: 100%; border: none;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer" style="background: rgba(255, 255, 255, 0.9);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Indicators -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrfToken = '{{ csrf_token }}';
+    const indicatorsList = document.getElementById('indicators-list');
+
+    // Reusable function for sending requests
+    function sendRequest(url, method, body, successCallback, errorCallback) {
+        fetch(url, {
+            method: method,
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    successCallback(data);
+                } else {
+                    if (errorCallback) errorCallback(data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                if (errorCallback) errorCallback(error);
+            });
+    }
+
+    // Open Indicator in Full-Screen Modal
+    indicatorsList.addEventListener('click', function (e) {
+        const link = e.target.closest('.open-indicator');
+        if (link) {
+            e.preventDefault();
+            const url = link.getAttribute('data-url');
+            const iframe = document.getElementById('indicator-detail-iframe');
+            iframe.src = url;
+        }
+    });
+
+    // Clear iframe src when modal is hidden
+    const indicatorDetailModal = document.getElementById('indicatorDetailModal');
+    indicatorDetailModal.addEventListener('hidden.bs.modal', function () {
+        const iframe = document.getElementById('indicator-detail-iframe');
+        iframe.src = '';
+    });
+
+    // Unlink Indicator
+    indicatorsList.addEventListener('click', function (e) {
+        if (e.target.classList.contains('unlink-indicator')) {
+            const indicatorId = e.target.dataset.indicatorId;
+
+            sendRequest(
+                '/indicators/unlink/',
+                'POST',
+                { risk_id: "{{ risk.id }}", indicator_id: indicatorId },
+                () => location.reload(),
+                (error) => alert(`Error unlinking indicator: ${error}`)
+            );
+        }
+    });
+
+    // Link Indicator
+    document.getElementById('link-indicator-button').addEventListener('click', function () {
+        const indicatorId = document.getElementById('link-indicator-dropdown').value;
+
+        if (!indicatorId) {
+            alert("Please select an indicator to link.");
+            return;
+        }
+
+        sendRequest(
+            '/indicators/link/',
+            'POST',
+            { risk_id: "{{ risk.id }}", indicator_id: indicatorId },
+            () => location.reload(),
+            (error) => alert(`Error linking indicator: ${error}`)
+        );
+    });
+
+    // Add Indicator
+    document.getElementById('add-indicator').addEventListener('click', function () {
+        const modal = new bootstrap.Modal(document.getElementById('addIndicatorModal'));
+        modal.show();
+    });
+
+    // Save New Indicator
+    document.getElementById('save-indicator').addEventListener('click', function () {
+        const title = document.getElementById('indicator-title').value.trim();
+        const currentValue = parseFloat(document.getElementById('indicator-value').value) || 0;
+        const reportingDate = document.getElementById('indicator-date').value;
+
+        if (!title) {
+            alert("Title is required!");
+            return;
+        }
+
+        const saveButton = this;
+        saveButton.disabled = true;
+
+        sendRequest(
+            '/indicator/add/',
+            'POST',
+            {
+                risk_id: "{{ risk.id }}",
+                title: title,
+                current_value: currentValue,
+                reporting_date: reportingDate,
+            },
+            () => location.reload(),
+            (error) => {
+                alert(`Error adding indicator: ${error}`);
+                saveButton.disabled = false;
+            }
+        );
+    });
+});
+</script>
+            
+<!-- -------------------------------------- -->
+
+
+<div class="tab-pane fade" id="scores">
+    <div class="container-fluid p-4 bg-light rounded shadow">
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Left Section: Inputs and Scores -->
+                <style>
+                    /* Ensure alignment of Likelihood and Impact sections */
+                    .score-row {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr auto;
+                        align-items: center;
+                        gap: 1rem; /* Space between columns */
+                    }
+        
+                    /* Equalize heights for Likelihood and Impact */
+                    .score-item {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: center;
+                        text-align: center;
+                        min-height: auto; /* Adjust as needed to standardize */
+                    }
+        
+                    /* Dropdown styling */
+                    .form-select-sm {
+                        font-size: 0.75rem;
+                    }
+        
+                    .likelihood-selector,
+                    .impact-selector {
+                        width: 100%; /* Full width for dropdowns */
+                        max-width: 200px; /* Limit width for consistency */
+                    }
+        
+                    /* Center text for descriptions */
+                    .text-muted {
+                        margin-top: 10px;
+                        font-size: 0.85rem; /* Smaller font for descriptions */
+                    }
+        
+                    /* Score styling */
+                    .score-box {
+                        text-align: center;
+                    }
+        
+                    .score-box h1 {
+                        font-size: 2.5rem; /* Large score display */
+                    }
+        
+                    .traffic-light {
+                        display: inline-block;
+                        width: 15px;
+                        height: 15px;
+                        border-radius: 50%;
+                        margin-top: 10px;
+                    }
+        
+                    .traffic-light.low {
+                        background-color: green;
+                    }
+        
+                    .traffic-light.medium {
+                        background-color: orange;
+                    }
+        
+                    .traffic-light.high {
+                        background-color: red;
+                    }
+                </style>
+        
+        <div class="col-lg-6">
+            {% for score_type, score in scores.items %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h5>
+                        {% if score_type == "inherent" %}{% trans "Inherent Score" %}
+                        {% elif score_type == "residual" %}{% trans "Residual Score" %}
+                        {% elif score_type == "targeted" %}{% trans "Targeted Score" %}
+                        {% else %}{{ score_type|title }} {% trans "Score" %}{% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="score-row">
+                        <!-- Likelihood Dropdown -->
+                        <div class="score-item">
+                            <label for="{{ score_type|lower }}_likelihood" class="form-label fw-bold">{% trans "Likelihood" %}:</label>
+                            <select id="{{ score_type|lower }}_likelihood" class="form-select form-select-lg form-select-sm likelihood-selector">
+                                {% for i in score_range|reverse %}
+                                <option value="{{ i }}" {% if score.likelihood == i %}selected{% endif %}>
+                                    {{ i }} - {{ likelihood_descriptions|get_item:i }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <p id="{{ score_type|lower }}_likelihood_description" class="text-muted">
+                                {{ likelihood_descriptions|get_item:score.likelihood }}
+                            </p>
+                        </div>
+        
+                        <!-- Impact Dropdown -->
+                        <div class="score-item">
+                            <label for="{{ score_type|lower }}_impact" class="form-label fw-bold">{% trans "Impact" %}:</label>
+                            <select id="{{ score_type|lower }}_impact" class="form-select form-select-lg form-select-sm impact-selector">
+                                {% for i in score_range|reverse %}
+                                <option value="{{ i }}" {% if score.impact == i %}selected{% endif %}>
+                                    {{ i }} - {{ impact_descriptions|get_item:i }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <p id="{{ score_type|lower }}_impact_description" class="text-muted">
+                                {{ impact_descriptions|get_item:score.impact }}
+                            </p>
+                        </div>
+                
+                        <!-- Display Score -->
+                        <div class="score-box">
+                            <h1 id="{{ score_type|lower }}_score" class="display-4 fw-bold">{{ score.score }}</h1>
+                            <span class="traffic-light {% if score.score <= 6 %}low{% elif score.score <= 12 %}medium{% else %}high{% endif %}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+                <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Parse the descriptions from Django context safely
+                    const likelihoodDescriptions = JSON.parse('{{ likelihood_descriptions|safe|escapejs }}');
+                    const impactDescriptions = JSON.parse('{{ impact_descriptions|safe|escapejs }}');
+        
+                    // Function to update scores and descriptions dynamically
+                    function updateScore(type) {
+                        const likelihoodSelect = document.getElementById(`${type}_likelihood`);
+                        const impactSelect = document.getElementById(`${type}_impact`);
+                        const likelihoodDescription = document.getElementById(`${type}_likelihood_description`);
+                        const impactDescription = document.getElementById(`${type}_impact_description`);
+                        const scoreDisplay = document.getElementById(`${type}_score`);
+                        const trafficLight = scoreDisplay.nextElementSibling;
+        
+                        const likelihood = parseInt(likelihoodSelect.value || 0, 10);
+                        const impact = parseInt(impactSelect.value || 0, 10);
+                        const score = likelihood * impact;
+        
+                        // Update the score
+                        scoreDisplay.textContent = score;
+        
+                        // Update traffic light
+                        trafficLight.className = 'traffic-light';
+                        if (score <= 6) {
+                            trafficLight.classList.add('low');
+                        } else if (score <= 12) {
+                            trafficLight.classList.add('medium');
+                        } else {
+                            trafficLight.classList.add('high');
+                        }
+        
+                        // Update descriptions dynamically
+                        likelihoodDescription.textContent = likelihoodDescriptions[likelihood] || 'No description available.';
+                        impactDescription.textContent = impactDescriptions[impact] || 'No description available.';
+                    }
+        
+                    // Attach event listeners to all likelihood and impact dropdowns
+                    ['inherent', 'residual', 'targeted'].forEach(type => {
+                        document.getElementById(`${type}_likelihood`).addEventListener('change', () => updateScore(type));
+                        document.getElementById(`${type}_impact`).addEventListener('change', () => updateScore(type));
+                    });
+                });
+                </script>
+        
+                <!-- Right Section: Heatmap + Trend Chart -->
+                <div class="col-lg-6">
+                    <div class="heatmap-container mb-4">
+                        <div class="heatmap d-flex flex-column">
+                            {% for row in heatmap %}
+                            <div class="heatmap-row d-flex">
+                                {% for cell in row %}
+                                <div class="heatmap-cell" 
+                                     data-likelihood="{{ cell.likelihood }}" 
+                                     data-impact="{{ cell.impact }}"
+                                     style="background-color: {{ cell.color }}; border-radius: 8px; margin: 2px; position: relative;">
+                                     <span>{{ cell.score }}</span>
+                                     <div class="marker-container">
+                                        {% for score in plotted_scores %}
+                                        {% if score.likelihood == cell.likelihood and score.impact == cell.impact %}
+                                        <div class="marker" style="background-color: white; color: {{ score.color }}; padding: 3px; border-radius: 5px; font-weight: bold;">
+                                            {{ score.type|slice:":1" }}
+                                        </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Trend Chart Below Heatmap -->
+                    <div class="chart-container" style="width: 100%; max-width: 800px; margin: 0 auto;">
+                        <canvas id="scoreTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById("scoreTrendChart").getContext("2d");
+
+        // Dynamically Injected Data from Backend
+        const labels = {{ trend_data.dates|safe }}; // Array of dates
+        const inherentScores = {{ trend_data.inherent|safe }}; // Array of inherent scores
+        const residualScores = {{ trend_data.residual|safe }}; // Array of residual scores
+        const targetedScores = {{ trend_data.targeted|safe }}; // Array of targeted scores
+
+        // Chart.js Trend Chart Configuration
+        const trendChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: labels, // X-axis labels (dates)
+                datasets: [
+                    {
+                        label: "{% trans 'Inherent Scores' %}",
+                        data: inherentScores, // Y-axis data for Inherent
+                        borderColor: "#007bff",
+                        backgroundColor: "rgba(0, 123, 255, 0.2)",
+                        tension: 0, // Set to 0 for straight lines
+                        fill: true,
+                    },
+                    {
+                        label: "{% trans 'Residual Scores' %}",
+                        data: residualScores, // Y-axis data for Residual
+                        borderColor: "#28a745",
+                        backgroundColor: "rgba(40, 167, 69, 0.2)",
+                        tension: 0, // Set to 0 for straight lines
+                        fill: true,
+                    },
+                    {
+                        label: "{% trans 'Targeted Scores' %}",
+                        data: targetedScores, // Y-axis data for Targeted
+                        borderColor: "#ffc107",
+                        backgroundColor: "rgba(255, 193, 7, 0.2)",
+                        tension: 0, // Set to 0 for straight lines
+                        fill: true,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: "top",
+                        labels: {
+                            boxWidth: 20,
+                        },
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return `${context.dataset.label}: ${context.raw}`;
+                            },
+                        },
+                    },
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "{% trans 'Date' %}", // X-axis title
+                        },
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: "{% trans 'Scores' %}", // Y-axis title
+                        },
+                        min: 0,
+                        suggestedMax: Math.max(...[...inherentScores, ...residualScores, ...targetedScores]) + 5, // Adjust dynamically
+                    },
+                },
+            },
+        });
+    });
+</script>
+
+
+
+<!-- ------------------ -->
+
+
+
+<!-- it aseets ----------------------------- -->
+<!-- IT Assets Section -->
+<div class="tab-pane fade" id="it-assets">
+    <div class="card-header">{% trans "IT Assets" %}</div>
+
+    <!-- Link Existing IT Asset -->
+    <div class="mb-3">
+        <label for="itasset-select">{% trans "Link Existing IT Asset" %}:</label>
+        <div class="d-flex">
+            <select id="itasset-select" class="form-select me-2">
+                <option value="">{% trans "-- Select IT Asset --" %}</option>
+                {% for itasset in all_it_assets %}
+                <option value="{{ itasset.id }}">{{ itasset.name }}</option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-success" id="link-itasset" {% if not is_owner_or_superuser %}disabled{% endif %}>
+                {% trans "Link IT Asset" %}
+            </button>
+        </div>
+    </div>
+
+    <!-- List of Linked IT Assets -->
+    <ul id="itassets-list" class="list-group mb-3">
+        {% for itasset in it_assets %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="#" class="open-itasset" data-bs-toggle="modal" data-bs-target="#itAssetDetailModal" data-url="/itassets/{{ itasset.id }}/edit/">
+                {{ itasset.name }}
+            </a>
+            <button class="btn btn-danger btn-sm unlink-itasset" data-id="{{ itasset.id }}">
+                {% trans "Unlink" %}
+            </button>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add New IT Asset -->
+    <button class="btn btn-primary" id="add-itasset" {% if not is_owner_or_superuser %}disabled title="{% trans 'Only owners or superusers can save changes' %}"{% endif %}>
+        {% trans "Add New IT Asset" %}
+    </button>
+</div>
+
+<!-- Modal for Adding IT Asset -->
+<div class="modal fade" id="addITAssetModal" tabindex="-1" aria-labelledby="addITAssetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addITAssetModalLabel">{% trans "Add New IT Asset" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="itasset-title" class="form-label">{% trans "IT Asset Name" %}</label>
+                    <input type="text" class="form-control" id="itasset-title" placeholder="{% trans 'Enter IT Asset Name' %}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-primary" id="save-itasset">{% trans "Save IT Asset" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Full-Screen Modal for Viewing IT Asset Details -->
+<div class="modal fade" id="itAssetDetailModal" tabindex="-1" aria-labelledby="itAssetDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" style="margin: 0; max-width: 100%;">
+        <div class="modal-content" style="background: rgba(255, 255, 255, 0.9); height: 100vh;">
+            <div class="modal-header" style="background: rgba(0, 86, 179, 0.9); color: white;">
+                <h5 class="modal-title" id="itAssetDetailModalLabel">{% trans "IT Asset Details" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="itasset-detail-iframe" style="width: 100%; height: 100%; border: none;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer" style="background: rgba(255, 255, 255, 0.9);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for IT Assets -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrfToken = '{{ csrf_token }}';
+    const itassetsList = document.getElementById('itassets-list');
+
+    // Add IT Asset using modal
+    document.getElementById('add-itasset').addEventListener('click', function () {
+        const modal = new bootstrap.Modal(document.getElementById('addITAssetModal'));
+        modal.show();
+    });
+
+    // Save IT Asset
+    const saveITAssetButton = document.getElementById('save-itasset');
+    saveITAssetButton.addEventListener('click', function () {
+        const titleInput = document.getElementById('itasset-title');
+        const title = titleInput.value.trim();
+
+        if (!title) {
+            alert("{% trans 'IT Asset name is required!' %}");
+            return;
+        }
+
+        saveITAssetButton.disabled = true;
+
+        fetch(`/risk/{{ risk.id }}/add_itasset/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ title: title }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(`{% trans 'Error' %}: ${data.error}`);
+                }
+            })
+            .catch(error => console.error("{% trans 'Error' %}:", error))
+            .finally(() => {
+                saveITAssetButton.disabled = false;
+            });
+    });
+
+    // Link existing IT Asset
+    document.getElementById('link-itasset').addEventListener('click', function () {
+        const itassetId = document.getElementById('itasset-select').value;
+        if (!itassetId) {
+            alert('{% trans "Please select an IT Asset to link." %}');
+            return;
+        }
+
+        fetch(`/risk/{{ risk.id }}/link_itasset/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ itasset_id: itassetId }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(`{% trans 'Error' %}: ${data.error}`);
+                }
+            })
+            .catch(error => console.error('{% trans "Error" %}:', error));
+    });
+
+    // Unlink IT Asset
+    itassetsList.addEventListener('click', function (e) {
+        if (e.target.classList.contains('unlink-itasset')) {
+            const itassetId = e.target.dataset.id;
+
+            fetch(`/risk/{{ risk.id }}/unlink_itasset/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ itasset_id: itassetId }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert(`{% trans 'Error' %}: ${data.error}`);
+                    }
+                })
+                .catch(error => console.error('{% trans "Error" %}:', error));
+        }
+    });
+
+    // Show IT Asset Details in Full-Screen Modal
+    itassetsList.addEventListener('click', function (e) {
+        const link = e.target.closest('.open-itasset');
+        if (link) {
+            e.preventDefault();
+            const url = link.getAttribute('data-url');
+            const iframe = document.getElementById('itasset-detail-iframe');
+            iframe.src = url;
+        }
+    });
+
+    // Clear iframe src when modal is hidden
+    const itAssetDetailModal = document.getElementById('itAssetDetailModal');
+    itAssetDetailModal.addEventListener('hidden.bs.modal', function () {
+        const iframe = document.getElementById('itasset-detail-iframe');
+        iframe.src = '';
+    });
+});
+</script>
+
+<!-- Procedures Tab -->
+
+
+<!-- Procedures Section -->
+<div class="tab-pane fade" id="procedures">
+    <div class="card-header">{% trans "Procedures" %}</div>
+
+    <!-- Link Existing Procedure -->
+    <div class="mb-3">
+        <label for="procedure-select">{% trans "Link Existing Procedure" %}:</label>
+        <div class="d-flex">
+            <select id="procedure-select" class="form-select me-2">
+                <option value="">{% trans "-- Select Procedure --" %}</option>
+                {% for procedure in all_procedures %}
+                <option value="{{ procedure.id }}">{{ procedure.title }}</option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-success" id="link-procedure" {% if not is_owner_or_superuser %}disabled{% endif %}>
+                {% trans "Link Procedure" %}
+            </button>
+        </div>
+    </div>
+
+    <!-- List of Linked Procedures -->
+    <ul id="procedures-list" class="list-group mb-3">
+        {% for procedure in procedures %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="#" class="procedure-link" data-bs-toggle="modal" data-bs-target="#procedureDetailModal" data-url="/procedures/{{ procedure.id }}/edit/">
+                {{ procedure.title }}
+            </a>
+            <button class="btn btn-danger btn-sm unlink-procedure" data-id="{{ procedure.id }}">
+                {% trans "Unlink" %}
+            </button>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add New Procedure -->
+    <button class="btn btn-primary" id="add-procedure" {% if not is_owner_or_superuser %}disabled title="{% trans 'Only owners or superusers can save changes' %}"{% endif %}>
+        {% trans "Add New Procedure" %}
+    </button>
+</div>
+
+<!-- Modal for Adding Procedure -->
+<div class="modal fade" id="addProcedureModal" tabindex="-1" aria-labelledby="addProcedureModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProcedureModalLabel">{% trans "Add New Procedure" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="procedure-title" class="form-label">{% trans "Procedure Title" %}</label>
+                    <input type="text" class="form-control" id="procedure-title" placeholder="{% trans 'Enter Procedure Title' %}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                <button type="button" class="btn btn-primary" id="save-procedure">{% trans "Save Procedure" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Full-Screen Modal for Viewing Procedure Details -->
+<div class="modal fade" id="procedureDetailModal" tabindex="-1" aria-labelledby="procedureDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" style="margin: 0; max-width: 100%;">
+        <div class="modal-content" style="background: rgba(255, 255, 255, 0.9); height: 100vh;">
+            <div class="modal-header" style="background: rgba(0, 86, 179, 0.9); color: white;">
+                <h5 class="modal-title" id="procedureDetailModalLabel">{% trans "Procedure Details" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="procedure-detail-iframe" style="width: 100%; height: 100%; border: none;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer" style="background: rgba(255, 255, 255, 0.9);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Procedures -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrfToken = '{{ csrf_token }}';
+    const proceduresList = document.getElementById('procedures-list');
+
+    // Add new procedure using modal
+    document.getElementById('add-procedure').addEventListener('click', function () {
+        const modal = new bootstrap.Modal(document.getElementById('addProcedureModal'));
+        modal.show();
+    });
+
+    // Save new procedure
+    document.getElementById('save-procedure').addEventListener('click', function () {
+        const titleInput = document.getElementById('procedure-title');
+        const title = titleInput.value.trim();
+
+        if (!title) {
+            alert("{% trans 'Title is required!' %}");
+            return;
+        }
+
+        fetch(`/risk/{{ risk.id }}/add_procedure/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ title: title }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(`{% trans 'Error' %}: ${data.error}`);
+                }
+            })
+            .catch(error => console.error("{% trans 'Error' %}:", error));
+    });
+
+    // Link existing procedure
+    document.getElementById('link-procedure').addEventListener('click', function () {
+        const procedureId = document.getElementById('procedure-select').value;
+        if (!procedureId) {
+            alert('{% trans "Please select a Procedure to link." %}');
+            return;
+        }
+
+        fetch(`/risk/{{ risk.id }}/link_procedure/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ procedure_id: procedureId }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(`{% trans 'Error' %}: ${data.error}`);
+                }
+            })
+            .catch(error => console.error("{% trans 'Error' %}:", error));
+    });
+
+    // Unlink procedure
+    proceduresList.addEventListener('click', function (e) {
+        if (e.target.classList.contains('unlink-procedure')) {
+            const procedureId = e.target.dataset.id;
+
+            fetch(`/risk/{{ risk.id }}/unlink_procedure/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ procedure_id: procedureId }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert(`{% trans 'Error' %}: ${data.error}`);
+                    }
+                })
+                .catch(error => console.error('{% trans "Error" %}:', error));
+        }
+    });
+
+    // Show Procedure Details in Full-Screen Modal
+    proceduresList.addEventListener('click', function (e) {
+        const link = e.target.closest('.procedure-link');
+        if (link) {
+            e.preventDefault();
+            const url = link.getAttribute('data-url');
+            const iframe = document.getElementById('procedure-detail-iframe');
+            iframe.src = url;
+        }
+    });
+
+    // Clear iframe src when modal is hidden
+    const procedureDetailModal = document.getElementById('procedureDetailModal');
+    procedureDetailModal.addEventListener('hidden.bs.modal', function () {
+        const iframe = document.getElementById('procedure-detail-iframe');
+        iframe.src = '';
+    });
+});
+</script>
+
+
+<!-- aprovals --------------------- -->
+
+
+<div class="tab-pane fade" id="approvals">
+    <div class="card-header">Approvals</div>
+    <ul class="list-group">
+        {% for approval_data in approvals %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ approval_data.approval.status|title }}</strong>: 
+                {{ approval_data.approval.rational|default:"First" }}
+                <br>
+                <small>
+                    Requested by: {{ approval_data.approval.user.user.username|default:"Unknown User" }}
+                    {% if approval_data.approval.due_date %}
+                        <br><strong>Due Date:</strong> {{ approval_data.approval.due_date|date:"F j, Y" }}
+                    {% endif %}
+                </small>
+                {% if approval_data.countdown is not None and approval_data.approval.status != 'approved' %}
+                <br><strong>Countdown:</strong> 
+                <span 
+                    class="badge 
+                    {% if approval_data.countdown > 0 %}bg-success{% elif approval_data.countdown < 0 %}bg-danger{% else %}bg-warning{% endif %}">
+                    {% if approval_data.countdown > 0 %}
+                        {{ approval_data.countdown }} days remaining
+                    {% elif approval_data.countdown == 0 %}
+                        Due today
+                    {% else %}
+                        Overdue by {{ approval_data.countdown }} days
+                    {% endif %}
+                </span>
+                {% endif %}
+            </div>
+            {% if approval_data.approval.status == 'pending' %}
+            <button class="btn btn-success btn-sm complete-approval-btn" data-id="{{ approval_data.approval.id }}">
+                Approve
+            </button>
+            {% endif %}
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">
+            No approvals have been requested for this risk.
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+<!-- aprovals --------------------- -->
+
+
+
+
+<!-- Events Tab -->
+ 
+<!-- Events (Incidents) Section -->
+<div class="tab-pane fade" id="events">
+    <div class="card-header">{% trans "Incidents" %}</div>
+    <ul id="events-list" class="list-group mb-3">
+        {% for event in events %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="#" class="open-event" data-bs-toggle="modal" data-bs-target="#eventDetailModal" data-url="/events/{{ event.id }}/edit">
+                {{ event.title |safe }} ({% trans "Reported on" %}: {{ event.date }})
+            </a>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">{% trans "No incidents reported for this risk." %}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add Incident Button -->
+    <button id="add-event" class="btn btn-primary">{% trans "Add Incident" %}</button>
+</div>
+
+<!-- Full-Screen Modal for Viewing Event Details -->
+<div class="modal fade" id="eventDetailModal" tabindex="-1" aria-labelledby="eventDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" style="margin: 0; max-width: 100%;">
+        <div class="modal-content" style="background: rgba(255, 255, 255, 0.9); height: 100vh;">
+            <div class="modal-header" style="background: rgba(0, 86, 179, 0.9); color: white;">
+                <h5 class="modal-title" id="eventDetailModalLabel">{% trans "Incident Details" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="event-detail-iframe" style="width: 100%; height: 100%; border: none;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer" style="background: rgba(255, 255, 255, 0.9);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Events -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const eventsList = document.getElementById('events-list');
+    const addEventButton = document.getElementById('add-event');
+
+    // Show Event Details in Full-Screen Modal
+    eventsList.addEventListener('click', function (e) {
+        const link = e.target.closest('.open-event');
+        if (link) {
+            e.preventDefault();
+            const url = link.getAttribute('data-url');
+            const iframe = document.getElementById('event-detail-iframe');
+            iframe.src = url;
+        }
+    });
+
+    // Clear iframe src when modal is hidden
+    const eventDetailModal = document.getElementById('eventDetailModal');
+    eventDetailModal.addEventListener('hidden.bs.modal', function () {
+        const iframe = document.getElementById('event-detail-iframe');
+        iframe.src = '';
+    });
+
+    // Show Add Incident Form in Full-Screen Modal
+    addEventButton.addEventListener('click', function () {
+        const riskId = "{{ risk.id }}"; // Current risk ID passed from the template
+        if (!riskId) {
+            console.error("{% trans 'Risk ID is missing or undefined.' %}");
+            return;
+        }
+
+        const iframe = document.getElementById('event-detail-iframe');
+        iframe.src = `/events/add/?link_to_risk=${riskId}`;
+        const modal = new bootstrap.Modal(document.getElementById('eventDetailModal'));
+        modal.show();
+
+        // Handle iframe load and form submission
+        iframe.onload = function () {
+            console.log("{% trans 'Iframe loaded successfully' %}");
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+            if (!iframeDoc) {
+                console.error("{% trans 'Failed to access iframe content.' %}");
+                return;
+            }
+
+            const saveButton = iframeDoc.querySelector('form [type=\"submit\"]');
+            if (saveButton) {
+                saveButton.addEventListener('click', function (e) {
+                    console.log("{% trans 'Save button clicked in iframe' %}");
+                    setTimeout(function () {
+                        modal.hide(); // Hide the modal after saving
+                        location.reload(); // Reload the page to refresh the event list
+                    }, 1000);
+                });
+            } else {
+                console.warn("{% trans 'Save button not found in the iframe.' %}");
+            }
+        };
+
+        iframe.onerror = function () {
+            console.error("{% trans 'Failed to load iframe content.' %}");
+            modal.hide();
+        };
+    });
+});
+</script>
+
+
+<!-- Opportunities Section -->
+<div class="tab-pane fade" id="opportunities">
+    <div class="card-header">{% trans "Opportunities" %}</div>
+
+    <div class="mt-3">
+        <label for="opportunity-select">{% trans "Link Existing Opportunities" %}:</label>
+        <select id="opportunity-select" class="form-select">
+            <option value="">{% trans "-- Select Opportunity --" %}</option>
+            {% for opportunity in all_opportunities %}
+            <option value="{{ opportunity.id }}">{{ opportunity.title }}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-primary mt-2" id="link-opportunity">{% trans "Link Opportunity" %}</button>
+    </div>
+
+    <ul id="opportunities-list" class="list-group mt-3">
+        {% for opportunity in opportunities %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="#" class="open-opportunity" data-bs-toggle="modal" data-bs-target="#opportunityDetailModal" data-url="/opportunities/{{ opportunity.id }}/" class="text-decoration-none">
+                {{ opportunity.title }}
+            </a>
+            <button class="btn btn-danger btn-sm unlink-opportunity" data-id="{{ opportunity.id }}">{% trans "Unlink" %}</button>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <button class="btn btn-primary mt-2" id="add-opportunity">{% trans "Add Opportunity" %}</button>
+</div>
+
+<!-- Full-Screen Modal for Viewing Opportunity Details -->
+<div class="modal fade" id="opportunityDetailModal" tabindex="-1" aria-labelledby="opportunityDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" style="margin: 0; max-width: 100%;">
+        <div class="modal-content" style="background: rgba(255, 255, 255, 0.9); height: 100vh;">
+            <div class="modal-header" style="background: rgba(0, 86, 179, 0.9); color: white;">
+                <h5 class="modal-title" id="opportunityDetailModalLabel">{% trans "Opportunity Details" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="opportunity-detail-iframe" style="width: 100%; height: 100%; border: none;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer" style="background: rgba(255, 255, 255, 0.9);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Threats Section -->
+<div class="tab-pane fade" id="threats">
+    <div class="card-header">{% trans "Threats" %}</div>
+
+    <ul id="threats-list" class="list-group">
+        {% for threat in threats %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="#" class="open-threat" data-bs-toggle="modal" data-bs-target="#threatDetailModal" data-url="/threats/{{ threat.id }}/" class="text-decoration-none">
+                {{ threat.title }}
+            </a>
+            <button class="btn btn-danger btn-sm unlink-threat" data-id="{{ threat.id }}">{% trans "Unlink" %}</button>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="mt-3">
+        <label for="threat-select">{% trans "Link Existing Threat" %}:</label>
+        <select id="threat-select" class="form-select">
+            <option value="">{% trans "-- Select Threat --" %}</option>
+            {% for threat in all_threats %}
+            <option value="{{ threat.id }}">{{ threat.title }}</option>
+            {% endfor %}
+        </select>
+        <button class="btn btn-primary mt-2" id="link-threat">{% trans "Link Threat" %}</button>
+    </div>
+
+    <button class="btn btn-primary mt-2" id="add-threat">{% trans "Add Threat" %}</button>
+</div>
+
+<!-- Full-Screen Modal for Viewing Threat Details -->
+<div class="modal fade" id="threatDetailModal" tabindex="-1" aria-labelledby="threatDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen" style="margin: 0; max-width: 100%;">
+        <div class="modal-content" style="background: rgba(255, 255, 255, 0.9); height: 100vh;">
+            <div class="modal-header" style="background: rgba(0, 86, 179, 0.9); color: white;">
+                <h5 class="modal-title" id="threatDetailModalLabel">{% trans "Threat Details" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="threat-detail-iframe" style="width: 100%; height: 100%; border: none;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer" style="background: rgba(255, 255, 255, 0.9);">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Opportunities and Threats -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrfToken = '{{ csrf_token }}';
+    const opportunitiesList = document.querySelector('#opportunities-list');
+    const threatsList = document.querySelector('#threats-list');
+
+    // --- Opportunities ---
+
+    // Link Opportunity
+    document.querySelector('#link-opportunity').addEventListener('click', function () {
+        const opportunityId = document.querySelector('#opportunity-select').value;
+        if (!opportunityId) {
+            alert("{% trans 'Please select an opportunity to link.' %}");
+            return;
+        }
+        fetch(`/risk/{{ risk.id }}/link_opportunity/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ opportunity_id: opportunityId }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) location.reload();
+                else alert("{% trans 'Error: Unable to link opportunity.' %}");
+            });
+    });
+
+    // Add Opportunity
+    document.querySelector('#add-opportunity').addEventListener('click', function () {
+        const title = prompt("{% trans 'Enter Opportunity Title:' %}");
+        if (!title) return;
+        fetch(`/risk/{{ risk.id }}/add_opportunity/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ title: title }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) location.reload();
+                else alert("{% trans 'Error: Unable to add opportunity.' %}");
+            });
+    });
+
+    // Unlink Opportunity
+    opportunitiesList.addEventListener('click', function (e) {
+        if (e.target.classList.contains('unlink-opportunity')) {
+            const opportunityId = e.target.dataset.id;
+            fetch(`/risk/{{ risk.id }}/unlink_opportunity/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ opportunity_id: opportunityId }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) location.reload();
+                else alert("{% trans 'Error: Unable to unlink opportunity.' %}");
+            });
+        }
+    });
+
+    // Show Opportunity in Modal
+    opportunitiesList.addEventListener('click', function (e) {
+        const link = e.target.closest('.open-opportunity');
+        if (link) {
+            e.preventDefault();
+            const url = link.getAttribute('data-url');
+            const iframe = document.getElementById('opportunity-detail-iframe');
+            iframe.src = url;
+        }
+    });
+
+    // Clear Opportunity iframe src when modal is hidden
+    const opportunityDetailModal = document.getElementById('opportunityDetailModal');
+    opportunityDetailModal.addEventListener('hidden.bs.modal', function () {
+        const iframe = document.getElementById('opportunity-detail-iframe');
+        iframe.src = '';
+    });
+
+    // --- Threats ---
+
+    // Link Threat
+    document.querySelector('#link-threat').addEventListener('click', function () {
+        const threatId = document.querySelector('#threat-select').value;
+        if (!threatId) {
+            alert("{% trans 'Please select a threat to link.' %}");
+            return;
+        }
+        fetch(`/risk/{{ risk.id }}/link_threat/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ threat_id: threatId }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) location.reload();
+                else alert("{% trans 'Error: Unable to link threat.' %}");
+            });
+    });
+
+    // Add Threat
+    document.querySelector('#add-threat').addEventListener('click', function () {
+        const title = prompt("{% trans 'Enter Threat Title:' %}");
+        if (!title) return;
+        fetch(`/risk/{{ risk.id }}/add_threat/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ title: title }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) location.reload();
+                else alert("{% trans 'Error: Unable to add threat.' %}");
+            });
+    });
+
+    // Unlink Threat
+    threatsList.addEventListener('click', function (e) {
+        if (e.target.classList.contains('unlink-threat')) {
+            const threatId = e.target.dataset.id;
+            fetch(`/risk/{{ risk.id }}/unlink_threat/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ threat_id: threatId }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) location.reload();
+                    else alert("{% trans 'Error: Unable to unlink threat.' %}");
+                });
+        }
+    });
+
+    // Show Threat in Modal
+    threatsList.addEventListener('click', function (e) {
+        const link = e.target.closest('.open-threat');
+        if (link) {
+            e.preventDefault();
+            const url = link.getAttribute('data-url');
+            const iframe = document.getElementById('threat-detail-iframe');
+            iframe.src = url;
+        }
+    });
+
+    // Clear Threat iframe src when modal is hidden
+    const threatDetailModal = document.getElementById('threatDetailModal');
+    threatDetailModal.addEventListener('hidden.bs.modal', function () {
+        const iframe = document.getElementById('threat-detail-iframe');
+        iframe.src = '';
+    });
+});
+</script>
+<!-- ----------------- -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</div>
+
+<script>
+    // Initialize TinyMCE editor
+    
+
+
+    tinymce.init({
+    selector: '#risk-title',  
+    plugins: 'lists link fullscreen paste',  // ✅ Removed 'textcolor' and 'formatselect'
+    toolbar: 'undo redo | fullscreen | removeformat| bold italic underline | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | link ',
+    menubar: true,  
+    toolbar_sticky: true,  // Keeps toolbar visible while scrolling
+    height: 200,  
+    statusbar: false, 
+    promotion:false, 
+    hidelogo:true,
+    fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt 48pt 72pt',
+    content_style: "body { font-size: 12pt; }",
+
+    // ✅ Ensures font size is maintained when pasting
+    paste_preprocess: function(plugin, args) {
+        args.content = `<span style="font-size:12pt;">${args.content}</span>`; 
+    },
+
+    // ✅ Ensures font size is applied on load and editing, while keeping cursor position
+    setup: function(editor) {
+        editor.on('init', function() {
+            this.getBody().style.fontSize = '12pt';
+        });
+
+        editor.on('change', function() {
+            let content = editor.getContent();
+            content = `<span style="font-size:12pt;">${content}</span>`; 
+
+            // Preserve the cursor position
+            const cursorPosition = editor.selection.getBookmark(2);
+            editor.setContent(content);
+            editor.selection.moveToBookmark(cursorPosition);
+        });
+    }
+});
+
+tinymce.init({
+    selector: '#risk-description',
+    plugins: 'lists link fullscreen paste',
+    toolbar: 'undo redo | fullscreen | removeformat | bold italic underline | fontsizeselect | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | link',
+    menubar: true,
+    toolbar_sticky: true,
+    height: 500,
+    statusbar: true,
+    logo:false,
+    promotion: false,
+    fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt 48pt 72pt',
+    content_style: 'body { font-size: 12pt; }',
+    
+    paste_preprocess: function(plugin, args) {
+        args.content = `<span style="font-size: 12pt">${args.content}</span>`;
+    },
+    
+    setup: function(editor) {
+        editor.on('init', function() {
+            editor.getBody().style.fontSize = '12pt';
+        });
+    },
+    
+    // Customize the menu bar to exclude the upgrade option
+    menu: {
+        file: { title: 'File', items: 'newdocument | print' },
+        edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall' },
+        insert: { title: 'Insert', items: 'link' },
+        view: { title: 'View', items: 'fullscreen' },
+        format: { title: 'Format', items: 'bold italic underline | formats' },
+        tools: { title: 'Tools', items: 'spellchecker code' },
+        help: { title: 'Help', items: 'help' } // Only show 'help', excluding upgrade
+    }
+});
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const csrfToken = '{{ csrf_token }}';
+
+        // Helper Function: Show Messages
+        function showMessage(type, text) {
+            const messageContainer = document.getElementById('message-container');
+            if (messageContainer) {
+                messageContainer.innerHTML = `
+                    <div class="alert alert-${type}" role="alert">
+                        ${text}
+                    </div>
+                `;
+                messageContainer.style.display = 'block'; // Ensure visibility
+            } else {
+                console.error("Message container not found. Unable to display message:", text);
+            }
+        }
+
+        // Utility: Update Scores
+        const updateScores = (type) => {
+            const likelihood = parseInt(document.getElementById(`${type}_likelihood`)?.value || 0);
+            const impact = parseInt(document.getElementById(`${type}_impact`)?.value || 0);
+            const score = likelihood * impact;
+
+            // Update displayed score
+            document.getElementById(`${type}_score`).textContent = score;
+
+            // Update traffic light color
+            const trafficLight = document.querySelector(`#${type}_score + .traffic-light`);
+            if (trafficLight) {
+                trafficLight.className = 'traffic-light';
+                trafficLight.classList.add(score <= 6 ? 'low' : score <= 12 ? 'medium' : 'high');
+            }
+
+            // Update marker on heatmap
+            document.querySelectorAll('.heatmap-cell').forEach(cell => {
+                const cellLikelihood = parseInt(cell.dataset.likelihood);
+                const cellImpact = parseInt(cell.dataset.impact);
+                const marker = cell.querySelector(`.marker[data-type="${type}"]`);
+
+                if (cellLikelihood === likelihood && cellImpact === impact) {
+                    if (!marker) {
+                        const newMarker = document.createElement('div');
+                        newMarker.className = 'marker';
+                        newMarker.textContent = type.charAt(0).toUpperCase(); // I, R, or T
+                        newMarker.dataset.type = type;
+                        cell.querySelector('.marker-container').appendChild(newMarker);
+                    }
+                } else if (marker) {
+                    marker.remove();
+                }
+            });
+        };
+
+        // Save Risk Functionality
+        // Save Risk Functionality
+document.getElementById('save-risk')?.addEventListener('click', function () {
+    const saveButton = document.getElementById('save-risk');
+    saveButton.disabled = true;
+    saveButton.textContent = 'Saving...';
+
+    // Add spinner
+    const spinner = document.createElement('div');
+    spinner.className = 'spinner-border text-primary';
+    spinner.setAttribute('role', 'status');
+    spinner.style.marginLeft = '10px';
+    saveButton.appendChild(spinner);
+
+    // Collect form data
+    const title = tinymce.get('risk-title').getContent().trim();
+    const description = tinymce.get('risk-description').getContent().trim();
+    const category = document.getElementById('risk-category')?.value;
+    const portfolio = document.getElementById('risk-portfolio')?.value;
+    const approvalCycle = document.getElementById('approval-cycle')?.value;
+
+    // Validate required fields
+    if (!title || !description || !category || !portfolio || !approvalCycle) {
+        showMessage('danger', 'All fields (title, description, category, portfolio, approval cycle) are required.');
+        saveButton.disabled = false;
+        saveButton.textContent = 'Save Changes';
+        spinner.remove();
+        return;
+    }
+
+    const owners = Array.from(document.querySelectorAll('#owners-list li button')).map(btn => btn.dataset.id);
+    const scores = ['inherent', 'residual', 'targeted'].reduce((acc, type) => {
+        acc[`${type}_likelihood`] = parseInt(document.getElementById(`${type}_likelihood`)?.value || 0);
+        acc[`${type}_impact`] = parseInt(document.getElementById(`${type}_impact`)?.value || 0);
+        return acc;
+    }, {});
+
+    // Warning if targeted < residual and no actions exist
+    const residualScore = scores.residual_likelihood * scores.residual_impact;
+    const targetedScore = scores.targeted_likelihood * scores.targeted_impact;
+    
+    const actionsList = document.getElementById('actions-list');
+    const hasActions = actionsList && actionsList.children.length > 0;
+
+    console.log("Residual Score:", residualScore);
+    console.log("Targeted Score:", targetedScore);
+    console.log("Number of Actions:", actionsList ? actionsList.children.length : "No actions list found");
+
+    if (targetedScore < residualScore && !hasActions) {
+        showMessage('warning', 'Targeted score is lower than the residual score. Please add actions to justify the imposed score.');
+        saveButton.disabled = false;
+        saveButton.textContent = 'Save Changes';
+        spinner.remove();
+        return;
+    }
+
+    // Score consistency checks
+    if (scores.residual_likelihood > scores.inherent_likelihood || scores.residual_impact > scores.inherent_impact) {
+        showMessage('danger', 'Residual risk values must be lower than or equal to inherent risk values.');
+        saveButton.disabled = false;
+        saveButton.textContent = 'Save Changes';
+        spinner.remove();
+        return;
+    }
+
+    if (scores.targeted_likelihood > scores.residual_likelihood || scores.targeted_impact > scores.residual_impact) {
+        showMessage('danger', 'Targeted risk values must be lower than or equal to residual risk values.');
+        saveButton.disabled = false;
+        saveButton.textContent = 'Save Changes';
+        spinner.remove();
+        return;
+    }
+
+    // Make API call to save the risk
+    fetch(`/risk/{{ risk.id }}/update/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            title,
+            description,
+            category,
+            portfolio,
+            approval_cycle: approvalCycle,
+            owners,
+            ...scores,
+        }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showMessage('success', 'Changes saved successfully!');
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                showMessage('danger', `Error: ${data.message}`);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('danger', 'An error occurred while saving the changes.');
+        })
+        .finally(() => {
+            saveButton.disabled = false;
+            saveButton.textContent = 'Save Changes';
+            spinner.remove();
+        });
+});
+       
+        // Heatmap Cell Interaction
+        document.querySelectorAll('.heatmap-cell').forEach(cell => {
+            cell.addEventListener('click', function () {
+                const likelihood = parseInt(this.dataset.likelihood);
+                const impact = parseInt(this.dataset.impact);
+                const selectedScoreType = document.querySelector('.btn-group .active')?.id.split('-')[1];
+
+                if (selectedScoreType) {
+                    document.getElementById(`${selectedScoreType}_likelihood`).value = likelihood;
+                    document.getElementById(`${selectedScoreType}_impact`).value = impact;
+                    updateScores(selectedScoreType);
+                }
+            });
+        });
+
+        
+
+        // Dynamic Score Updates
+        ['inherent', 'residual', 'targeted'].forEach(type => {
+            document.getElementById(`${type}_likelihood`)?.addEventListener('change', () => updateScores(type));
+            document.getElementById(`${type}_impact`)?.addEventListener('change', () => updateScores(type));
+        });
+
+        // Add/Remove Owners
+        document.getElementById('owners-list')?.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-owner-btn')) {
+                const userProfileId = e.target.dataset.id;
+
+                fetch(`/risk/{{ risk.id }}/update_owners/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action: 'remove', user_profile_id: userProfileId }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            e.target.closest('li').remove();
+                        }
+                    });
+            }
+        });
+    });
+
+
+
+
+
+
+
+
+</script>
+
+
+
+</body>
+
+</html>

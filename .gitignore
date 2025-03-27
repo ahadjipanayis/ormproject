@@ -1,0 +1,8 @@
+ormprojectvenv/
+__pycache__/
+*.pyc
+*.log
+db.sqlite3
+.env
+media/
+staticfiles/

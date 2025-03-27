@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Threat List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>IT Threats</h1>
+
+        {% if messages %}
+            <div class="alert alert-info">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'itthreat_list' %}">
+            {% csrf_token %}
+            <h3>Add New IT Threat</h3>
+            <div class="form-group">
+                <label for="code">Code</label>
+                <input type="text" class="form-control" id="code" name="code" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" name="description" required>
+            </div>
+            <div class="form-group">
+                <label for="risk_sources">Risk Sources</label>
+                <input type="text" class="form-control" id="risk_sources" name="risk_sources" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select class="form-control" id="category" name="category" required>
+                    <option value="physical">Physical Threats</option>
+                    <option value="natural">Natural Threats</option>
+                    <option value="infrastructure">Infrastructure Failures</option>
+                    <option value="technical">Technical Failures</option>
+                    <option value="human">Human Actions</option>
+                    <option value="compromise">Compromise of Functions or Services</option>
+                    <option value="organizational">Organizational Threats</option>
+                </select>
+            </div>
+            <button type="submit" name="add" class="btn btn-primary">Add IT Threat</button>
+        </form>
+
+        <hr>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for threat in threats %}
+                    <tr>
+                        <td>{{ threat.code }}</td>
+                        <td>{{ threat.description }}</td>
+                        <td>{{ threat.get_category_display }}</td>
+                        <td>
+                            <a href="{% url 'itthreat_detail' threat_id=threat.id %}" class="btn btn-info">Details</a>
+                            <form method="POST" action="{% url 'itthreat_list' %}" style="display:inline-block;">
+                                {% csrf_token %}
+                                <input type="hidden" name="delete_id" value="{{ threat.id }}">
+                                <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,517 @@
+{% load static i18n %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Enterprise Risk Management - AVAX" %}</title>
+    <link rel="icon" type="image/png" href="{% static 'images/avax-logo.jpeg' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f5f6f5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: #003087;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            height: 90px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .hamburger {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            display: none;
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            transition: transform 0.3s ease;
+        }
+
+        .btn, .dropdown-btn {
+            background-color: transparent;
+            color: #fff;
+            padding: 10px 14px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .btn:hover, .dropdown-btn:hover {
+            background-color: #0047b3;
+        }
+
+        /* Specific Button Styles */
+        .btn-events { background-color: #f80000; }
+        .btn-events:hover { background-color: #d84315; }
+        .btn-risk { background-color: #f85300; }
+        .btn-risk:hover { background-color: #087c82; }
+        .btn-action { background-color: #28a745; }
+        .btn-action:hover { background-color: #218838; }
+        .btn-external {
+            background-color: #fff;
+            color: #003087;
+            padding: 10px 14px;
+            width: auto;
+            height: auto;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .btn-external img {
+            width: 24px;
+            height: 24px;
+        }
+        .btn-external:hover { background-color: #e0e0e0; }
+
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #003087;
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            z-index: 10;
+            padding: 8px 0;
+            left: 0;
+        }
+
+        .dropdown-content a, .dropdown-content button {
+            color: #fff;
+            padding: 12px 16px;
+            display: block;
+            font-size: 16px;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .dropdown-content a:hover, .dropdown-content button:hover {
+            background-color: #0047b3;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-btn::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 14px;
+        }
+
+        .nested-dropdown .nested-content {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background-color: #003087;
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            padding: 8px 0;
+        }
+
+        .nested-dropdown:hover .nested-content {
+            display: block;
+        }
+
+        /* User Dropdown Specific Styles */
+        .dropdown.user-dropdown .dropdown-content {
+            top: 100%;
+            left: -70%;
+            right: auto;
+        }
+
+        /* Main Content */
+        .container {
+            flex: 1;
+            margin-top: 90px;
+            overflow: hidden;
+        }
+
+        iframe#main-content {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Language Switcher Styles */
+        .language-switcher select {
+            width: 100%;
+            padding: 10px 16px;
+            background: none;
+            color: #fff;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .language-switcher select option {
+            font-size: 24px;
+            background: #003087;
+            color: #fff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+                background-color: #003087;
+                position: fixed;
+                top: 90px;
+                right: 0;
+                width: 300px;
+                height: calc(100vh - 90px);
+                transform: translateX(100%);
+                z-index: 999;
+            }
+
+            .nav-menu.open {
+                transform: translateX(0);
+            }
+
+            .nav-menu .dropdown-content {
+                position: static;
+                width: 100%;
+            }
+
+            .nav-menu .nested-dropdown .nested-content {
+                position: static;
+                width: 100%;
+            }
+
+            .btn, .dropdown-btn {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .language-switcher select {
+                width: 100%;
+                padding: 10px 16px;
+                font-size: 20px;
+            }
+
+            .language-switcher select option {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="https://intranet.avax.gr" target="_blank">
+            <img src="{% static 'images/avax-logo.jpeg' %}" alt="{% trans 'AVAX Logo' %}" class="logo">
+        </a>
+
+        <div class="nav-menu">
+            <!-- ERM Manual (Moved to First Position) -->
+            <a href="javascript:void(0)" data-link="{{ home_link }}" class="btn" title="{% trans 'ERM Manual' %}" aria-label="{% trans 'View ERM Manual' %}">
+                <i class="fas fa-book"></i> {% trans "ERM Manual" %}
+            </a>
+
+            <!-- Calendar -->
+            <button class="btn" title="{% trans 'Calendar' %}" onclick="loadContent('{{ calendar_view_link }}')" aria-label="{% trans 'View Calendar' %}">
+                <i class="fas fa-calendar-alt"></i>
+            </button>
+
+            <!-- Procedures -->
+            <a href="javascript:void(0)" data-link="/procedures/" class="btn" title="{% trans 'Procedures' %}" aria-label="{% trans 'View Procedures' %}">
+                <i class="fas fa-diagram-project"></i> {% trans "Procedures" %}
+            </a>
+
+            <!-- Documents -->
+            <button class="btn" title="{% trans 'Documents' %}" onclick="loadContent('/documents')" aria-label="{% trans 'View Documents' %}">
+                <i class="fas fa-folder"></i>
+            </button>
+
+            <!-- Counterparties -->
+            <a href="javascript:void(0)" data-link="/counterparties/" class="btn" title="{% trans 'Counterparties' %}" aria-label="{% trans 'View Counterparties' %}">
+                <i class="fas fa-handshake"></i> {% trans "" %}
+            </a>
+
+            <!-- Events -->
+            <a href="javascript:void(0)" data-link="events/" class="btn btn-events" title="{% trans 'Incidents' %}" aria-label="{% trans 'View Incidents' %}">
+                <i class="fas fa-calendar"></i> {% trans "Incidents" %}
+            </a>
+
+            <!-- Risk Registry -->
+            <a href="javascript:void(0)" data-link="/risks_new/" class="btn btn-risk" title="{% trans 'Risk Registry' %}" aria-label="{% trans 'View Risk Registry' %}">
+                <i class="fas fa-briefcase"></i> {% trans "Risk Registry" %}
+            </a>
+
+            <!-- Tools Dropdown -->
+            <div class="dropdown">
+                <button class="dropdown-btn" aria-label="{% trans 'Tools Options' %}"><i class="fas fa-tools"></i> {% trans "" %}</button>
+                <div class="dropdown-content">
+                    <a href="javascript:void(0)" data-link="/risk-selection/"><i class="fas fa-robot"></i> {% trans "Open AI" %}</a>
+                    <a href="javascript:void(0)" data-link="{{ process_user_input_link }}"><i class="fas fa-file-word"></i> {% trans "User Input" %}</a>
+                    <a href="javascript:void(0)" data-link="procedures/"><i class="fas fa-diagram-project"></i> {% trans "Procedures" %}</a>
+                    <a href="javascript:void(0)" onclick="window.open('{{ procedure_design_link }}', '_blank')"><i class="fas fa-project-diagram"></i> {% trans "Flow Charts" %}</a>
+                    <a href="javascript:void(0)" data-link="/mitigations/"><i class="fas fa-shield-alt"></i> {% trans "Mitigations" %}</a>
+                    <a href="javascript:void(0)" data-link="/actions/"><i class="fas fa-tasks"></i> {% trans "Actions" %}</a>
+                    <a href="javascript:void(0)" data-link="/indicators/"><i class="fas fa-chart-line"></i> {% trans "Indicators" %}</a>
+                    <a href="javascript:void(0)" data-link="/opportunities/"><i class="fas fa-lightbulb"></i> {% trans "Opportunities" %}</a>
+                    <a href="javascript:void(0)" data-link="/threats/"><i class="fas fa-lightbulb"></i> {% trans "Threats" %}</a>
+                    <a href="javascript:void(0)" data-link="/categories/"><i class="fas fa-layer-group"></i> {% trans "Categories" %}</a>
+                    <a href="javascript:void(0)" data-link="/portfolios/"><i class="fas fa-briefcase"></i> {% trans "Portfolios" %}</a>
+                </div>
+            </div>
+
+            <!-- Opportunities -->
+            <a href="javascript:void(0)" data-link="/opportunities/" class="btn" title="{% trans 'Opportunities' %}" aria-label="{% trans 'View Opportunities' %}">
+                <i class="fas fa-lightbulb"></i> {% trans "Opportunities" %}
+            </a>
+
+            <!-- KPIs/KRIs -->
+            <a href="javascript:void(0)" data-link="indicators/" class="btn" title="{% trans 'KPIs/KRIs' %}" aria-label="{% trans 'View KPIs/KRIs' %}">
+                <i class="fas fa-chart-line"></i> {% trans "Indicators" %} (KPIs/KRIs)
+            </a>
+
+            <!-- Actions -->
+            <a href="javascript:void(0)" data-link="actions/" class="btn btn-action" title="{% trans 'Actions' %}" aria-label="{% trans 'View Actions' %}">
+                <i class="fas fa-tasks"></i> {% trans "Actions" %}
+            </a>
+
+            {% if request.user.is_superuser or 'CTO' in request.user.userprofile.role or 'ALLIT' in request.user.userprofile.role or 'CFO' in request.user.userprofile.role or 'Internal Audit' in request.user.userprofile.role  %}
+            <!-- IT Dropdown -->
+            <div class="dropdown">
+                <button class="dropdown-btn" aria-label="{% trans 'IT Options' %}"><i class="fas fa-desktop"></i> {% trans "IT" %}</button>
+                <div class="dropdown-content">
+                    <a href="javascript:void(0)" data-link="/assets-with-risks/"><i class="fas fa-server"></i> {% trans "Risk per IT Asset" %}</a>
+                    <a href="javascript:void(0)" data-link="/itassets/"><i class="fas fa-desktop"></i> {% trans "IT Assets" %}</a>
+                    <a href="javascript:void(0)" data-link="/itthreat/"><i class="fas fa-bug"></i> {% trans "IT Threats" %}</a>
+                    <a href="javascript:void(0)" data-link="/vulnerability/"><i class="fas fa-exclamation-triangle"></i> {% trans "Vulnerabilities" %}</a>
+                    <a href="javascript:void(0)" data-link="/it-report/"><i class="fas fa-file-word"></i> {% trans "IT REPORT" %}</a>
+
+              
+              
+              
+                </div>
+            </div>
+            {% endif %}
+
+            {% if request.user.is_superuser or 'CFO' in request.user.userprofile.role or 'Internal Audit' in request.user.userprofile.role %}
+            <!-- Audit Dropdown -->
+            <div class="dropdown">
+                <button class="dropdown-btn" aria-label="{% trans 'Audit Options' %}"><i class="fas fa-search"></i> {% trans "" %}</button>
+                <div class="dropdown-content">
+                    <a href="javascript:void(0)" data-link="{{ soa_link }}"><i class="fa-solid fa-gear"></i> {% trans "S O A" %}</a>
+                    <a href="javascript:void(0)" data-link="/risk_assessments/"><i class="fas fa-tasks"></i> {% trans "Assessments" %}</a>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Reports Dropdown -->
+            <div class="dropdown">
+                <button class="dropdown-btn" aria-label="{% trans 'Reports Options' %}"><i class="fas fa-folder-open"></i> {% trans "" %}</button>
+                <div class="dropdown-content">
+                    <a href="javascript:void(0)" data-link="{{ user_portfolio_report_link }}"><i class="fas fa-file-word"></i> {% trans "Portfolio Reports" %}</a>
+                    <a href="javascript:void(0)" data-link="{{ interactive_heatmap_link }}"><i class="fas fa-th"></i> {% trans "Heatmaps" %}</a>
+                    <a href="javascript:void(0)" data-link="{{ risk_chart_owner_link }}"><i class="fas fa-chart-bar"></i> {% trans "Risk Per Owner" %}</a>
+                    <a href="javascript:void(0)" data-link="{{ chart_view_link }}"><i class="fas fa-chart-bar"></i> {% trans "Risk Per Category" %}</a>
+                    <a href="javascript:void(0)" data-link="{{ chart_view_portfolio_link }}"><i class="fas fa-chart-bar"></i> {% trans "Risk Per Portfolio" %}</a>
+                    <a href="javascript:void(0)" data-link="{{ risk_pivot_table_link }}"><i class="fas fa-table"></i> {% trans "Pivots" %}</a>
+                    <a href="javascript:void(0)" onclick="window.open('{{ imf_reports_view_link }}', '_blank')"><i class="fas fa-globe"></i> {% trans "IMF Reports" %}</a>
+                    {% if request.user.is_superuser or 'CFO' in request.user.userprofile.role or 'Internal Audit' in request.user.userprofile.role %}
+                    <a href="javascript:void(0)" data-link="/residual-risk-pivot/"><i class="fas fa-sort-amount-up"></i> {% trans "Ranking" %}</a>
+                    <a href="javascript:void(0)" data-link="/residual-risk-pivot-portfolio/"><i class="fas fa-sort-amount-up"></i> {% trans "Ranking per Portfolio" %}</a>
+                    <a href="javascript:void(0)" data-link="/risk-apetite/"><i class="fas fa-sort-amount-up"></i> {% trans "Risk Appetite" %}</a>
+                    <a href="javascript:void(0)" data-link="{{ admin_pivots_link }}"><i class="fas fa-lock"></i> {% trans "Admin Pivots" %}</a>
+                    <a href="javascript:void(0)" data-link="{{ reports_landing_page_link }}"><i class="fas fa-file-word"></i> {% trans "Admin Reports" %}</a>
+                    {% endif %}
+                    <a href="javascript:void(0)" data-link="{{ risk_network_link }}"><i class="fas fa-project-diagram"></i> {% trans "Risk Network" %}</a>
+                    <!-- External Buttons -->
+                    <button class="btn btn-external" onclick="window.open('http://ermapp.avax.gr:3000', '_blank')" aria-label="{% trans 'Open Metabase' %}">
+                        <img src="{% static 'images/metabase-icon.png' %}" alt="{% trans 'Metabase' %}">
+                    </button>
+                    <button class="btn btn-external" onclick="window.open('/chat-page-o/', '_blank')" aria-label="{% trans 'Open AI Chat' %}">
+                        <img src="{% static 'images/OpenAI-black-monoblossom.png' %}" alt="{% trans 'Open AI' %}">
+                    </button>
+                    <button class="btn btn-external" onclick="window.open('/chat/', '_blank')" aria-label="{% trans 'XAI Chat' %}">
+                        <img src="{% static 'images/xai.png' %}" alt="{% trans 'XAI' %}">
+                    </button>
+                </div>
+            </div>
+
+            <!-- Approve -->
+            <button class="btn" title="{% trans 'Approve' %}" onclick="loadContent('approval-requests')" aria-label="{% trans 'View Approvals' %}">
+                <i class="fas fa-thumbs-up"></i>
+            </button>
+
+            {% if request.user.is_superuser %}
+            <!-- Admin Tools Dropdown -->
+            <div class="dropdown">
+                <button class="dropdown-btn" aria-label="{% trans 'Admin Tools' %}"><i class="fas fa-cogs"></i> {% trans "" %}</button>
+                <div class="dropdown-content">
+                    <a href="/admin/" target="_blank"><i class="fas fa-user-shield"></i> {% trans "Admin Panel" %}</a>
+                    <a href="javascript:void(0)" data-link="{{ user_profile_link }}"><i class="fas fa-id-card"></i> {% trans "Profiles" %}</a>
+                    <a href="{% url 'run_create_approval_requests' %}" target="_blank"><i class="fas fa-play-circle"></i> {% trans "Run Approvals" %}</a>
+                    <a href="javascript:void(0)" data-link="/approval-control/"><i class="fas fa-user-secret"></i> {% trans "Status Per User" %}</a>
+                    <a href="javascript:void(0)" onclick="window.open('/network-tools/', '_blank')"><i class="fas fa-network-wired"></i> {% trans "Network Tools" %}</a>
+                    <a href="javascript:void(0)" data-link="/user-activity/"><i class="fas fa-user-minus"></i> {% trans "User Activity" %}</a>
+                    <a href="javascript:void(0)" data-link="/email-tracking/"><i class="fas fa-envelope"></i> {% trans "Email Tracking" %}</a>
+                    <a href="javascript:void(0)" data-link="/select-users/"><i class="fas fa-users"></i> {% trans "Setup Session" %}</a>
+                    <a href="javascript:void(0)" data-link="/upload/"><i class="fas fa-users"></i> {% trans "Photo Verification" %}</a>
+                    <a href="javascript:void(0)" data-link="/loan-checker/"><i class="fas fa-users"></i> {% trans "Loan" %}</a>
+                    <a href="javascript:void(0)" data-link="/agent-explorer/"><i class="fas fa-users"></i> {% trans "AGENT" %}</a>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Language Switcher -->
+            <form action="/set-language/" method="post" style="display:inline;" class="language-switcher">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <select name="language" onchange="this.form.submit()" aria-label="{% trans 'Select Language' %}">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% for lang in LANGUAGES %}
+                    <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
+                        {% if lang.0 == 'en' %}🇺🇸
+                        {% elif lang.0 == 'el' %}🇬🇷
+                        {% elif lang.0 == 'ru' %}🇷🇺
+                        {% elif lang.0 == 'ro' %}🇷🇴
+                        {% elif lang.0 == 'uk' %}🇺🇦
+                        {% elif lang.0 == 'de' %}🇩🇪
+                        {% elif lang.0 == 'it' %}🇮🇹
+                        {% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
+            </form>
+
+            <!-- User Dropdown -->
+            <div class="dropdown user-dropdown">
+                <button class="dropdown-btn" aria-label="{% trans 'User Options' %}"><i class="fas fa-user-circle"></i> {{ username|slice:":2"|upper }}</button>
+                <div class="dropdown-content">
+                    <a href="/password_change/"><i class="fas fa-key"></i> {% trans "Change Password" %}</a>
+                    <a href="javascript:void(0)" data-link="{{ home_link }}"><i class="fas fa-book"></i> {% trans "ERM Manual" %}</a>
+                    <form action="/set-language/" method="post" style="display:inline;" class="language-switcher">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <select name="language" onchange="this.form.submit()" aria-label="{% trans 'Select Language' %}">
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% get_available_languages as LANGUAGES %}
+                            {% for lang in LANGUAGES %}
+                            <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
+                                {% if lang.0 == 'en' %}🇺🇸
+                                {% elif lang.0 == 'el' %}🇬🇷
+                                {% elif lang.0 == 'ru' %}🇷🇺
+                                {% elif lang.0 == 'ro' %}🇷🇴
+                                {% elif lang.0 == 'uk' %}🇺🇦
+                                {% elif lang.0 == 'de' %}🇩🇪
+                                {% elif lang.0 == 'it' %}🇮🇹
+                                {% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                    <form action="/admin/logout/" method="post">
+                        {% csrf_token %}
+                        <button type="submit"><i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <button class="hamburger" onclick="toggleMenu()" aria-label="{% trans 'Toggle Menu' %}">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <div class="container">
+        <iframe id="main-content" src="{{ calendar_view_link }}"></iframe>
+    </div>
+
+    <script>
+        function loadContent(link) {
+            if (link) document.getElementById('main-content').src = link;
+        }
+
+        function toggleMenu() {
+            document.querySelector('.nav-menu').classList.toggle('open');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContent('{{ calendar_view_link }}');
+            document.querySelectorAll('[data-link]').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    loadContent(el.getAttribute('data-link'));
+                });
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const navMenu = document.querySelector('.nav-menu');
+            const hamburger = document.querySelector('.hamburger');
+            if (!navMenu.contains(e.target) && !hamburger.contains(e.target) && navMenu.classList.contains('open')) {
+                navMenu.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>

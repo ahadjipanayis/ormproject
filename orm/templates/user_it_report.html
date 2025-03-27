@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reports | ermapp.avax.gr</title>
+  <link rel="icon" href="/static/images/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: Calibri, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+    }
+    h2 {
+      background-color: #007bff;
+      color: white;
+      padding: 15px;
+      margin: 0;
+      text-align: center;
+    }
+    .button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 32px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      transition: 0.4s;
+      width: 100%;
+      max-width: 300px;
+    }
+    .button:hover {
+      background-color: white;
+      color: black;
+      border: 2px solid #4CAF50;
+    }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 50%;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #4CAF50;
+      border-right: 8px solid #007bff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1001;
+      right: 30px;
+      bottom: -100px;
+      font-size: 17px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: bottom 0.5s ease, opacity 0.5s ease;
+    }
+    .toast.show {
+      visibility: visible;
+      bottom: 30px;
+      opacity: 1;
+    }
+    .toast.error {
+      background-color: #dc3545;
+    }
+  </style>
+  <script>
+    function showToast(message, isError = false) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.remove("error");
+      if (isError) toast.classList.add("error");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    async function submitFormFetch(form, reportType) {
+      const modal = document.getElementById("loadingModal");
+      const loadingText = document.getElementById("loadingText");
+      const spinner = document.getElementById("spinner");
+      const timerText = document.getElementById("timerText");
+
+      modal.style.display = "block";
+      loadingText.textContent = `Preparing ${reportType} Report...`;
+      spinner.classList.remove("stopped");
+      timerText.textContent = "Elapsed time: 0 seconds";
+
+      document.querySelectorAll(".button").forEach(btn => btn.disabled = true);
+      let seconds = 0;
+      const interval = setInterval(() => {
+        seconds++;
+        timerText.textContent = `Elapsed time: ${seconds} second${seconds !== 1 ? "s" : ""}`;
+      }, 1000);
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: formData,
+          headers: { "X-Requested-With": "XMLHttpRequest" }
+        });
+
+        if (!response.ok) throw new Error("Network response was not ok");
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+
+        const disposition = response.headers.get("Content-Disposition");
+        const filename = disposition && disposition.includes("filename=")
+          ? disposition.split("filename=")[1].replace(/["']/g, "").trim()
+          : "report.zip";
+
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+        clearInterval(interval);
+        modal.style.display = "none";
+        document.querySelectorAll(".button").forEach(btn => btn.disabled = false);
+        showToast("Download complete!");
+      } catch (err) {
+        clearInterval(interval);
+        modal.style.display = "none";
+        showToast("Download failed. Please try again.", true);
+        document.querySelectorAll(".button").forEach(btn => btn.disabled = false);
+        console.error(err);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h2>Reporting</h2>
+
+  <div id="loadingModal" class="modal">
+    <div class="modal-content">
+      <h3 id="loadingText">Preparing report...</h3>
+      <div id="spinner" class="spinner"></div>
+      <p id="timerText">Elapsed time: 0 seconds</p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">Download complete!</div>
+
+  <form method="post" action="{% url 'generate_project_risk_report' %}" onsubmit="event.preventDefault(); submitFormFetch(this, 'Portfolio')">
+    {% csrf_token %}
+    <button type="submit" class="button"><i class="fas fa-file-download"></i> Download Report</button>
+  </form>
+</body>
+</html>

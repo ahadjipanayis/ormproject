@@ -1,0 +1,39 @@
+[2025-03-27 09:21:59 +0200] [285816] [INFO] Starting gunicorn 23.0.0
+[2025-03-27 09:21:59 +0200] [285816] [INFO] Listening at: http://0.0.0.0:8000 (285816)
+[2025-03-27 09:21:59 +0200] [285816] [INFO] Using worker: sync
+[2025-03-27 09:21:59 +0200] [285841] [INFO] Booting worker with pid: 285841
+2025-03-27 09:22:10.107893: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-27 09:22:10.112456: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-27 09:22:10.124306: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1743060130.143608  285841 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1743060130.149223  285841 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-27 09:22:10.169130: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+[2025-03-27 09:34:38 +0200] [285816] [INFO] Handling signal: term
+[2025-03-27 09:34:38 +0200] [285841] [INFO] Worker exiting (pid: 285841)
+[2025-03-27 09:34:39 +0200] [285816] [INFO] Shutting down: Master
+[2025-03-27 10:07:05 +0200] [304331] [INFO] Starting gunicorn 23.0.0
+[2025-03-27 10:07:05 +0200] [304331] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-03-27 10:07:05 +0200] [304331] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-03-27 10:07:06 +0200] [304331] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-03-27 10:07:06 +0200] [304331] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-03-27 10:07:07 +0200] [304331] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-03-27 10:07:07 +0200] [304331] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-03-27 10:07:08 +0200] [304331] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-03-27 10:07:08 +0200] [304331] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-03-27 10:07:09 +0200] [304331] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-03-27 10:07:09 +0200] [304331] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-03-27 10:07:10 +0200] [304331] [ERROR] Can't connect to ('0.0.0.0', 8000)
+[2025-03-27 11:18:12 +0200] [333472] [INFO] Starting gunicorn 23.0.0
+[2025-03-27 11:18:12 +0200] [333472] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-03-27 11:18:12 +0200] [333472] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-03-27 11:18:13 +0200] [333472] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-03-27 11:18:13 +0200] [333472] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-03-27 11:18:14 +0200] [333472] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-03-27 11:18:14 +0200] [333472] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-03-27 11:18:15 +0200] [333472] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-03-27 11:18:15 +0200] [333472] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-03-27 11:18:16 +0200] [333472] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-03-27 11:18:16 +0200] [333472] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-03-27 11:18:17 +0200] [333472] [ERROR] Can't connect to ('0.0.0.0', 8000)

@@ -1,0 +1,450 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entity Relationship Diagram</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        /* Reset and base styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8; /* Light background color */
+        }
+
+        /* Title styling */
+        h2 {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        /* Diagram container styling */
+        #diagram-container {
+            position: absolute;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 80px);
+            overflow: hidden;
+        }
+
+        /* Link (relationship) styling */
+        .link {
+            fill: none;
+            stroke: #95a5a6;
+            stroke-opacity: 0.8;
+            stroke-width: 2px;
+        }
+
+        /* Node styling */
+        .node {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .node rect {
+            stroke: #2980b9;
+            stroke-width: 2px;
+            rx: 10;
+            ry: 10;
+            opacity: 0.9;
+            filter: url(#dropShadow);
+        }
+
+        /* Blurred node styling */
+        .blurred rect {
+            filter: blur(2px) opacity(0.1);
+            pointer-events: none;
+        }
+
+        /* Node title styling */
+        .node-title {
+            fill: #2c3e50;
+            font-size: 14px;
+            font-weight: bold;
+            text-anchor: middle;
+            pointer-events: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Node columns (attributes) styling */
+        .node-columns {
+            font-size: 12px;
+            fill: #34495e;
+            text-anchor: start;
+        }
+
+        /* Node attribute text styling */
+        .node-columns text {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.05);
+        }
+
+        /* Zoom instructions */
+        #zoom-instructions {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.8);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #2c3e50;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div><h2>Entity Relationship Diagram</h2></div>
+    <div id="diagram-container"></div>
+    <div id="zoom-instructions">Use mouse wheel to zoom, drag to pan</div>
+
+    <script>
+        // Select the container and get its dimensions
+        const container = document.querySelector("#diagram-container");
+        let containerWidth = container.clientWidth;
+        let containerHeight = container.clientHeight;
+
+        // Data from Django context
+        const tableDetails = {{ table_details|safe }};
+        const relationships = {{ relationships|safe }};
+
+        // Define tables to be blurred (if any)
+        const tablesToBlur = ["IndicatorValueHistory", "smtpsetting", "event", "indicator", "mitigation", "bpmndiagram", "procedure", "action", "opportunity", "riskassessment", "mitigation_owners", "riskassessment_risks", "indicatorvaluehistory", "reportanddashboardpermissions", "assessmenthistory", "risksnapshot"]; // Add more table names as needed
+
+        // Filter tables with "orm_" prefix and map to node objects
+        const nodes = tableDetails.filter(table => table.name.startsWith("orm_"))
+            .map((table, index) => {
+                const tableName = table.name.replace(/^orm_/, '');
+                // Determine node type for coloring
+                let nodeType = 'default'; // Blue for default
+                if (tableName === 'risk') {
+                    nodeType = 'risk'; // Orange for 'risk'
+                } else if (tableName.startsWith('risk_')) {
+                    nodeType = 'risk_'; // Green for 'risk_' tables
+                }
+                return {
+                    id: table.name,
+                    columns: table.columns,
+                    isBlurred: tablesToBlur.includes(tableName),
+                    nodeType: nodeType,
+                    tableName: tableName,
+                    width: 200,
+                    height: 40 + table.columns.length * 20,
+                    x: containerWidth / 2 + 200 * Math.cos(2 * Math.PI * index / tableDetails.length),
+                    y: containerHeight / 2 + 200 * Math.sin(2 * Math.PI * index / tableDetails.length)
+                };
+            });
+
+        // Filter links to ensure both source and target nodes exist
+        // Additionally, if a link involves a blurred table and it's not an intermediary table, exclude it
+        const intermediaryTables = ["risk_mitigation"]; // Add more intermediary table names as needed
+
+        const links = relationships.filter(rel => {
+            // Remove links from 'risk_owner' and 'userprofile_portfolios'
+            if ((rel.source === 'risk_owner' && rel.target === 'owner') || (rel.source === 'userprofile_portfolios' || rel.target === 'userprofile_portfolios')) {
+                return false;
+            }
+
+            const sourceExists = nodes.some(node => node.id === rel.source);
+            const targetExists = nodes.some(node => node.id === rel.target);
+            // If both exist, check if they are intermediary or not
+            if (sourceExists && targetExists) {
+                const sourceNode = nodes.find(node => node.id === rel.source);
+                const targetNode = nodes.find(node => node.id === rel.target);
+                // Exclude direct links involving non-intermediary blurred tables
+                if ((sourceNode.isBlurred && !intermediaryTables.includes(rel.source)) ||
+                    (targetNode.isBlurred && !intermediaryTables.includes(rel.target))) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        });
+
+        // Identify Connected Nodes
+        // Create a set of connected node IDs
+        const connectedNodeIds = new Set();
+
+        links.forEach(link => {
+            connectedNodeIds.add(link.source);
+            connectedNodeIds.add(link.target);
+        });
+
+        // Filter nodes to include only those that are connected
+        const connectedNodes = nodes.filter(node => connectedNodeIds.has(node.id));
+
+        // Update nodeById map with connected nodes
+        const nodeById = new Map(connectedNodes.map(node => [node.id, node]));
+
+        // Replace source and target with node objects
+        links.forEach(link => {
+            link.source = nodeById.get(link.source);
+            link.target = nodeById.get(link.target);
+        });
+
+        // Set up SVG canvas
+        const svg = d3.select("#diagram-container").append("svg")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("aria-label", "Entity Relationship Diagram")
+            .attr("role", "img");
+
+        // Define arrowhead marker
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 10) // Adjusted refX to position arrowhead correctly
+            .attr("refY", 0)
+            .attr("orient", "auto")
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("xoverflow", "visible")
+            .append("svg:path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#95a5a6")
+            .style("stroke", "none");
+
+        // Define filters and gradients
+        const defs = svg.append("defs");
+
+        // Drop shadow filter
+        const filter = defs.append("filter")
+            .attr("id", "dropShadow")
+            .attr("x", "-50%")
+            .attr("y", "-50%")
+            .attr("width", "200%")
+            .attr("height", "200%");
+
+        filter.append("feGaussianBlur")
+            .attr("in", "SourceAlpha")
+            .attr("stdDeviation", 3)
+            .attr("result", "blur");
+
+        filter.append("feOffset")
+            .attr("in", "blur")
+            .attr("dx", 2)
+            .attr("dy", 2)
+            .attr("result", "offsetBlur");
+
+        const feMerge = filter.append("feMerge");
+
+        feMerge.append("feMergeNode")
+            .attr("in", "offsetBlur");
+        feMerge.append("feMergeNode")
+            .attr("in", "SourceGraphic");
+
+        // Define gradients for node types
+        const gradients = {
+            'risk': createGradient(defs, 'orangeGradient', 'rgba(255, 165, 0, 0.9)', 'rgba(255, 222, 173, 0.9)'), // Orange gradient
+            'risk_': createGradient(defs, 'greenGradient', 'rgba(144, 238, 144, 0.9)', 'rgba(240, 255, 240, 0.9)'), // Light green gradient
+            'default': createGradient(defs, 'blueGradient', 'rgba(173, 216, 230, 0.9)', 'rgba(224, 255, 255, 0.9)') // Light blue gradient
+        };
+
+        function createGradient(defs, id, color1, color2) {
+            const gradient = defs.append("linearGradient")
+                .attr("id", id)
+                .attr("x1", "0%")
+                .attr("x2", "0%")
+                .attr("y1", "0%")
+                .attr("y2", "100%");
+
+            gradient.append("stop")
+                .attr("offset", "0%")
+                .attr("stop-color", color1);
+            gradient.append("stop")
+                .attr("offset", "100%")
+                .attr("stop-color", color2);
+
+            return `url(#${id})`;
+        }
+
+        const svgGroup = svg.append("g");
+
+        // Implement zoom and pan
+        svg.call(d3.zoom()
+            .scaleExtent([0.1, 2]) // Adjusted zoom range for better navigation
+            .on("zoom", (event) => {
+                svgGroup.attr("transform", event.transform);
+            })
+        );
+
+        // Initialize force simulation with enhanced parameters
+        const simulation = d3.forceSimulation(connectedNodes)
+            .force("link", d3.forceLink(links).id(d => d.id).distance(150).strength(0.7))
+            .force("charge", d3.forceManyBody().strength(-500))
+            .force("center", d3.forceCenter(containerWidth / 2, containerHeight / 2))
+            .force("collision", d3.forceCollide().radius(d => calculateCollisionRadius(d)))
+            .on("tick", ticked);
+
+        // Function to calculate collision radius based on node size
+        function calculateCollisionRadius(d) {
+            const width = d.width;
+            const height = d.height;
+            // Calculate the diagonal of the rectangle and add some padding
+            return Math.sqrt(width * width + height * height) / 2 + 20;
+        }
+
+        // Dragging flag to differentiate between click and drag
+        let dragging = false;
+
+        // Draw links
+        const link = svgGroup.append("g")
+            .attr("class", "links")
+            .selectAll("line")
+            .data(links)
+            .enter().append("line")
+            .attr("class", "link")
+            .attr("stroke-width", 2)
+            .attr("stroke", "#95a5a6")
+            .attr("marker-end", "url(#arrowhead)"); // Added marker-end attribute here
+
+        // Draw nodes
+        const node = svgGroup.append("g")
+            .attr("class", "nodes")
+            .selectAll("g")
+            .data(connectedNodes)
+            .enter().append("g")
+            .attr("class", d => d.isBlurred ? "node blurred" : "node")
+            .on("click", function(event, d) {
+                if (dragging) return; // Prevent click action if dragging
+
+                // Extract the table name without 'orm_'
+                const tableName = d.tableName;
+
+                let modelName = tableName;
+
+                if (tableName.startsWith('risk_')) {
+                    // Get the part after 'risk_'
+                    modelName = tableName.substring(5); // get substring after 'risk_'
+                    // Remove trailing 's' if present
+                    if (modelName.endsWith('s')) {
+                        modelName = modelName.slice(0, -1);
+                    }
+                }
+
+                // Construct the target URL
+                // const targetUrl = `/admin/orm/${modelName}/`;
+
+                // Redirect to the target URL
+                window.location.href = targetUrl;
+            });
+
+        // Drag behavior with dragging flag
+        const dragBehavior = d3.drag()
+            .on("start", function(event, d) {
+                dragging = false;
+                dragStarted(event, d);
+            })
+            .on("drag", function(event, d) {
+                dragging = true;
+                dragged(event, d);
+            })
+            .on("end", function(event, d) {
+                dragEnded(event, d);
+                setTimeout(() => { dragging = false; }, 50); // Slight delay to prevent click event
+            });
+
+        node.call(dragBehavior);
+
+        // Add rectangles to nodes
+        node.append("rect")
+            .attr("width", d => d.width)
+            .attr("height", d => d.height)
+            .attr("rx", 10)
+            .attr("ry", 10)
+            .attr("fill", d => {
+                if (d.nodeType === 'risk') {
+                    return gradients['risk'];
+                } else if (d.nodeType === 'risk_') {
+                    return gradients['risk_'];
+                } else {
+                    return gradients['default'];
+                }
+            });
+
+        // Add node titles centered horizontally
+        node.append("text")
+            .attr("class", "node-title")
+            .attr("x", d => d.width / 2) // Centered horizontally in the node
+            .attr("y", 25) // Adjusted to position within the node
+            .text(d => d.tableName);
+
+        // Add node columns (attributes)
+        node.append("g")
+            .attr("class", "node-columns")
+            .selectAll("text")
+            .data(d => d.columns)
+            .enter().append("text")
+            .attr("x", 10)
+            .attr("y", (d, i) => 50 + i * 20)
+            .text(d => d);
+
+        // Simulation tick function to update positions
+        function ticked() {
+            link
+                .attr("x1", d => getLinkPoint(d.source, d.target).x1)
+                .attr("y1", d => getLinkPoint(d.source, d.target).y1)
+                .attr("x2", d => getLinkPoint(d.target, d.source).x1)
+                .attr("y2", d => getLinkPoint(d.target, d.source).y1);
+
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+        }
+
+        // Function to calculate link endpoints at the edge of nodes
+        function getLinkPoint(source, target) {
+            const dx = target.x + target.width / 2 - (source.x + source.width / 2);
+            const dy = target.y + target.height / 2 - (source.y + source.height / 2);
+            const angle = Math.atan2(dy, dx);
+
+            const sourcePaddingX = (source.width / 2) * Math.cos(angle);
+            const sourcePaddingY = (source.height / 2) * Math.sin(angle);
+
+            const x1 = source.x + source.width / 2 + sourcePaddingX;
+            const y1 = source.y + source.height / 2 + sourcePaddingY;
+
+            return { x1, y1 };
+        }
+
+        // Drag event functions
+        function dragStarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragEnded(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // Responsive behavior
+        window.addEventListener('resize', () => {
+            containerWidth = container.clientWidth;
+            containerHeight = container.clientHeight;
+            svg.attr("width", containerWidth).attr("height", containerHeight);
+            simulation.force("center", d3.forceCenter(containerWidth / 2, containerHeight / 2));
+            simulation.force("collision", d3.forceCollide().radius(d => calculateCollisionRadius(d)));
+            simulation.alpha(0.3).restart();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ document.title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { margin-top: 40px; }
+        iframe { width: 100%; height: 600px; border: none; }
+        pre { background-color: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ddd; white-space: pre-wrap; word-wrap: break-word; }
+        img { max-width: 100%; height: auto; margin-bottom: 10px; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ document.title }}</h1>
+        <p><strong>Type:</strong> {{ document.file_type }}</p>
+        <p><strong>Uploaded on:</strong> {{ document.uploaded_at }}</p>
+
+        {% if document.file_type in "pdf" %}
+            <!-- PDF Preview using PDF.js -->
+            <canvas id="pdfViewer"></canvas>
+            <script>
+                var url = "{{ document.file.url }}";
+                var loadingTask = pdfjsLib.getDocument(url);
+                loadingTask.promise.then(function(pdf) {
+                    pdf.getPage(1).then(function(page) {
+                        var scale = 1.5;
+                        var viewport = page.getViewport({ scale: scale });
+
+                        var canvas = document.getElementById("pdfViewer");
+                        var context = canvas.getContext("2d");
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        var renderContext = { canvasContext: context, viewport: viewport };
+                        page.render(renderContext);
+                    });
+                });
+            </script>
+        
+        {% elif document.file_type in "doc docx xls xlsx ppt pptx" %}
+            <!-- Microsoft Office Viewer -->
+            <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{ document.file.url }}" width="100%" height="600px"></iframe>
+
+        {% elif document.file_type in "txt" %}
+            <!-- Plain Text Preview -->
+            <pre>{{ document.content }}</pre>
+
+        {% elif document.file_type in "png jpg jpeg gif" %}
+            <!-- Image Preview -->
+            <img src="{{ document.file.url }}" alt="Image Preview">
+
+        {% else %}
+            <p>No preview available.</p>
+        {% endif %}
+
+        <a href="{{ document.file.url }}" class="btn btn-primary mt-3" target="_blank">Download</a>
+        <a href="{% url 'document_list' %}" class="btn btn-secondary mt-3">Back</a>
+    </div>
+</body>
+</html>

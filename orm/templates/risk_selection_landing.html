@@ -1,0 +1,243 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ermapp.avax.gr | Open AI Interface</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: 'Calibri', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        p.description {
+            text-align: center;
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 25px;
+        }
+        .disclaimer {
+            font-size: 1em;
+            color: #e74c3c;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #e74c3c;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #ffe6e6;
+        }
+        .portfolio-section {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #e6f7ff;
+        }
+        .portfolio-title {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.3em;
+            color: #007bff;
+            margin-bottom: 10px;
+            user-select: none;
+        }
+        .portfolio-title:hover {
+            color: #0056b3;
+        }
+        .portfolio-content {
+            display: none;
+            margin-top: 10px;
+        }
+        .risk-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .risk-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        .button {
+            padding: 12px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 20px auto;
+            max-width: 150px;
+        }
+    </style>
+    <script>
+        function togglePortfolioContent(portfolioId) {
+            const content = document.getElementById('portfolio_content_' + portfolioId);
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(event) {
+                const customContext = document.getElementById('custom_context').value.trim();
+                const selectedRisks = document.querySelectorAll('input[name="selected_risks"]:checked');
+
+                if (!customContext && selectedRisks.length === 0) {
+                    alert("Please provide additional context or select at least one risk.");
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <img src="{% static 'images/openai-lockup.svg' %}" alt="OpenAI Logo" class="logo">
+        <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+
+        <h2>Select Risks to Analyse</h2>
+
+        <!-- Disclaimer Section -->
+        <p class="disclaimer">
+            <strong>Disclaimer:</strong> This report will be generated using OpenAI's model selected below. The information provided is based on the analysis of the input data and should not be relied upon automatically for decision-making. Please verify the information independently before taking any action.
+        </p>
+
+        <p class="description">Please provide any additional context and select risks from the portfolios below to be analyzed.</p>
+        
+        <form method="post" action="{% url 'generate_selected_risks_report' %}">
+            {% csrf_token %}
+
+            <!-- Free Text Input Section -->
+            <div>
+                <label for="custom_context" style="font-weight: bold; display: block; margin-bottom: 10px;">Additional Context (Optional):</label>
+                <textarea 
+                    id="custom_context" 
+                    name="custom_context" 
+                    rows="4" 
+                    style="
+                        width: calc(100% - 20px); 
+                        padding: 10px; 
+                        margin: 0 auto 20px auto; 
+                        display: block;
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        font-size: 1em; 
+                        resize: vertical; 
+                        background-color: #fafafa;">
+                </textarea>
+            </div>
+
+
+            <div>
+                <label for="gpt_model" style="font-weight: bold; display: block; margin-bottom: 10px;">Select GPT Model:</label>
+               
+
+                <select id="gpt_model" name="gpt_model" required style="
+                width: calc(100% - 20px); 
+                padding: 10px; 
+                margin: 0 auto 20px auto; 
+                display: block;
+                border: 1px solid #ccc; 
+                border-radius: 8px; 
+                font-size: 1em; 
+                background-color: #fafafa;">
+                <option value="gpt-4o">GPT-4o (High-Intelligence Flagship Model)</option>
+                <option value="gpt-4o-mini">GPT-4o Mini (Affordable, Lightweight Model)</option>
+        
+                <option value="gpt-4-turbo">GPT-4 Turbo (High-Intelligence Previous Generation)</option>
+                <option value="gpt-4">GPT-4 (Previous Generation High-Intelligence)</option>
+                <option value="gpt-3.5-turbo"selected>GPT-3.5 Turbo (Fast and Inexpensive)</option>
+            </select>
+            
+
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="button" formtarget="_blank">Generate Report</button>
+            </div>
+         
+            
+            
+            {% for portfolio, risks in grouped_risks.items %}
+                <div class="portfolio-section">
+                    <div class="portfolio-title" onclick="togglePortfolioContent({{ portfolio.id }})">
+                        {{ portfolio.name }}
+                    </div>
+                    <div id="portfolio_content_{{ portfolio.id }}" class="portfolio-content">
+                        <ul class="risk-list">
+                            {% for risk in risks %}
+                                <li class="risk-item">
+                                    <!-- Checkbox for risk selection -->
+                                    <input type="checkbox" id="risk_{{ risk.id }}" name="selected_risks" value="{{ risk.id }}">
+                                    <!-- Link to risk change view -->
+                                    <label for="risk_{{ risk.id }}">
+                                        <a href="{% url 'admin:orm_risk_change' risk.id %}" target="_blank" style="text-decoration: none; color: #007bff;">
+                                            {{ risk.title|safe }}
+                                        </a>
+                                    </label>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </form>
+        <!-- <div class="button-container">
+            <button type="submit" class="button" formtarget="_blank">Generate Report</button>
+        </div> -->
+
+        <div class="footer">
+            <p>Proposals to be generated using <a href="https://www.openai.com/" target="_blank">above selected model.</a></p>
+        </div>
+    </div>
+</body>
+</html>

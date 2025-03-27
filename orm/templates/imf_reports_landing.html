@@ -1,0 +1,544 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMF Data Mapper</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Static JS Libraries -->
+    <script src="{% static 'js/plotly-latest.min.js' %}" defer></script>
+    <script src="{% static 'js/html2canvas.min.js' %}" defer></script>
+    <script src="{% static 'js/jszip.min.js' %}" defer></script>
+    <script src="{% static 'js/docxtemplater.min.js' %}" defer></script>
+    <script src="{% static 'js/FileSaver.min.js' %}" defer></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        h2 {
+            background-color: #0078d4; /* Outlook blue */
+            color: #fff;
+            padding: 12px 20px;
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 500;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 a {
+            color: #fff;
+            text-decoration: underline;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+
+        #container {
+            max-width: 1400px;
+            margin: 15px auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #map-container {
+            width: 100%;
+            height: 50vh;
+            background-color: #cde8f9;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .selected-countries-box {
+            padding: 10px 15px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 0.9rem;
+            color: #252525;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .collapsible, .download-btn, .reset-btn, .generate-btn {
+            background-color: #0078d4;
+            color: #fff;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .collapsible:hover, .download-btn:hover, .reset-btn:hover, .generate-btn:hover {
+            background-color: #005ea2;
+        }
+
+        .content {
+            display: none;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .content label {
+            font-weight: 500;
+            color: #252525;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        .label-column {
+            font-weight: 500;
+            color: #444;
+        }
+
+        .description-column {
+            color: #666;
+        }
+
+        .chart-container {
+            padding: 15px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .description-box {
+            padding: 12px;
+            background-color: #f9f9f9;
+            border: 1px solid #e1e1e1;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .loading {
+            display: none;
+            width: 100%;
+            height: 6px;
+            background-color: #dfe4ea;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .loading .progress {
+            height: 100%;
+            background-color: #0078d4;
+            transition: width 0.3s ease;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0078d4;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            #container {
+                padding: 10px;
+            }
+            #map-container {
+                height: 40vh;
+            }
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            .form-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #map-container {
+                height: 30vh;
+            }
+            h2 {
+                font-size: 1.2rem;
+            }
+            .collapsible, .download-btn, .reset-btn, .generate-btn {
+                font-size: 0.85rem;
+                padding: 8px 12px;
+            }
+            .selected-countries-box {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>IMF Data Mapper
+        <a href="https://www.imf.org/external/datamapper/datasets" target="_blank">www.imf.org</a>
+    </h2>
+
+    <div id="container">
+        <div id="map-container"></div>
+        <div id="selected-countries" class="selected-countries-box">Selected Countries: None</div>
+
+        <div class="form-buttons">
+            <button type="button" class="collapsible">
+                <i class="fas fa-list"></i> Indicators
+            </button>
+            <button type="button" id="resetBtn" class="reset-btn">
+                <i class="fas fa-redo"></i> Reset
+            </button>
+        </div>
+
+        <div class="content">
+            <form id="reportForm">
+                <label for="indicators">Select Indicators:</label>
+                <div class="grid-container">
+                    {% for group_name, indicators in indicator_groups.items %}
+                        <fieldset style="grid-column: span 2;">
+                            {% for indicator in indicators %}
+                                <div class="grid-container">
+                                    <div class="label-column">
+                                        <input type="checkbox" id="indicator_{{ indicator.code }}" name="indicators" value="{{ indicator.code }}"
+                                            data-label="{{ indicator.name }}" data-description="{{ indicator.description }}" data-unit="{{ indicator.unit }}">
+                                        <label for="indicator_{{ indicator.code }}">{{ indicator.name }}</label>
+                                    </div>
+                                    <div class="description-column">
+                                        <span class="indicator-description">{{ indicator.description|safe }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </fieldset>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="generate-btn">
+                    <i class="fas fa-chart-bar"></i> Generate Report
+                </button>
+            </form>
+        </div>
+
+        <div class="loading" id="loadingBar">
+            <div class="progress"></div>
+        </div>
+
+        <div id="chart-container"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let selectedCountries = [];
+            let generatedCharts = [];
+
+            async function fetchWithRetry(url, retries = 3, delay = 1000) {
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url);
+                        if (response.ok) {
+                            const contentType = response.headers.get('content-type');
+                            if (contentType && contentType.includes('application/json')) {
+                                return await response.json();
+                            } else {
+                                throw new Error(`Invalid content-type: ${contentType}`);
+                            }
+                        }
+                        console.error(`Attempt ${i + 1} failed: ${response.status} - ${response.statusText}`);
+                    } catch (error) {
+                        console.error(`Attempt ${i + 1} failed: ${error.message}`);
+                    }
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+                throw new Error(`Failed to fetch data from ${url} after ${retries} attempts`);
+            }
+
+            fetchWithRetry('https://restcountries.com/v3.1/all')
+                .then(data => {
+                    const countryCodes = data.map(country => country.cca3);
+                    const countryNames = data.map(country => country.name.common);
+
+                    const plotData = [{
+                        type: 'choropleth',
+                        locationmode: 'ISO-3',
+                        locations: countryCodes,
+                        z: Array(countryCodes.length).fill(1),
+                        text: countryNames,
+                        colorscale: [
+                            [0, 'rgb(229, 236, 246)'],
+                            [0.5, 'rgb(87, 144, 223)'],
+                            [1, 'rgb(26, 84, 180)']
+                        ],
+                        showscale: false,
+                        hovertemplate: '<b>%{text}</b><extra></extra>',
+                    }];
+
+                    const layout = {
+                        geo: {
+                            scope: 'world',
+                            projection: { type: 'equirectangular' },
+                            showframe: false,
+                            showcoastlines: true,
+                            coastlinecolor: "#ccc",
+                            showland: true,
+                            landcolor: "#e5e5e5",
+                            showocean: true,
+                            oceancolor: "#cde8f9"
+                        },
+                        margin: { t: 0, r: 0, b: 0, l: 0 },
+                        autosize: true,
+                    };
+
+                    const mapContainer = document.getElementById('map-container');
+                    if (mapContainer) {
+                        Plotly.newPlot(mapContainer, plotData, layout);
+                        mapContainer.on('plotly_click', function(eventData) {
+                            const clickedCountry = eventData.points[0].location;
+                            if (selectedCountries.includes(clickedCountry)) {
+                                selectedCountries = selectedCountries.filter(c => c !== clickedCountry);
+                            } else {
+                                selectedCountries.push(clickedCountry);
+                            }
+                            updateSelectedCountriesDisplay();
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching country data:', error));
+
+            function updateSelectedCountriesDisplay() {
+                const display = selectedCountries.length > 0 ? selectedCountries.join(', ') : 'None';
+                document.getElementById('selected-countries').textContent = `Selected Countries: ${display}`;
+            }
+
+            const resetBtn = document.getElementById('resetBtn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    selectedCountries = [];
+                    updateSelectedCountriesDisplay();
+                    document.querySelectorAll('input[name="indicators"]').forEach(checkbox => checkbox.checked = false);
+                    document.getElementById('chart-container').innerHTML = '';
+                    generatedCharts = [];
+                });
+            }
+
+            const coll = document.querySelector('.collapsible');
+            const content = document.querySelector('.content');
+            if (coll && content) {
+                coll.addEventListener('click', () => {
+                    content.style.display = content.style.display === 'block' ? 'none' : 'block';
+                });
+            }
+
+            const reportForm = document.getElementById('reportForm');
+            if (reportForm) {
+                reportForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const selectedIndicators = Array.from(document.querySelectorAll('input[name="indicators"]:checked')).map(el => ({
+                        code: el.value,
+                        label: el.dataset.label,
+                        description: el.dataset.description,
+                        unit: el.dataset.unit
+                    }));
+
+                    if (selectedCountries.length === 0) {
+                        alert('Please select at least one country.');
+                        return;
+                    }
+
+                    if (selectedIndicators.length === 0) {
+                        alert('Please select at least one indicator.');
+                        return;
+                    }
+
+                    content.style.display = 'none';
+                    showLoadingAnimation();
+
+                    Promise.all(selectedIndicators.map(indicator => {
+                        return fetchWithRetry(`/imf-reports/?country=${selectedCountries.join(',')}&indicators=${indicator.code}`)
+                            .then(data => {
+                                if (data.error) {
+                                    alert(data.error);
+                                    return;
+                                }
+                                createPlotlyChart(data, indicator, selectedCountries);
+                            })
+                            .catch(error => {
+                                console.error('Error fetching data:', error);
+                                alert('Failed to fetch data.');
+                            });
+                    })).then(() => {
+                        hideLoadingAnimation();
+                    });
+                });
+            }
+
+            function showLoadingAnimation() {
+                const loadingBar = document.getElementById('loadingBar');
+                if (loadingBar) {
+                    loadingBar.style.display = 'block';
+                    const progress = loadingBar.querySelector('.progress');
+                    if (progress) {
+                        progress.style.width = '0%';
+                        let width = 0;
+                        const interval = setInterval(() => {
+                            if (width >= 100) {
+                                clearInterval(interval);
+                            } else {
+                                width += 2;
+                                progress.style.width = width + '%';
+                            }
+                        }, 50);
+                    }
+                }
+            }
+
+            function hideLoadingAnimation() {
+                const loadingBar = document.getElementById('loadingBar');
+                if (loadingBar) {
+                    loadingBar.style.display = 'none';
+                }
+            }
+
+            function createPlotlyChart(data, indicator, countries) {
+                const years = data.labels;
+                const datasets = data.datasets;
+
+                const traces = countries.map(country => {
+                    const countryData = datasets.find(dataset => dataset.data[country]);
+                    if (!countryData) return null;
+                    return {
+                        x: years,
+                        y: countryData.data[country],
+                        mode: 'lines+markers',
+                        name: country,
+                        line: { width: 2 },
+                        hovertemplate: `<b>%{x}</b><br><b>${country}</b>: %{y:.1f} ${indicator.unit}<extra></extra>`,
+                    };
+                }).filter(trace => trace !== null);
+
+                const layout = {
+                    title: { text: indicator.label, font: { size: 18 }, x: 0.5, xanchor: 'center' },
+                    xaxis: { title: 'Year', rangeslider: { visible: true }, type: 'category' },
+                    yaxis: { title: `Value (${indicator.unit})`, zeroline: true, zerolinewidth: 1, zerolinecolor: '#e1e1e1' },
+                    legend: { orientation: 'v', x: 1, y: 1, font: { size: 12 }, bgcolor: '#f9f9f9', bordercolor: '#e1e1e1', borderwidth: 1 },
+                    margin: { t: 50, r: 20, b: 100, l: 60 },
+                    height: 600,
+                };
+
+                const container = document.createElement('div');
+                container.className = 'chart-container';
+
+                const chartDiv = document.createElement('div');
+                chartDiv.style.height = '600px';
+                container.appendChild(chartDiv);
+
+                const descriptionBox = document.createElement('div');
+                descriptionBox.className = 'description-box';
+                descriptionBox.innerHTML = generateDescription(indicator, countries, data);
+                container.appendChild(descriptionBox);
+
+                const chartContainer = document.getElementById('chart-container');
+                if (chartContainer) {
+                    chartContainer.appendChild(container);
+                    Plotly.newPlot(chartDiv, traces, layout);
+                    generatedCharts.push({ container, title: indicator.label });
+                }
+            }
+
+            function generateDescription(indicator, countries, data) {
+                const currentYear = new Date().getFullYear();
+                const last5Years = Array.from({ length: 5 }, (_, i) => currentYear - i).reverse();
+
+                let description = `<strong>Description:</strong> ${indicator.description}<br><br>`;
+                description += `<strong style="color: #0078d4;">Trend Analysis (Last 5 Years) in ${indicator.unit}:</strong><br>`;
+
+                countries.forEach(country => {
+                    const countryData = data.datasets.find(dataset => dataset.data[country]);
+                    if (countryData) {
+                        const values = countryData.data[country];
+                        const years = data.labels;
+                        const filteredValues = [];
+                        const filteredYears = [];
+
+                        for (let i = 0; i < years.length; i++) {
+                            if (last5Years.includes(parseInt(years[i]))) {
+                                filteredValues.push(values[i]);
+                                filteredYears.push(years[i]);
+                            }
+                        }
+
+                        if (filteredValues.length > 0) {
+                            description += `<strong>${country}:</strong><br>`;
+                            for (let i = 0; i < filteredValues.length - 1; i++) {
+                                const change = filteredValues[i + 1] - filteredValues[i];
+                                const percentageChange = ((change / filteredValues[i]) * 100).toFixed(1);
+                                const color = change > 0 ? 'green' : change < 0 ? 'red' : 'black';
+
+                                description += `From ${filteredYears[i]} to ${filteredYears[i + 1]}, the value <span style="color:${color};">${change > 0 ? 'increased' : 'decreased'}</span> (from ${formatNumber(filteredValues[i])} to ${formatNumber(filteredValues[i + 1])}) with a change of <span style="color:${color};">${formatNumber(percentageChange)}%</span>.<br>`;
+                            }
+                        } else {
+                            description += `<strong>${country}:</strong> No data available for the last 5 years.<br>`;
+                        }
+                    } else {
+                        description += `<strong>${country}:</strong> No data available.<br>`;
+                    }
+                });
+
+                return description;
+            }
+
+            function formatNumber(value) {
+                return Number(value).toLocaleString('en-US', {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1,
+                }).replace(/,/g, '_').replace(/\./g, ',').replace(/_/g, '.');
+            }
+        });
+    </script>
+</body>
+</html>

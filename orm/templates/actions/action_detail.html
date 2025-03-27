@@ -1,0 +1,251 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Action: {{ action.title|escape }}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+
+    <!-- TinyMCE -->
+    <script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 5pt;
+            max-width: none;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .form-control, .form-select {
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            width: 100%;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Related Risks Section */
+        .related-risks {
+            margin-top: 30px;
+        }
+
+        .related-risks h3 {
+            color: #0056b3;
+            margin-bottom: 15px;
+        }
+
+        .risk-link {
+            color: #0056b3;
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .risk-link:hover {
+            color: #2e24e8;
+        }
+
+        /* Overlay styles */
+        #risk-detail-overlay {
+            position: fixed;
+            top: 0;
+            right: -60%;
+            width: 60%;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease-in-out;
+            z-index: 1050;
+        }
+
+        #risk-detail-overlay.active {
+            right: 0;
+        }
+
+        .overlay-header {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+
+        .overlay-header h5 {
+            margin: 0;
+            color: #333;
+        }
+
+        .overlay-header button {
+            background-color: #dc3545;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .overlay-header button:hover {
+            background-color: #c82333;
+        }
+
+        #risk-detail-iframe {
+            width: 100%;
+            height: calc(100% - 50px);
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Action</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="id_title" class="form-label">Title</label>
+                <input type="text" id="id_title" name="title" value="{{ action.title|safe }}" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="id_description" class="form-label">Description</label>
+                <textarea id="id_description" name="description" class="form-control">{{ action.description|safe }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_owner" class="form-label">Owner</label>
+                <select id="id_owner" name="owner" class="form-select">
+                    {% for user in users %}
+                    <option value="{{ user.id }}" {% if user.id == action.owner_id %}selected{% endif %}>
+                        {{ user.user.username }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_portfolio" class="form-label">Portfolio</label>
+                <select id="id_portfolio" name="portfolio" class="form-select">
+                    {% for portfolio in portfolios %}
+                    <option value="{{ portfolio.id }}" {% if portfolio.id == action.portfolio_id %}selected{% endif %}>
+                        {{ portfolio.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_performer" class="form-label">Performer</label>
+                <select id="id_performer" name="performer" class="form-select">
+                    {% for user in users %}
+                    <option value="{{ user.id }}" {% if user.id == action.performer_id %}selected{% endif %}>
+                        {{ user.user.username }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_deadline" class="form-label">Deadline</label>
+                <input type="date" id="id_deadline" name="deadline" value="{{ action.deadline|date:'Y-m-d' }}" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="id_status" class="form-label">Status</label>
+                <select id="id_status" name="status" class="form-select">
+                    {% for key, value in action.STATUS_CHOICES %}
+                    <option value="{{ key }}" {% if key == action.status %}selected{% endif %}>
+                        {{ value }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="{% url 'action_list' %}" class="btn btn-secondary">Back to List</a>
+        </form>
+
+        <!-- Related Risks Section -->
+        <div class="related-risks">
+            <h3>Related Risks</h3>
+            {% if related_risks %}
+                <ul class="list-group">
+                    {% for risk in related_risks %}
+                        <li class="list-group-item">
+                            <a href="javascript:void(0);" onclick="openRiskOverlay({{ risk.id }})" class="risk-link">
+                                {{ risk.title|safe }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No related risks found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Risk Detail Overlay -->
+    <div id="risk-detail-overlay">
+        <div class="overlay-header">
+            <h5>Risk Details</h5>
+            <button onclick="closeRiskOverlay()">Close</button>
+        </div>
+        <iframe id="risk-detail-iframe"></iframe>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        tinymce.init({
+            selector: '#id_description',
+            plugins: 'lists link fullscreen',
+            toolbar: 'undo redo | bold italic | bullist numlist outdent indent | link',
+            menubar: false,
+            branding: false,
+            height: 300,
+            forced_root_block: false,
+            valid_elements: '*[*]',
+            entity_encoding: 'raw',
+            content_style: "body { font-family: Arial, sans-serif; font-size: 16px; }",
+        });
+
+        function openRiskOverlay(riskId) {
+            const overlay = document.getElementById('risk-detail-overlay');
+            const iframe = document.getElementById('risk-detail-iframe');
+            iframe.src = `/risk/${riskId}/`; // Assumes URL pattern is /risk/<id>/
+            overlay.classList.add('active');
+        }
+
+        function closeRiskOverlay() {
+            const overlay = document.getElementById('risk-detail-overlay');
+            const iframe = document.getElementById('risk-detail-iframe');
+            iframe.src = '';
+            overlay.classList.remove('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Assessment Reminder</title>
+    <style>
+        body {
+            font-family: Calibri, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 10px;
+        }
+        .content {
+            padding-top: 10px;
+        }
+        .footer {
+            padding-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Assessment Reminder</h2>
+        </div>
+        <div class="content">
+            <p>Dear {{ user.first_name }},</p>
+            <p>This is a reminder that the assessment for the following risk is due:</p>
+            <ul>
+                <li><strong>Risk:</strong> {{ risk.title }}</li>
+                <li><strong>Due Date:</strong> {{ due_date }}</li>
+            </ul>
+            <p>Please complete the assessment as soon as possible.</p>
+        </div>
+        <div class="footer">
+            <p>Thank you,<br>The Risk Management Team</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Residual Risk Levels</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f8;
+        }
+        h1, h2, h3 {
+            text-align: center;
+        }
+        h2 {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            margin: 0;
+        }
+        #chart-container, #category-chart-container {
+            width: 90%;
+            margin: 20px auto;
+        }
+        #portfolio-filters-container {
+            margin: 20px auto;
+            max-width: 300px;
+            text-align: left;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+        }
+        #portfolio-filters-container h3 {
+            margin: 0;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+        }
+        #portfolio-filters {
+            display: none; /* Initially hidden for collapsible functionality */
+        }
+        #portfolio-filters label {
+            display: block;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        #portfolio-filters input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        #toggle-filters {
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+
+    #toggle-filters:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    #toggle-filters:active {
+        background-color: #003d7a;
+    }
+        #risk-details {
+            margin-top: 30px;
+            border-top: 2px solid #ccc;
+            padding-top: 20px;
+        }
+        .risk-list-header {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .risk-list-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .risk-list-item:last-child {
+            border-bottom: none;
+        }
+        .risk-number {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .risk-list-item a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .risk-list-item a:hover {
+            text-decoration: underline;
+        }
+        .filter-button {
+    background-color: #007bff; /* Blue background */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.filter-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+/* Filter Portfolios button styling */
+.filter-button {
+    background-color: #007bff; /* Blue background */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px; /* Optional: Space below the button */
+    margin-top: 20px; /* Space above the button */
+}
+
+.filter-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* General container styling */
+#portfolio-filters-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+}
+
+/* Styling for the Apply Filter button */
+.apply-filter-button {
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.apply-filter-button:hover {
+    background-color: #218838;
+}
+
+/* Styling for dynamically added Apply Filters button */
+/* Styling for the Apply Filters button */
+.apply-filter-button {
+    display: block;
+    width: 100%;
+    background-color: #28a745; /* Green background */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.apply-filter-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Portfolio Filters Section Styling */
+#portfolio-filters-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+}
+
+
+    </style>
+</head>
+<body>
+    <h2>Residual Risk Levels by Portfolio and Category</h2>
+
+ 
+<!-- Filter Toggle Button -->
+<button id="filter-toggle" class="filter-button">Filters</button>
+
+<!-- Portfolio Filters Section -->
+<div id="portfolio-filters-container" style="display: none;">
+    <div id="portfolio-filters">
+        <h3>Portfolio Filters</h3>
+        <!-- Add your filter options here -->
+        <p>Select filters for portfolios.</p>
+    </div>
+    <!-- Apply Filter Button -->
+  
+</div>
+
+
+
+
+    <!-- Portfolio Chart -->
+    <div id="chart-container">
+        <canvas id="portfolioChart"></canvas>
+    </div>
+
+    <!-- Category Chart -->
+    <div id="category-chart-container">
+        <h3 id="category-chart-title">Category Risks</h3>
+        <canvas id="categoryChart"></canvas>
+    </div>
+
+    <!-- Risk Details -->
+    <div id="risk-details">
+        <h3 id="risk-list-header"></h3>
+        <div id="risk-list"></div>
+    </div>
+
+    <script>
+
+function calculateAndDisplayTotal(chartData) {
+    try {
+        // Initialize total risks count
+        let totalRisks = 0;
+
+        // Loop through all portfolios and sum up risks
+        Object.values(chartData).forEach(portfolio => {
+            totalRisks += (portfolio.low?.count || 0) +
+                          (portfolio.medium?.count || 0) +
+                          (portfolio.high?.count || 0);
+        });
+
+        // Update the HTML with the calculated total
+        const totalRisksElement = document.getElementById('total-risks');
+        totalRisksElement.textContent = `Total Risks: ${totalRisks}`;
+    } catch (error) {
+        console.error("Error calculating total risks:", error);
+        const totalRisksElement = document.getElementById('total-risks');
+        totalRisksElement.textContent = "Error calculating total risks.";
+    }
+}
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const chartData = {{ chart_data|safe }}; // Injected backend JSON
+
+            const ctxPortfolio = document.getElementById('portfolioChart').getContext('2d');
+            const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+            let portfolioChart;
+            let categoryChart;
+
+            const portfolioFilterContainer = document.getElementById('portfolio-filters');
+            const portfolioLabels = Object.keys(chartData).sort((a, b) => a.localeCompare(b));
+
+
+            // Add checkboxes for filtering portfolios
+            portfolioLabels.forEach(portfolio => {
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = portfolio;
+                checkbox.checked = true;
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(portfolio));
+                portfolioFilterContainer.appendChild(label);
+            });
+
+            // Add apply filters button
+            const applyFiltersButton = document.createElement('button');
+            applyFiltersButton.textContent = 'Apply Filters';
+            portfolioFilterContainer.appendChild(applyFiltersButton);
+
+            applyFiltersButton.addEventListener('click', () => {
+                const selectedPortfolios = Array.from(
+                    portfolioFilterContainer.querySelectorAll('input:checked')
+                ).map(input => input.value);
+
+                const filteredData = Object.fromEntries(
+                    Object.entries(chartData).filter(([key]) => selectedPortfolios.includes(key))
+                );
+
+                updatePortfolioChart(filteredData);
+            });
+
+            // Toggle filter visibility
+            const filterToggle = document.getElementById('filter-toggle');
+            const filters = document.getElementById('portfolio-filters');
+            filterToggle.addEventListener('click', () => {
+                const isVisible = filters.style.display === 'block';
+                filters.style.display = isVisible ? 'none' : 'block';
+            });
+
+            function updatePortfolioChart(data) {
+    const portfolioLabels = Object.keys(data).sort((a, b) => a.localeCompare(b));
+
+    const portfolioChartData = {
+        labels: portfolioLabels,
+        datasets: [
+            {
+                label: 'Low Risks',
+                data: portfolioLabels.map(p => data[p]?.low?.count || 0),
+                backgroundColor: 'green',
+            },
+            {
+                label: 'Medium Risks',
+                data: portfolioLabels.map(p => data[p]?.medium?.count || 0),
+                backgroundColor: 'orange',
+            },
+            {
+                label: 'High Risks',
+                data: portfolioLabels.map(p => data[p]?.high?.count || 0),
+                backgroundColor: 'red',
+            },
+        ],
+    };
+
+    if (portfolioChart) portfolioChart.destroy();
+
+    portfolioChart = new Chart(ctxPortfolio, {
+        type: 'bar',
+        data: portfolioChartData,
+        options: {
+            responsive: true,
+            indexAxis: 'y',
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: context => `${context.dataset.label}: ${context.raw}`,
+                    },
+                },
+                datalabels: {
+                    display: true,
+                    color: 'black',
+                    anchor: 'center',
+                    formatter: value => (value > 0 ? value : ''), // Only show numbers for non-zero values
+                },
+            },
+            scales: {
+                x: { stacked: true },
+                y: { stacked: true },
+            },
+            onClick: (event, elements) => {
+                if (elements.length > 0) {
+                    const index = elements[0].index;
+                    const datasetIndex = elements[0].datasetIndex; // Identify risk level (low, medium, high)
+                    const riskLevels = ['low', 'medium', 'high'];
+                    const selectedRiskLevel = riskLevels[datasetIndex]; // Determine risk level
+                    const selectedPortfolio = portfolioLabels[index]; // Portfolio name
+                    displayCategoryChart(selectedPortfolio, chartData[selectedPortfolio], selectedRiskLevel);
+                }
+            },
+        },
+        plugins: [
+            {
+                id: 'sectionAndTotalLabel',
+                afterDatasetsDraw(chart) {
+                    const { ctx, data } = chart;
+                    ctx.save();
+
+                    data.labels.forEach((label, index) => {
+                        const low = data.datasets[0].data[index];
+                        const medium = data.datasets[1].data[index];
+                        const high = data.datasets[2].data[index];
+                        const total = low + medium + high;
+
+                        const metaLow = chart.getDatasetMeta(0).data[index];
+                        const metaMedium = chart.getDatasetMeta(1).data[index];
+                        const metaHigh = chart.getDatasetMeta(2).data[index];
+
+                        // Draw numbers inside each section
+                        if (low > 0) {
+                            ctx.fillStyle = 'white'; // Inside text color
+                            ctx.fillText(low, metaLow.x - metaLow.width / 2, metaLow.y + 4);
+                        }
+                        if (medium > 0) {
+                            ctx.fillStyle = 'black';
+                            ctx.fillText(medium, metaMedium.x - metaMedium.width / 2, metaMedium.y + 4);
+                        }
+                        if (high > 0) {
+                            ctx.fillStyle = 'white';
+                            ctx.fillText(high, metaHigh.x - metaHigh.width / 2, metaHigh.y + 4);
+                        }
+
+                        // Draw total risks outside the bar
+                        ctx.fillStyle = 'black';
+                        ctx.fillText(
+                            `Total: ${total}`,
+                            metaHigh.x + metaHigh.width + 20, // Offset outside the bar
+                            metaHigh.y + 4
+                        );
+                    });
+
+                    ctx.restore();
+                },
+            },
+        ],
+    });
+
+    if (portfolioLabels.length > 0) {
+        displayCategoryChart(portfolioLabels[0], data);
+    }
+}
+
+            function displayCategoryChart(portfolio, data, riskLevel) {
+    const categories = data?.categories || {};
+    const categoryLabels = Object.keys(categories).sort((a, b) => a.localeCompare(b));
+
+    const categoryChartData = {
+        labels: categoryLabels,
+        datasets: [
+            {
+                label: 'Low Risks',
+                data: categoryLabels.map(c => categories[c].low.count),
+                backgroundColor: 'green',
+            },
+            {
+                label: 'Medium Risks',
+                data: categoryLabels.map(c => categories[c].medium.count),
+                backgroundColor: 'orange',
+            },
+            {
+                label: 'High Risks',
+                data: categoryLabels.map(c => categories[c].high.count),
+                backgroundColor: 'red',
+            },
+        ],
+    };
+
+    document.getElementById('category-chart-title').textContent = `Categories of Portfolio: ${portfolio}`;
+
+    if (categoryChart) categoryChart.destroy();
+    categoryChart = new Chart(ctxCategory, {
+        type: 'bar',
+        data: categoryChartData,
+        options: {
+            responsive: true,
+            indexAxis: 'y',
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: context => `${context.dataset.label}: ${context.raw}`,
+                    },
+                },
+            },
+            scales: {
+                x: { stacked: true },
+                y: { stacked: true },
+            },
+            onClick: (event, elements) => {
+                if (elements.length > 0) {
+                    const index = elements[0].index;
+                    const datasetIndex = elements[0].datasetIndex;
+                    const selectedRiskLevel = ['low', 'medium', 'high'][datasetIndex];
+                    const selectedCategory = categoryLabels[index];
+                    displayRiskList(portfolio, selectedCategory, categories[selectedCategory], selectedRiskLevel);
+                }
+            },
+        },
+        plugins: [
+            {
+                id: 'sectionAndTotalLabel',
+                afterDatasetsDraw(chart) {
+                    const { ctx, data } = chart;
+                    ctx.save();
+                    data.labels.forEach((label, index) => {
+                        const low = data.datasets[0].data[index];
+                        const medium = data.datasets[1].data[index];
+                        const high = data.datasets[2].data[index];
+                        const total = low + medium + high;
+
+                        const metaLow = chart.getDatasetMeta(0).data[index];
+                        const metaMedium = chart.getDatasetMeta(1).data[index];
+                        const metaHigh = chart.getDatasetMeta(2).data[index];
+
+                        // Draw numbers inside sections
+                        if (low > 0) ctx.fillText(low, metaLow.x - 10, metaLow.y + 4);
+                        if (medium > 0) ctx.fillText(medium, metaMedium.x - 10, metaMedium.y + 4);
+                        if (high > 0) ctx.fillText(high, metaHigh.x - 10, metaHigh.y + 4);
+
+                        // Draw total outside the bar
+                        ctx.fillStyle = 'black';
+                        ctx.fillText(`Total: ${total}`, metaHigh.x + 50, metaHigh.y + 4);
+                    });
+                    ctx.restore();
+                },
+            },
+        ],
+    });
+}
+
+            function displayRiskList(portfolio, category, categoryData, riskLevel) {
+    const riskListHeader = document.getElementById('risk-list-header');
+    const riskList = document.getElementById('risk-list');
+    riskList.innerHTML = '';
+
+    // Get the appropriate risks for the selected risk level
+    const risks = categoryData[riskLevel]?.risks || [];
+
+    // Update the header with the selected risk level, category, and portfolio
+    if (risks.length === 0) {
+        riskListHeader.textContent = `No ${riskLevel} risks in ${category} (Portfolio: ${portfolio})`;
+        return;
+    }
+
+    riskListHeader.textContent = `${riskLevel.charAt(0).toUpperCase() + riskLevel.slice(1)} Risks in ${category} (Portfolio: ${portfolio})`;
+
+    // Add the risks to the list
+    // Add the risks to the list
+    risks.forEach((risk, index) => {
+    const item = document.createElement('div');
+    item.className = 'risk-list-item';
+    item.innerHTML = `
+        <span class="risk-number" style="color: black;">${index + 1}.</span>
+        <a href="/risk/${risk.id}/" target="_blank" style="color: black; text-decoration: none;">${risk.title}</a>
+    `;
+    riskList.appendChild(item);
+});
+
+
+}
+
+            updatePortfolioChart(chartData);
+        });
+        document.getElementById('filter-toggle').addEventListener('click', function () {
+    const filtersContainer = document.getElementById('portfolio-filters-container');
+    if (filtersContainer.style.display === 'none' || filtersContainer.style.display === '') {
+        filtersContainer.style.display = 'block'; // Show the filters section
+    } else {
+        filtersContainer.style.display = 'none'; // Hide the filters section
+    }
+});
+
+    </script>
+</body>
+</html>

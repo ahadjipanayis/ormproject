@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Portfolio Reports | ermapp.avax.gr</title>
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Calibri, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition-duration: 0.4s;
+            margin: 5px 0;
+        }
+        .button:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #4CAF50;
+        }
+        .button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        h2 {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .portfolio-list {
+            width: 100%;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .portfolio-list label {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            margin: 0;
+            font-size: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .portfolio-list label:last-child {
+            border-bottom: none;
+        }
+        .portfolio-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1001;
+            right: 30px;
+            bottom: -100px;
+            font-size: 17px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: bottom 0.5s ease, opacity 0.5s ease;
+        }
+        .toast.show {
+            visibility: visible;
+            bottom: 30px;
+            opacity: 1;
+        }
+        .toast.error {
+            background-color: #dc3545;
+        }
+    </style>
+    <script>
+        function sortPortfolioList() {
+            const labels = Array.from(document.querySelectorAll('.portfolio-list label'));
+            labels.sort((a, b) => a.textContent.trim().localeCompare(b.textContent.trim()));
+            const listContainer = document.querySelector('.portfolio-list');
+            labels.forEach(label => listContainer.appendChild(label));
+        }
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.remove('error');
+            if (isError) toast.classList.add('error');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        async function submitFormFetch(actionUrl, reportType) {
+            const modal = document.getElementById('loadingModal');
+            const spinner = document.querySelector('.spinner');
+            const loadingText = document.getElementById('loadingText');
+            const timerText = document.getElementById('timerText');
+
+            loadingText.textContent = `Preparing ${reportType} report. Please wait...`;
+            modal.style.display = 'block';
+            document.querySelectorAll('.button').forEach(button => button.disabled = true);
+
+            let seconds = 0;
+            timerText.textContent = `Elapsed time: 0 seconds`;
+            const timerInterval = setInterval(() => {
+                seconds++;
+                timerText.textContent = `Elapsed time: ${seconds} second${seconds !== 1 ? 's' : ''}`;
+            }, 1000);
+
+            const form = document.getElementById('portfolio-form');
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(actionUrl, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                if (!response.ok) throw new Error("Network response was not ok");
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = "portfolio_report.zip";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+
+                clearInterval(timerInterval);
+                modal.style.display = 'none';
+                document.querySelectorAll('.button').forEach(button => button.disabled = false);
+                showToast("Download complete!");
+            } catch (err) {
+                clearInterval(timerInterval);
+                modal.style.display = 'none';
+                document.querySelectorAll('.button').forEach(button => button.disabled = false);
+                showToast("Download failed. Please try again.", true);
+                console.error(err);
+            }
+        }
+
+        window.onload = sortPortfolioList;
+    </script>
+</head>
+<body>
+    <div class="section">
+        <h2>Portfolio Reports</h2>
+        <form method="post" id="portfolio-form">
+            {% csrf_token %}
+            <h3>Select Portfolios to Include:</h3>
+            <div class="portfolio-list">
+                {% for portfolio in portfolios %}
+                    <label>
+                        <input type="checkbox" name="portfolios" value="{{ portfolio.id }}">
+                        {{ portfolio.name }}
+                    </label>
+                {% endfor %}
+            </div>
+
+            <!-- Greek Report -->
+            <button type="button" class="button"
+                onclick="submitFormFetch('{% url 'generate_project_risk_report' %}', 'Portfolios (Greek)')">
+                <i class="fas fa-file-download"></i> Generate Greek Report
+            </button>
+
+            <!-- English Report -->
+            <button type="button" class="button"
+                onclick="submitFormFetch('{% url 'generate_project_risk_report_en' %}', 'Portfolios (English)')">
+                <i class="fas fa-file-download"></i> Generate English Report
+            </button>
+        </form>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content">
+            <h3 id="loadingText">Preparing report...</h3>
+            <div class="spinner"></div>
+            <p id="timerText">Elapsed time: 0 seconds</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Download complete!</div>
+</body>
+</html>

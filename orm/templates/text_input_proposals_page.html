@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ermapp.avax.gr | Risk Proposal Interface</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/avax-logo.jpeg' %}" type="image/jpeg">
+    <style>
+        body {
+            font-family: 'Calibri', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: auto;
+            margin: 10px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .button i {
+            margin-right: 5px;
+        }
+        .textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            resize: none;
+        }
+        .proposal-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #eef6ff;
+            border-radius: 5px;
+        }
+        .select-all {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            .button {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+            .textarea {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Risk Proposal Interface</h1>
+        <p>Generate and manage proposals for mitigations and risks in a selected portfolio.</p>
+
+        <!-- Text Input Section -->
+        <h2>Text Input for Proposals</h2>
+        <p>Paste your text below. Each line will be treated as a proposal for mitigations or risks.</p>
+        <form method="post" action="{% url 'process_user_input' %}">
+            {% csrf_token %}
+            <textarea name="user_text" class="textarea" placeholder="Paste text here..."></textarea>
+            <button type="submit" class="button"><i class="fas fa-paper-plane"></i> Process Text</button>
+        </form>
+
+        <!-- Portfolio Dropdown -->
+        <h2>Select Portfolio</h2>
+        <select id="portfolio-dropdown" name="portfolio" required>
+            <option value="" selected disabled>Select a Portfolio</option>
+            {% for portfolio in available_portfolios %}
+                <option value="{{ portfolio.id }}">{{ portfolio.name }}</option>
+            {% endfor %}
+        </select>
+        <p id="portfolio-error" class="error-message" style="display: none;">Please select a portfolio.</p>
+
+        <!-- Category Dropdown -->
+        <h2>Select Category</h2>
+        <select name="category" id="category-dropdown" required>
+            <option value="" selected disabled>Select a Category</option>
+            {% for category in available_categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <p id="category-error" class="error-message" style="display: none;">Please select a category.</p>
+
+        <!-- Display Processed Proposals -->
+        {% if processed_lines %}
+            <h2>Generated Proposals</h2>
+            <form method="post" action="{% url 'create_proposals_with_portfolio' %}" onsubmit="return validateSelections()">
+                {% csrf_token %}
+                <input type="hidden" name="portfolio_id" id="selected-portfolio-id" value="">
+                <input type="hidden" name="category_id" id="selected-category-id" value="">
+                <div class="select-all">
+                    <input type="checkbox" id="select-all-proposals" onclick="toggleSelectAll(this, 'proposal-checkbox')">
+                    <label for="select-all-proposals">Select All</label>
+                </div>
+                {% for line in processed_lines %}
+                    <div class="proposal-item">
+                        <input type="checkbox" class="proposal-checkbox" name="selected_proposals" value="{{ line }}">
+                        <label>{{ line }}</label>
+                    </div>
+                {% endfor %}
+                <button type="submit" class="button" name="action" value="add_mitigation"><i class="fas fa-shield"></i> Add Mitigations</button>
+                <button type="submit" class="button" name="action" value="add_risk"><i class="fas fa-exclamation-circle"></i> Add Risks</button>
+                <button type="submit" class="button" name="action" value="add_opportunity"><i class="fas fa-lightbulb"></i> Add Opportunities</button>
+                <button type="submit" class="button" name="action" value="add_threat"><i class="fas fa-skull"></i> Add Threats</button>
+            </form>
+        {% else %}
+            <p>No proposals generated yet. Paste your text above and click "Process Text".</p>
+        {% endif %}
+
+        <form method="post" action="{% url 'create_risk_mitigation_associations' %}" onsubmit="return validateSelections()">
+            {% csrf_token %}
+            <input type="hidden" name="portfolio_id" id="selected-portfolio-id" value="">
+            <input type="hidden" name="category_id" id="selected-category-id" value="">
+            <button type="submit" class="button"><i class="fas fa-link"></i> Create Risk-Mitigation Associations</button>
+        </form>
+
+        <div class="footer">
+            <p>Manage your risk-related proposals effectively.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('portfolio-dropdown').addEventListener('change', function () {
+            document.getElementById('selected-portfolio-id').value = this.value;
+            document.getElementById('portfolio-error').style.display = 'none';
+        });
+
+        document.getElementById('category-dropdown').addEventListener('change', function () {
+            document.getElementById('selected-category-id').value = this.value;
+            document.getElementById('category-error').style.display = 'none';
+        });
+
+        function toggleSelectAll(selectAllCheckbox, className) {
+            const checkboxes = document.querySelectorAll(`.${className}`);
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        }
+
+        function validateSelections() {
+            const portfolioId = document.getElementById('selected-portfolio-id').value;
+            const categoryId = document.getElementById('selected-category-id').value;
+            let valid = true;
+
+            if (!portfolioId) {
+                document.getElementById('portfolio-error').style.display = 'block';
+                valid = false;
+            }
+            if (!categoryId) {
+                document.getElementById('category-error').style.display = 'block';
+                valid = false;
+            }
+            return valid;
+        }
+    </script>
+</body>
+</html>

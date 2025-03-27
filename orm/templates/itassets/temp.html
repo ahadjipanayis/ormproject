@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update IT Asset</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .container {
+        max-width: 900px;
+        margin: 30px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card {
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    .card-header {
+        font-weight: bold;
+    }
+    .form-control, .btn {
+        border-radius: 5px;
+    }
+</style>
+
+<body>
+
+    <div class="container">
+        <h1 class="mb-4">Update IT Asset: {{ it_asset.name }}</h1>
+
+        {% if messages %}
+            <div class="alert alert-info">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Asset Details Card -->
+        <div class="card">
+            <div class="card-header bg-primary text-white">Asset Details</div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="name">Asset Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ it_asset.name }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3">{{ it_asset.description }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="asset_type">Asset Type</label>
+                        <select name="asset_type" id="asset_type" class="form-control">
+                            {% for key, value in asset_type_choices %}
+                                <option value="{{ key }}" {% if it_asset.asset_type == key %}selected{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" value="{{ it_asset.location }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select name="status" id="status" class="form-control">
+                            {% for key, value in status_choices %}
+                                <option value="{{ key }}" {% if it_asset.status == key %}selected{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="portfolio">Portfolio</label>
+                        <select name="portfolio" id="portfolio" class="form-control">
+                            {% for portfolio in all_portfolios %}
+                                <option value="{{ portfolio.id }}" {% if it_asset.portfolio_id == portfolio.id %}selected{% endif %}>{{ portfolio.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" name="save_asset" class="btn btn-primary mt-3">Save IT Asset</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- CIA Ratings -->
+        <div class="card">
+            <div class="card-header bg-dark text-white">CIA Ratings</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="confidentiality">Confidentiality</label>
+                    <select name="confidentiality" id="confidentiality" class="form-control">
+                        <option value="1" {% if it_asset.confidentiality == 1 %}selected{% endif %}>Low</option>
+                        <option value="2" {% if it_asset.confidentiality == 2 %}selected{% endif %}>Medium</option>
+                        <option value="3" {% if it_asset.confidentiality == 3 %}selected{% endif %}>High</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="integrity">Integrity</label>
+                    <select name="integrity" id="integrity" class="form-control">
+                        <option value="1" {% if it_asset.integrity == 1 %}selected{% endif %}>Low</option>
+                        <option value="2" {% if it_asset.integrity == 2 %}selected{% endif %}>Medium</option>
+                        <option value="3" {% if it_asset.integrity == 3 %}selected{% endif %}>High</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="availability">Availability</label>
+                    <select name="availability" id="availability" class="form-control">
+                        <option value="1" {% if it_asset.availability == 1 %}selected{% endif %}>Low</option>
+                        <option value="2" {% if it_asset.availability == 2 %}selected{% endif %}>Medium</option>
+                        <option value="3" {% if it_asset.availability == 3 %}selected{% endif %}>High</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Linked IT Threats -->
+        <div class="card">
+            <div class="card-header bg-danger text-white">Linked IT Threats</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for threat in linked_threats %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            {{ threat.code }} - {{ threat.description }}
+                            <form method="POST">
+                                {% csrf_token %}
+                                <button type="submit" name="unlink_threat" value="{{ threat.id }}" class="btn btn-danger btn-sm">Unlink</button>
+                            </form>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No IT threats linked.</li>
+                    {% endfor %}
+                </ul>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <select name="link_threat" class="form-control mt-2">
+                        {% for threat in all_threats %}
+                            <option value="{{ threat.id }}">{{ threat.code }} - {{ threat.description }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-success mt-2">Link IT Threat</button>
+                </form>
+            </div>
+        </div>
+
+        <br>
+        <a href="{% url 'itasset_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+
+</body>
+</html>

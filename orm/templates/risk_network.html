@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Risk Network Visualization</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+        }
+
+        #visualization {
+            width: 100%;
+            height: 90vh;
+            border: 1px solid #ccc;
+            overflow: hidden;
+        }
+
+        .link {
+            stroke: #999;
+            stroke-opacity: 0.6;
+            stroke-width: 1.5px;
+        }
+
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 6px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .box {
+            rx: 10;
+            ry: 10;
+            stroke: #000;
+            stroke-width: 1px;
+        }
+
+        .circle {
+            stroke: #000;
+            stroke-width: 1px;
+        }
+
+        .label {
+            font-size: 12px;
+            text-anchor: middle;
+            fill: #000;
+        }
+           /* Zoom instructions */
+           #zoom-instructions {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.8);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #2c3e50;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h2>Residual Risk Level Per Owner</h2>
+    
+
+     <!-- <div id="portfolio-filter-container" style="margin: 10px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9;">
+        <h3>Filter by Portfolio</h3>
+        <div id="portfolio-filters" style="display: flex; flex-wrap: wrap; gap: 10px; padding: 10px;">
+            {% for portfolio in portfolios %}
+                <label>
+                    <input type="checkbox" class="portfolio-filter" value="{{ portfolio.id }}" checked>
+                    {{ portfolio.name }}
+                </label>
+            {% endfor %}
+        </div>
+        <button id="apply-filters" style="margin-top: 10px; padding: 5px 15px; background: #007bff; color: white; border: none; border-radius: 5px;">
+            Apply Filters
+        </button>
+    </div> -->
+
+
+
+    <div id="legend" style="margin: 10px; font-size: 14px; display: flex; align-items: center; gap: 20px;">
+        <p><strong>Legend:</strong></p>
+        <p><span style="color: #28a745;">●</span> Low Risk</p>
+        <p><span style="color: #ffc107;">●</span> Medium Risk</p>
+        <p><span style="color: #dc3545;">●</span> High Risk</p>
+    </div>
+
+
+    <div id="visualization"></div>
+
+    {{ nodes|json_script:"nodes-data" }}
+    {{ links|json_script:"links-data" }}
+    <div id="zoom-instructions">Use mouse wheel to zoom, drag to pan</div>
+
+    <script>
+        
+        const nodes = JSON.parse(document.getElementById('nodes-data').textContent);
+        const links = JSON.parse(document.getElementById('links-data').textContent);
+
+        let width = window.innerWidth;
+        let height = window.innerHeight - 100;
+
+        const svg = d3.select('#visualization')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .call(d3.zoom().on("zoom", function (event) {
+                svg.attr("transform", event.transform);
+            }))
+            .append('g');
+
+        svg.append('defs').selectAll('marker')
+            .data(['end'])
+            .enter().append('marker')
+            .attr('id', 'arrow')
+            .attr('viewBox', '0 -5 10 10')
+            .attr('refX', 25)
+            .attr('refY', 0)
+            .attr('markerWidth', 6)
+            .attr('markerHeight', 6)
+            .attr('orient', 'auto')
+            .append('path')
+            .attr('d', 'M0,-5L10,0L0,5')
+            .attr('fill', '#999');
+
+        nodes.forEach((node, i) => {
+            node.x = (i % 10) * (width / 10) + Math.random() * 50;
+            node.y = Math.floor(i / 10) * 100 + Math.random() * 50;
+        });
+
+        const simulation = d3.forceSimulation(nodes)
+            .force('link', d3.forceLink(links)
+                .id(d => d.id)
+                .distance(d => d.type === 'owner' ? 80 : 150)
+                .strength(d => d.type === 'owner' ? 0.9 : 0.5))
+            .force('charge', d3.forceManyBody().strength(-300))
+            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force('collision', d3.forceCollide().radius(d => d.type === 'owner' ? 50 : 100))
+            .force('x', d3.forceX(d => d.type === 'risk' ? width / 2 : null).strength(0.1))
+            .force('y', d3.forceY(d => d.type === 'risk' ? height / 2 : null).strength(0.1));
+
+        const link = svg.append('g')
+            .attr('class', 'links')
+            .selectAll('line')
+            .data(links)
+            .enter().append('line')
+            .attr('class', 'link')
+            .attr('stroke', '#999')
+            .attr('stroke-width', 1.5)
+            .attr('marker-end', 'url(#arrow)');
+
+        const node = svg.append('g')
+            .attr('class', 'nodes')
+            .selectAll('g')
+            .data(nodes)
+            .enter().append('g')
+            .attr('class', d => d.type)
+            .on('click', (event, d) => {
+                if (d.url) window.location.href = d.url;
+            })
+            .on('mouseover', handleMouseOver)
+            .on('mouseout', handleMouseOut)
+            .call(d3.drag()
+                .on('start', dragStarted)
+                .on('drag', dragged)
+                .on('end', dragEnded));
+
+        node.filter(d => d.type === 'risk')
+            .append('rect')
+            .attr('class', 'box')
+            .attr('width', d => calculateTextWidth(d.name, 16, 200) + 20)
+            .attr('height', d => calculateTextHeight(d.name, 16, 200) + 20)
+            .attr('rx', 10)
+            .attr('ry', 10)
+            .attr('x', d => -calculateTextWidth(d.name, 16, 200) / 2)
+            .attr('y', d => -calculateTextHeight(d.name, 16, 200) / 2)
+            .attr('fill', d => {
+                if (d.riskLevel === 'low') return '#2ecc71';
+                if (d.riskLevel === 'medium') return 'orange'; // Medium Risk: orange
+                if (d.riskLevel === 'high') return '#e74c3c';
+                return '#ccc';
+            })
+            .attr('fill-opacity', 0.7);
+
+        node.filter(d => d.type === 'risk')
+            .append('text')
+            .attr('class', 'label')
+            .attr('x', 0)
+            .attr('y', 0)
+            .selectAll('tspan')
+            .data(d => wrapText(stripHtml(d.name), 200))
+            .enter()
+            .append('tspan')
+            .attr('x', 0)
+            .attr('dy', (_, i) => i === 0 ? '0em' : '1.2em')
+            .text(d => d);
+
+        node.filter(d => d.type === 'owner')
+            .append('circle')
+            .attr('class', 'circle')
+            .attr('r', 35)
+            .attr('fill', '#ccc');
+
+        node.filter(d => d.type === 'owner')
+            .append('image')
+            .attr('xlink:href', 'https://img.icons8.com/ios-filled/50/000000/user-male-circle.png')
+            .attr('width', 40)
+            .attr('height', 40)
+            .attr('x', -20)
+            .attr('y', -20);
+
+        node.filter(d => d.type === 'owner')
+            .append('text')
+            .attr('class', 'label')
+            .attr('x', 0)
+            .attr('y', 50)
+            .text(d => stripHtml(d.name));
+
+        const tooltip = d3.select('body').append('div')
+            .attr('class', 'tooltip')
+            .style('opacity', 0);
+
+        function handleMouseOver(event, d) {
+            tooltip.transition()
+                .duration(200)
+                .style('opacity', 0.9);
+            tooltip.html(`<strong>${stripHtml(d.name)}</strong><br>Type: ${d.type}${d.riskLevel ? `<br>Risk Level: ${d.riskLevel}` : ''}`)
+                .style('left', `${event.pageX + 10}px`)
+                .style('top', `${event.pageY - 28}px`);
+        }
+
+        function handleMouseOut() {
+            tooltip.transition()
+                .duration(500)
+                .style('opacity', 0);
+        }
+
+        function dragStarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragEnded(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            // d.fx = null;
+            // d.fy = null;
+        }
+
+        function stripHtml(html) {
+            const div = document.createElement("div");
+            div.innerHTML = html;
+            return div.textContent || div.innerText || "";
+        }
+
+        function wrapText(text, maxWidth) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                context.font = '16px Arial';
+                const testLine = currentLine + ' ' + word;
+                const metrics = context.measureText(testLine);
+                if (metrics.width > maxWidth) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = testLine;
+                }
+            }
+
+            lines.push(currentLine);
+            return lines;
+        }
+
+        function calculateTextWidth(text, fontSize, maxWidth) {
+            const lines = wrapText(stripHtml(text), maxWidth);
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            context.font = `${fontSize}px Arial`;
+            const widths = lines.map(line => context.measureText(line).width);
+            return Math.max(...widths);
+        }
+
+        function calculateTextHeight(text, fontSize, maxWidth) {
+            const lines = wrapText(stripHtml(text), maxWidth);
+            return lines.length * fontSize * 1.2; // Line height multiplier
+        }
+
+        simulation.on('tick', () => {
+            link
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+
+            node.attr('transform', d => `translate(${d.x},${d.y})`);
+        });
+        window.addEventListener('resize', () => {
+    width = window.innerWidth;
+    height = window.innerHeight - 100;
+
+    d3.select('#visualization svg')
+        .attr('width', width)
+        .attr('height', height);
+
+    simulation.force('center', d3.forceCenter(width / 2, height / 2));
+    simulation.alpha(0.3).restart();
+});
+
+    </script>
+
+</body>
+</html>

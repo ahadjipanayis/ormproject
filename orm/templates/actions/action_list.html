@@ -1,0 +1,348 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% trans "Actions" %}</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e8f0fe; /* Light blue-gray background */
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #1e90ff; /* Dodger Blue */
+      margin-bottom: 20px;
+    }
+    .container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 5pt;
+      max-width: none;
+      box-sizing: border-box;
+    }
+    .overdue {
+      background-color: #ff4040; /* Softer red */
+      color: white;
+      padding: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .warning {
+      background-color: #ffa500; /* Vibrant orange */
+      color: white;
+      padding: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .completed {
+      background-color: #32cd32; /* Lime green */
+      color: white;
+      padding: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .countdown {
+      font-weight: bold;
+      padding: 8px;
+      border-radius: 5px;
+    }
+    .countdown.overdue {
+      background-color: #ff4040;
+      color: white;
+    }
+    .countdown.warning {
+      background-color: #ffa500;
+      color: white;
+    }
+    table.table {
+      table-layout: fixed;
+      width: 100%;
+    }
+    table.table th,
+    table.table td {
+      white-space: normal;
+      word-wrap: break-word;
+      overflow: visible;
+      text-align: center;
+    }
+    table.table th:first-child,
+    table.table td:first-child,
+    table.table th:last-child,
+    table.table td:last-child {
+      text-align: left;
+    }
+    .action-link {
+      color: #4169e1; /* Royal Blue */
+      text-decoration: none;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+    .action-link:hover {
+      color: #ff69b4; /* Hot Pink for fun */
+    }
+    /* Overlay styles */
+    #action-detail-overlay {
+      position: fixed;
+      top: 0;
+      right: -60%;
+      width: 60%;
+      height: 100%;
+      background-color: #f0f8ff; /* Alice Blue */
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+      transition: right 0.3s ease-in-out;
+      z-index: 1050;
+    }
+    #action-detail-overlay.active {
+      right: 0;
+    }
+    .overlay-header {
+      padding: 10px;
+      border-bottom: 1px solid #b0c4de; /* Light Steel Blue */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #4682b4; /* Steel Blue */
+      color: white;
+    }
+    .overlay-header h5 {
+      margin: 0;
+    }
+    .overlay-header button {
+      background-color: #ff6347; /* Tomato */
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .overlay-header button:hover {
+      background-color: #ff4500; /* Orange Red */
+    }
+    #action-detail-iframe {
+      width: 100%;
+      height: calc(100% - 50px);
+      border: none;
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>{% trans "Actions List" %}</h1>
+
+  <!-- 🚨 Overdue Actions -->
+  <h2 class="overdue mb-3" data-bs-toggle="collapse" href="#overdueActions" role="button">
+    {% blocktrans with count=overdue_count %}Overdue Actions ({{ count }}){% endblocktrans %}
+  </h2>
+  <div class="collapse show" id="overdueActions">
+    {% if overdue_count == 0 %}
+      <p class="text-muted">{% trans "No overdue actions found." %}</p>
+    {% else %}
+      {% for owner, items in overdue_actions_by_owner.items %}
+        <h4 class="bg-light p-2" style="cursor: pointer;" 
+            data-bs-toggle="collapse" href="#overdue_owner_{{ owner.pk }}" 
+            role="button"
+            aria-expanded="false" aria-controls="overdue_owner_{{ owner.pk }}">
+          {% blocktrans with username=owner.user.username count=items|length %}
+            Owner: {{ username }} ({{ count }} actions)
+          {% endblocktrans %}
+        </h4>
+        <div id="overdue_owner_{{ owner.pk }}" class="collapse show">
+          <table class="table table-bordered table-striped mb-4">
+            <thead>
+              <tr>
+                <th>{% trans "Title" %}</th>
+                <th>{% trans "Portfolio" %}</th>
+                <th>{% trans "Performer" %}</th>
+                <th>{% trans "Deadline" %}</th>
+                <th>{% trans "Countdown" %}</th>
+                <th>{% trans "Related Risks" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for action in items %}
+              <tr>
+                <td>
+                  <a href="javascript:void(0);" onclick="openActionOverlay({{ action.pk }})" class="action-link">
+                    {{ action.title|safe }}
+                  </a>
+                </td>
+                <td>{{ action.portfolio.name|default:"N/A" }}</td>
+                <td>{{ action.performer.user.username|default:"N/A" }}</td>
+                <td class="overdue">{{ action.deadline|date:"d M Y" }}</td>
+                <td class="countdown overdue">
+                  {% blocktrans with days=action.countdown_absolute %}{{ days }} days overdue{% endblocktrans %}
+                </td>
+                <td>
+                  {% for risk in action.risks.all %}
+                    <a href="{% url 'risk_detail' risk.pk %}">{{ risk.title|safe }}</a>
+                    {% if not forloop.last %}, {% endif %}
+                  {% empty %}
+                    {% trans "N/A" %}
+                  {% endfor %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <!-- ⏳ Pending Actions -->
+  <h2 class="warning mb-3" data-bs-toggle="collapse" href="#pendingActions" role="button">
+    {% blocktrans with count=pending_count %}Pending Actions ({{ count }}){% endblocktrans %}
+  </h2>
+  <div class="collapse show" id="pendingActions">
+    {% if pending_count == 0 %}
+      <p class="text-muted">{% trans "No pending actions found." %}</p>
+    {% else %}
+      {% for owner, items in pending_actions_by_owner.items %}
+        <h4 class="bg-light p-2" style="cursor: pointer;"
+            data-bs-toggle="collapse" href="#pending_owner_{{ owner.pk }}"
+            role="button"
+            aria-expanded="false" aria-controls="pending_owner_{{ owner.pk }}">
+          {% blocktrans with username=owner.user.username count=items|length %}
+            Owner: {{ username }} ({{ count }} actions)
+          {% endblocktrans %}
+        </h4>
+        <div id="pending_owner_{{ owner.pk }}" class="collapse show">
+          <table class="table table-bordered table-striped mb-4">
+            <thead>
+              <tr>
+                <th>{% trans "Title" %}</th>
+                <th>{% trans "Portfolio" %}</th>
+                <th>{% trans "Performer" %}</th>
+                <th>{% trans "Deadline" %}</th>
+                <th>{% trans "Countdown" %}</th>
+                <th>{% trans "Related Risks" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for action in items %}
+              <tr>
+                <td>
+                  <a href="javascript:void(0);" onclick="openActionOverlay({{ action.pk }})" class="action-link">
+                    {{ action.title|safe }}
+                  </a>
+                </td>
+                <td>{{ action.portfolio.name|default:"N/A" }}</td>
+                <td>{{ action.performer.user.username|default:"N/A" }}</td>
+                <td>{{ action.deadline|date:"d M Y" }}</td>
+                <td class="countdown warning">
+                  {% blocktrans with days=action.countdown_days %}{{ days }} days left{% endblocktrans %}
+                </td>
+                <td>
+                  {% for risk in action.risks.all %}
+                    <a href="{% url 'risk_detail' risk.pk %}">{{ risk.title|safe }}</a>
+                    {% if not forloop.last %}, {% endif %}
+                  {% empty %}
+                    {% trans "N/A" %}
+                  {% endfor %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <!-- ✔ Completed Actions -->
+  <h2 class="completed mb-3" data-bs-toggle="collapse" href="#completedActions" role="button">
+    {% blocktrans with count=completed_count %}✔ Completed Actions ({{ count }}){% endblocktrans %}
+  </h2>
+  <div class="collapse" id="completedActions">
+    {% if completed_count == 0 %}
+      <p class="text-muted">{% trans "No completed actions found." %}</p>
+    {% else %}
+      {% for owner, items in completed_actions_by_owner.items %}
+        <h4 class="bg-light p-2" style="cursor: pointer;"
+            data-bs-toggle="collapse" href="#completed_owner_{{ owner.pk }}"
+            role="button"
+            aria-expanded="false" aria-controls="completed_owner_{{ owner.pk }}">
+          {% blocktrans with username=owner.user.username count=items|length %}
+            Owner: {{ username }} ({{ count }} actions)
+          {% endblocktrans %}
+        </h4>
+        <div id="completed_owner_{{ owner.pk }}" class="collapse show">
+          <table class="table table-bordered table-striped mb-4">
+            <thead>
+              <tr>
+                <th>{% trans "Title" %}</th>
+                <th>{% trans "Portfolio" %}</th>
+                <th>{% trans "Performer" %}</th>
+                <th>{% trans "Deadline" %}</th>
+                <th>{% trans "Related Risks" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for action in items %}
+              <tr>
+                <td>
+                  <a href="javascript:void(0);" onclick="openActionOverlay({{ action.pk }})" class="action-link">
+                    {{ action.title|safe }}
+                  </a>
+                </td>
+                <td>{{ action.portfolio.name|default:"N/A" }}</td>
+                <td>{{ action.performer.user.username|default:"N/A" }}</td>
+                <td class="completed">{{ action.deadline|date:"d M Y" }}</td>
+                <td>
+                  {% for risk in action.risks.all %}
+                    <a href="{% url 'risk_detail' risk.pk %}">{{ risk.title|safe }}</a>
+                    {% if not forloop.last %}, {% endif %}
+                  {% empty %}
+                    {% trans "N/A" %}
+                  {% endfor %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+<!-- Action Detail Overlay -->
+<div id="action-detail-overlay">
+  <div class="overlay-header">
+    <h5>{% trans "Action Details" %}</h5>
+    <button onclick="closeActionOverlay()">{% trans "Close" %}</button>
+  </div>
+  <iframe id="action-detail-iframe"></iframe>
+</div>
+
+<script>
+  function openActionOverlay(actionId) {
+    const overlay = document.getElementById('action-detail-overlay');
+    const iframe = document.getElementById('action-detail-iframe');
+    iframe.src = `/action_detail/${actionId}/`;
+    overlay.classList.add('active');
+  }
+
+  function closeActionOverlay() {
+    const overlay = document.getElementById('action-detail-overlay');
+    const iframe = document.getElementById('action-detail-iframe');
+    iframe.src = '';
+    overlay.classList.remove('active');
+  }
+</script>
+</body>
+</html>

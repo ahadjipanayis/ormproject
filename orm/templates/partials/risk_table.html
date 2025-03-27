@@ -1,0 +1,67 @@
+<table class="table table-bordered risk-table">
+    <thead class="table-dark">
+        <tr>
+            <th style="width: 40%;">Τίτλος</th>
+            <th style="width: 20%;">Κατηγορία</th>
+            <th style="width: 10%;">Εγγενής Βαθμολογία</th>
+            <th style="width: 10%;">Υπολειπόμενη Βαθμολογία</th>
+            <th style="width: 10%;">Στοχευμένη Βαθμολογία</th>
+            <th style="width: 10%;">Ιδιοκτήτες & Εγκρίσεις</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for risk_data in risks %}
+        <tr data-title="{{ risk_data.risk.title|lower }}">
+            <td>
+                <a href="{% url 'risk_detail' risk_data.risk.id %}" class="risk-link">{{ risk_data.risk.title|safe }}</a>
+            </td>
+            <td>{{ risk_data.risk.category.name }}</td>
+            <td>
+                <div class="card {% if risk_data.risk.inherent_score > 12 %}bg-danger text-white{% elif risk_data.risk.inherent_score > 6 %}bg-warning text-dark{% else %}bg-success text-white{% endif %}">
+                    <div class="card-body p-2 text-center">
+                        <small><strong>Inherent</strong></small><br>
+                        <span>{{ risk_data.risk.inherent_likelihood }} × {{ risk_data.risk.inherent_impact }}</span><br>
+                        <strong>{{ risk_data.risk.inherent_score }}</strong>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="card {% if risk_data.risk.residual_score > 12 %}bg-danger text-white{% elif risk_data.risk.residual_score > 6 %}bg-warning text-dark{% else %}bg-success text-white{% endif %}">
+                    <div class="card-body p-2 text-center">
+                        <small><strong>Residual</strong></small><br>
+                        <span>{{ risk_data.risk.residual_likelihood }} × {{ risk_data.risk.residual_impact }}</span><br>
+                        <strong>{{ risk_data.risk.residual_score }}</strong>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="card {% if risk_data.risk.targeted_score > 12 %}bg-danger text-white{% elif risk_data.risk.targeted_score > 6 %}bg-warning text-dark{% else %}bg-success text-white{% endif %}">
+                    <div class="card-body p-2 text-center">
+                        <small><strong>Targeted</strong></small><br>
+                        <span>{{ risk_data.risk.targeted_likelihood }} × {{ risk_data.risk.targeted_impact }}</span><br>
+                        <strong>{{ risk_data.risk.targeted_score }}</strong>
+                    </div>
+                </div>
+            </td>
+            <td>
+                {% for owner, approval in risk_data.owner_approvals.items %}
+                <div class="owner-card">
+                    <strong>{{ owner.role }}</strong><br>
+                    <small>{{ owner.user }}</small><br>
+                    <small>Επόμενη: {{ approval.next_approval|date:"d/m/Y"|default:"N/A" }}</small><br>
+                    <small>Κατάσταση: 
+                        {% if approval.countdown > 0 %}
+                            <span class="badge bg-success">Σε {{ approval.countdown }} ημέρες</span>
+                        {% elif approval.countdown == 0 %}
+                            <span class="badge bg-warning">Σήμερα</span>
+                        {% else %}
+                            <span class="badge bg-danger">Καθυστερημένο</span>
+                        {% endif %}
+                    </small>
+                </div>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

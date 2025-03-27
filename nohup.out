@@ -1,0 +1,224 @@
+[2025-03-26 21:56:17 +0200] [45990] [INFO] Starting gunicorn 23.0.0
+[2025-03-26 21:56:17 +0200] [45990] [INFO] Listening at: http://0.0.0.0:8000 (45990)
+[2025-03-26 21:56:17 +0200] [45990] [INFO] Using worker: sync
+[2025-03-26 21:56:17 +0200] [45991] [INFO] Booting worker with pid: 45991
+2025-03-26 21:56:24.824847: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-26 21:56:24.829652: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-26 21:56:24.840910: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1743018984.874784   45991 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1743018984.880299   45991 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-26 21:56:24.900854: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+[2025-03-26 22:06:32 +0200] [45990] [INFO] Handling signal: hup
+[2025-03-26 22:06:32 +0200] [45990] [INFO] Hang up: Master
+[2025-03-26 22:06:32 +0200] [49984] [INFO] Booting worker with pid: 49984
+[2025-03-26 22:06:32 +0200] [45990] [ERROR] Worker (pid:45991) was sent SIGHUP!
+2025-03-26 22:06:39.272869: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-26 22:06:39.277297: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-26 22:06:39.289770: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1743019599.309654   49984 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1743019599.315389   49984 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-26 22:06:39.336451: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+Not Found: /static/tinymce/plugins/paste/plugin.min.js
+[2025-03-27 07:22:05 +0200] [45990] [INFO] Handling signal: term
+[2025-03-27 07:22:05 +0200] [49984] [INFO] Worker exiting (pid: 49984)
+[2025-03-27 07:22:06 +0200] [45990] [INFO] Shutting down: Master
+[2025-03-27 07:22:36 +0200] [239894] [INFO] Starting gunicorn 23.0.0
+[2025-03-27 07:22:36 +0200] [239894] [INFO] Listening at: http://0.0.0.0:8000 (239894)
+[2025-03-27 07:22:36 +0200] [239894] [INFO] Using worker: sync
+[2025-03-27 07:22:36 +0200] [239895] [INFO] Booting worker with pid: 239895
+2025-03-27 07:22:43.413513: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-27 07:22:43.422168: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-27 07:22:43.437259: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1743052963.456401  239895 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1743052963.462158  239895 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-27 07:22:43.483284: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+[2025-03-27 08:40:16 +0200] [239894] [INFO] Handling signal: winch
+[2025-03-27 08:48:19 +0200] [270913] [INFO] Starting gunicorn 23.0.0
+[2025-03-27 08:48:19 +0200] [270913] [INFO] Listening at: http://0.0.0.0:8000 (270913)
+[2025-03-27 08:48:19 +0200] [270913] [INFO] Using worker: sync
+[2025-03-27 08:48:19 +0200] [270914] [INFO] Booting worker with pid: 270914
+2025-03-27 08:48:24.541614: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-27 08:48:24.546017: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2025-03-27 08:48:24.557790: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1743058104.576837  270914 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1743058104.582603  270914 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-03-27 08:48:24.602411: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+[2025-03-27 08:56:50 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 08:56:50 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 08:56:50 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 08:56:50 +0200] [270913] [INFO] Handling signal: winch
+Not Found: /favicon.ico
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:46 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:11:57 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:22 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:23 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:23 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:23 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:23 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:23 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:23 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:23 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:14:23 +0200] [270913] [INFO] Handling signal: winch
+Not Found: /favicon.ico
+[2025-03-27 09:17:45 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:17:49 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:17:52 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:17:52 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:06 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:06 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:06 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:06 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:18:07 +0200] [270913] [INFO] Handling signal: winch
+[2025-03-27 09:20:48 +0200] [270913] [INFO] Handling signal: int
+[2025-03-27 09:20:48 +0200] [270914] [INFO] Worker exiting (pid: 270914)
+[DEBUG] Entering run_exploits view
+[DEBUG] Request data: {'selected_ports': {'173.19.6.233': ['135', '139', '445', '3389', '5800', '5900', '7070']}}
+[DEBUG] Starting exploit tests for 1 devices
+[DEBUG] Processing device 173.19.6.233 with ports ['135', '139', '445', '3389', '5800', '5900', '7070']
+[DEBUG] Exploit info for port 135: {'name': 'Microsoft RPC Vulnerabilities', 'tool': 'Metasploit', 'exploit': 'exploit/windows/ms08_067_netapi'}
+[DEBUG] Running test Microsoft RPC Vulnerabilities on 173.19.6.233:135
+[DEBUG] Executing tool Metasploit for 173.19.6.233:135
+[DEBUG] Tool execution failed: 'exploit'
+[DEBUG] Exploit info for port 139: {'name': 'SMB Enumeration', 'tool': 'Nmap NSE', 'script': 'smb-enum-shares'}
+[DEBUG] Running test SMB Enumeration on 173.19.6.233:139
+[DEBUG] Executing tool Nmap NSE for 173.19.6.233:139
+[DEBUG] Starting Nmap script smb-enum-shares on 173.19.6.233:139
+[DEBUG] Nmap command: nmap -sT -p 139 --script smb-enum-shares 173.19.6.233
+[DEBUG] Nmap result - returncode: 0, stdout: Starting Nmap 7.93 ( https://nmap.org ) at 2025-03-27 09:06 EET
+Nmap scan report for giannopoulos.JP...
+[DEBUG] Tool Nmap NSE result: {'status': 'success', 'output': 'Starting Nmap 7.93 ( https://nmap.org ) at 2025-03-27 09:06 EET\nNmap scan report for giannopoulos.JPHELLAS.GR (173.19.6.233)\nHost is up (0.0010s latency).\n\nPORT    STATE SERVICE\n139/tcp open  netbios-ssn\n\nNmap done: 1 IP address (1 host up) scanned in 0.32 seconds', 'error': None}
+[DEBUG] Exploit info for port 445: {'name': 'SMB Exploit (EternalBlue)', 'tool': 'Metasploit', 'exploit': 'exploit/windows/smb/ms17_010_eternalblue'}
+[DEBUG] Running test SMB Exploit (EternalBlue) on 173.19.6.233:445
+[DEBUG] Executing tool Metasploit for 173.19.6.233:445
+[DEBUG] Tool execution failed: 'exploit'
+[DEBUG] Exploit info for port 3389: {'name': 'RDP Vulnerability Scan', 'tool': 'Nmap NSE', 'script': 'rdp-vuln-ms12-020'}
+[DEBUG] Running test RDP Vulnerability Scan on 173.19.6.233:3389
+[DEBUG] Executing tool Nmap NSE for 173.19.6.233:3389
+[DEBUG] Starting Nmap script rdp-vuln-ms12-020 on 173.19.6.233:3389
+[DEBUG] Nmap command: nmap -sT -p 3389 --script rdp-vuln-ms12-020 173.19.6.233
+[DEBUG] Nmap result - returncode: 0, stdout: Starting Nmap 7.93 ( https://nmap.org ) at 2025-03-27 09:06 EET
+Nmap scan report for giannopoulos.JP...
+[DEBUG] Tool Nmap NSE result: {'status': 'success', 'output': 'Starting Nmap 7.93 ( https://nmap.org ) at 2025-03-27 09:06 EET\nNmap scan report for giannopoulos.JPHELLAS.GR (173.19.6.233)\nHost is up (0.00093s latency).\n\nPORT     STATE SERVICE\n3389/tcp open  ms-wbt-server\n\nNmap done: 1 IP address (1 host up) scanned in 0.43 seconds', 'error': None}
+[DEBUG] Exploit info for port 5800: {'name': 'Packet Analysis', 'tests': [{'name': 'Wireshark Analysis', 'tool': 'Wireshark', 'command': 'tshark -r {capture_file}'}]}
+[DEBUG] Running test Wireshark Analysis on 173.19.6.233:5800
+[DEBUG] Executing tool Wireshark for 173.19.6.233:5800
+[DEBUG] Starting Wireshark analysis on tshark -r capture.pcap
+[DEBUG] Wireshark command: tshark -r tshark -r capture.pcap
+[DEBUG] Wireshark failed: [Errno 2] No such file or directory: 'tshark'
+[DEBUG] Tool Wireshark result: {'status': 'error', 'error': "[Errno 2] No such file or directory: 'tshark'"}
+[DEBUG] Exploit info for port 5900: {'name': 'Packet Analysis', 'tests': [{'name': 'Wireshark Analysis', 'tool': 'Wireshark', 'command': 'tshark -r {capture_file}'}]}
+[DEBUG] Running test Wireshark Analysis on 173.19.6.233:5900
+[DEBUG] Executing tool Wireshark for 173.19.6.233:5900
+[DEBUG] Starting Wireshark analysis on tshark -r capture.pcap
+[DEBUG] Wireshark command: tshark -r tshark -r capture.pcap
+[DEBUG] Wireshark failed: [Errno 2] No such file or directory: 'tshark'
+[DEBUG] Tool Wireshark result: {'status': 'error', 'error': "[Errno 2] No such file or directory: 'tshark'"}
+[DEBUG] Exploit info for port 7070: {'name': 'Packet Analysis', 'tests': [{'name': 'Wireshark Analysis', 'tool': 'Wireshark', 'command': 'tshark -r {capture_file}'}]}
+[DEBUG] Running test Wireshark Analysis on 173.19.6.233:7070
+[DEBUG] Executing tool Wireshark for 173.19.6.233:7070
+[DEBUG] Starting Wireshark analysis on tshark -r capture.pcap
+[DEBUG] Wireshark command: tshark -r tshark -r capture.pcap
+[DEBUG] Wireshark failed: [Errno 2] No such file or directory: 'tshark'
+[DEBUG] Tool Wireshark result: {'status': 'error', 'error': "[Errno 2] No such file or directory: 'tshark'"}
+[DEBUG] Generating report
+[DEBUG] Report generated: Scan Report Generated: 2025-03-27 09:06:07
+
+Device: 173.19.6.233
+Port: 135, Test: Microsoft RPC Vulnerabilities
+Status: error
+Details:
+'exploit'
+--------------------------------------------------
+Port...
+[DEBUG] Exploit tests completed, returning response
+[2025-03-27 09:20:50 +0200] [270913] [INFO] Shutting down: Master

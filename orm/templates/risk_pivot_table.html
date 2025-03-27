@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Risk Tables with Expand/Collapse and Resizable Height</title>
+
+    <!-- jqGrid CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.5/css/ui.jqgrid.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/free-jqgrid@4.15.5/js/jquery.jqgrid.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <style>
+        body {
+            font-family: Calibri, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .ui-jqgrid .ui-jqgrid-btable td, 
+        .ui-jqgrid .ui-jqgrid-htable th {
+            text-align: left;
+        }
+        .ui-jqgrid .ui-jqgrid-btable td[aria-describedby="grid_inherent_score"], 
+        .ui-jqgrid .ui-jqgrid-btable td[aria-describedby="grid_residual_score"], 
+        .ui-jqgrid .ui-jqgrid-btable td[aria-describedby="grid_targeted_score"],
+        .ui-jqgrid .ui-jqgrid-htable th[aria-describedby="grid_inherent_score"],
+        .ui-jqgrid .ui-jqgrid-htable th[aria-describedby="grid_residual_score"],
+        .ui-jqgrid .ui-jqgrid-htable th[aria-describedby="grid_targeted_score"] {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .ui-jqgrid .ui-jqgrid-btable td {
+            font-size: 16px;
+            white-space: normal !important;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        .ui-jqgrid .ui-jqgrid-htable th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        a {
+            text-decoration: none;
+            font-size: 16px;
+        }
+        h2 {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #grid-container, #grid-container-residual {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .high-risk { background-color: #FF6F6F !important; color: white !important; }
+        .medium-risk { background-color: #FFD700 !important; color: black !important; }
+        .low-risk { background-color: #90EE90 !important; color: black !important; }
+        .btn-group {
+            margin-bottom: 15px;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin-right: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .resizable {
+            border: 1px solid #ccc;
+            padding: 0;
+            overflow: hidden;
+        }
+        .risk-count {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            color: #007bff;
+        }
+        
+    </style>
+</head>
+<body>
+  
+    <div class="risk-count">Total Risks: <span id="total-risks"></span></div>
+
+    <!-- First Table (Portfolio and Category) -->
+    <div id="grid-container" class="resizable">
+        <div class="btn-group">
+            <button class="btn" id="expandAllGrid1">Expand All (Grid 1)</button>
+            <button class="btn" id="collapseAllGrid1">Collapse All (Grid 1)</button>
+        </div>
+        <table id="grid"></table>
+        <div id="pager"></div>
+    </div>
+
+    <!-- Second Table (Residual Score) -->
+    <div id="grid-container-residual" class="resizable">
+        <div class="btn-group">
+            <button class="btn" id="expandAllGrid2">Expand All (Grid 2)</button>
+            <button class="btn" id="collapseAllGrid2">Collapse All (Grid 2)</button>
+        </div>
+        <table id="grid_residual"></table>
+        <div id="pager_residual"></div>
+          <!-- New Section for Bar Charts -->
+  
+    <script>
+            // Render Bar Charts by Category
+   
+
+        $(function() {
+            $("#grid-container, #grid-container-residual").resizable({
+                handles: "s",
+                alsoResize: "#grid, #grid_residual",
+                minHeight: 200,
+                resize: function(event, ui) {
+                    $("#grid").jqGrid('setGridHeight', ui.size.height - 100);
+                    $("#grid_residual").jqGrid('setGridHeight', ui.size.height - 100);
+                }
+            });
+        });
+
+        var tableData = [
+            {% for portfolio, categories in pivot_data.items %}
+                {% for category, risks in categories.items %}
+                    {% for risk in risks %}
+                        {
+                            portfolio: "{{ portfolio }}",
+                            category: "{{ category }}",
+                            risk_title: `<a href='/risk/{{ risk.id }}/' target='_blank'>{{ risk.title|safe }}</a>`,
+                            inherent_score: {{ risk.inherent_score }},
+                            mitigations: `{% for mitigation in risk.mitigations %}{{ mitigation.title|safe }}{% if not forloop.last %}, {% endif %}{% endfor %}`,
+                            residual_score: {{ risk.residual_score }},
+                            targeted_score: {{ risk.targeted_score }},
+                            owners: "{{ risk.owners }}"
+                        },
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        ];
+
+        document.getElementById("total-risks").textContent = tableData.length;
+
+        function scoreFormatter(cellvalue) {
+            if (cellvalue >= 15) {
+                return '<div class="high-risk">' + cellvalue + '</div>';
+            } else if (cellvalue >= 8) {
+                return '<div class="medium-risk">' + cellvalue + '</div>';
+            } else {
+                return '<div class="low-risk">' + cellvalue + '</div>';
+            }
+        }
+
+        $("#grid").jqGrid({
+            data: tableData,
+            datatype: "local",
+            colModel: [
+                { label: 'Portfolio', name: 'portfolio', width: 150 },
+                { label: 'Category', name: 'category', width: 150 },
+                { label: 'Risk Title', name: 'risk_title', width: 300, formatter: "html" },
+                { label: 'Inherent Score', name: 'inherent_score', width: 100, formatter: scoreFormatter, sorttype: 'int' },
+                { label: 'Mitigations', name: 'mitigations', width: 350, formatter: "html" },
+                { label: 'Residual Score', name: 'residual_score', width: 100, formatter: scoreFormatter, sorttype: 'int' },
+                { label: 'Targeted Score', name: 'targeted_score', width: 100, formatter: scoreFormatter, sorttype: 'int' },
+                { label: 'Owners', name: 'owners', width: 200 }
+            ],
+            viewrecords: true,
+            width: '100%',
+            autowidth: true,
+            shrinkToFit: false,
+            height: 400,
+            scroll: 1,
+            grouping: true,
+            groupingView: {
+                groupField: ['portfolio', 'category'],
+                groupColumnShow: [true, true],
+                groupText: ['<b>{0} - {1} Items</b>', '<b>{0} - {1} Items</b>'],
+                groupSummary: [true, true],
+                groupCollapse: true
+            },
+            sortable: true,
+            sortname: 'portfolio',
+            sortorder: "asc",
+            caption: "Risk Table with Grouping by Portfolio and Category"
+        });
+
+        $("#grid_residual").jqGrid({
+            data: tableData,
+            datatype: "local",
+            colModel: [
+                { label: 'Portfolio', name: 'portfolio', width: 150 },
+                { label: 'Category', name: 'category', width: 150 },
+                { label: 'Risk Title', name: 'risk_title', width: 300, formatter: "html" },
+                { label: 'Inherent Score', name: 'inherent_score', width: 100, formatter: scoreFormatter, sorttype: 'int' },
+                { label: 'Mitigations', name: 'mitigations', width: 350, formatter: "html" },
+                { label: 'Residual Score', name: 'residual_score', width: 100, formatter: scoreFormatter, sorttype: 'int' },
+                { label: 'Targeted Score', name: 'targeted_score', width: 100, formatter: scoreFormatter, sorttype: 'int' },
+                { label: 'Owners', name: 'owners', width: 200 }
+            ],
+            viewrecords: true,
+            width: '100%',
+            autowidth: true,
+            shrinkToFit: false,
+            height: 400,
+            scroll: 1,
+            grouping: true,
+            groupingView: {
+                groupField: ['residual_score'],
+                groupColumnShow: [true],
+                groupText: ['<b>{0} - {1} Items</b>'],
+                groupSummary: [true],
+                groupCollapse: true
+            },
+            sortable: true,
+            sortname: 'residual_score',
+            sortorder: "desc",
+            caption: "Risk Table Grouped by Residual Score, Category, and Portfolio"
+        });
+
+        $('#expandAllGrid1').on('click', function() {
+            var groupingView = $("#grid").jqGrid('getGridParam', 'groupingView');
+            groupingView.groupCollapse = false;
+            $('#grid').trigger("reloadGrid");
+        });
+        $('#collapseAllGrid1').on('click', function() {
+            var groupingView = $("#grid").jqGrid('getGridParam', 'groupingView');
+            groupingView.groupCollapse = true;
+            $('#grid').trigger("reloadGrid");
+        });
+
+        $('#expandAllGrid2').on('click', function() {
+            var groupingView = $("#grid_residual").jqGrid('getGridParam', 'groupingView');
+            groupingView.groupCollapse = false;
+            $('#grid_residual').trigger("reloadGrid");
+        });
+        $('#collapseAllGrid2').on('click', function() {
+            var groupingView = $("#grid_residual").jqGrid('getGridParam', 'groupingView');
+            groupingView.groupCollapse = true;
+            $('#grid_residual').trigger("reloadGrid");
+        });
+    </script>
+</body>
+</html>
