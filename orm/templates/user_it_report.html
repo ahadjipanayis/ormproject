@@ -191,7 +191,7 @@
   <form method="post" action="{% url 'generate_it_risk_report' %}" onsubmit="event.preventDefault(); submitFormFetch(this)">
     {% csrf_token %}
     <div class="portfolio-list">
-      {% for portfolio in portfolios %}
+      {% for portfolio in portfolios|dictsort:"name" %}
         <div class="portfolio-item">
           <label>
             <input type="checkbox" name="portfolios" value="{{ portfolio.id }}">
