@@ -6,3 +6,6 @@ db.sqlite3
 .env
 media/
 staticfiles/
+ermapp.sql
+metabase.sql
+metabasedata.sql
