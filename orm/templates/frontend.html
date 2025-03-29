@@ -271,7 +271,18 @@
             <a href="javascript:void(0)" data-link="{{ home_link }}" class="btn" title="{% trans 'ERM Manual' %}" aria-label="{% trans 'View ERM Manual' %}">
                 <i class="fas fa-book"></i> {% trans "Manual" %}
             </a>
+          <!-- Events -->
+          <a href="javascript:void(0)" data-link="events/" class="btn btn-events" title="{% trans 'Incidents' %}" aria-label="{% trans 'View Incidents' %}">
+            <i class="fas fa-calendar"></i> {% trans "Incidents" %}
+        </a>
 
+        <!-- Risk Registry -->
+        <a href="javascript:void(0)" data-link="/risks_new/" class="btn btn-risk" title="{% trans 'Risk Registry' %}" aria-label="{% trans 'View Risk Registry' %}">
+            <i class="fas fa-briefcase"></i> {% trans "Risk Registry" %}
+        </a>
+        <a href="javascript:void(0)" data-link="actions/" class="btn btn-action" title="{% trans 'Actions' %}" aria-label="{% trans 'View Actions' %}">
+            <i class="fas fa-tasks"></i> {% trans "Actions" %}
+        </a>
             <!-- Calendar -->
             <button class="btn" title="{% trans 'Calendar' %}" onclick="loadContent('{{ calendar_view_link }}')" aria-label="{% trans 'View Calendar' %}">
                 <i class="fas fa-calendar-alt"></i>
@@ -292,18 +303,7 @@
                 <i class="fas fa-handshake"></i> {% trans "" %}
             </a>
 
-            <!-- Events -->
-            <a href="javascript:void(0)" data-link="events/" class="btn btn-events" title="{% trans 'Incidents' %}" aria-label="{% trans 'View Incidents' %}">
-                <i class="fas fa-calendar"></i> {% trans "Incidents" %}
-            </a>
-
-            <!-- Risk Registry -->
-            <a href="javascript:void(0)" data-link="/risks_new/" class="btn btn-risk" title="{% trans 'Risk Registry' %}" aria-label="{% trans 'View Risk Registry' %}">
-                <i class="fas fa-briefcase"></i> {% trans "Risk Registry" %}
-            </a>
-            <a href="javascript:void(0)" data-link="actions/" class="btn btn-action" title="{% trans 'Actions' %}" aria-label="{% trans 'View Actions' %}">
-                <i class="fas fa-tasks"></i> {% trans "Actions" %}
-            </a>
+  
             <!-- Tools Dropdown -->
             <div class="dropdown">
                 <button class="dropdown-btn" aria-label="{% trans 'Tools Options' %}"><i class="fas fa-tools"></i> {% trans "" %}</button>
