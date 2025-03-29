@@ -7,7 +7,6 @@
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
-        .pagination { margin-top: 20px; }
         details { margin: 10px 0; }
         summary { cursor: pointer; font-weight: bold; }
         .day-section { margin-bottom: 20px; border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
@@ -46,15 +45,5 @@
             {% endfor %}
         </div>
     {% endfor %}
-
-    <div class="pagination">
-        {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
-        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">Next</a>
-        {% endif %}
-    </div>
 </body>
 </html>
