@@ -407,6 +407,9 @@
                 <button class="dropdown-btn" aria-label="{% trans 'Admin Tools' %}"><i class="fas fa-cogs"></i> {% trans "" %}</button>
                 <div class="dropdown-content">
                     <a href="/admin/" target="_blank"><i class="fas fa-user-shield"></i> {% trans "Admin Panel" %}</a>
+                    <a href="https://ermapp.avax.gr:5055/pgweb/" target="_blank"><i class="fa-solid fa-database"></i> {% trans "pgweb" %}</a>
+                    <a href="https://ermapp.avax.gr:10001/sysinfo.cgi?xnavigation=1" target="_blank"><i class="fa-solid fa-server"></i> {% trans "Webmin" %}</a>
+
                     <a href="javascript:void(0)" data-link="{{ user_profile_link }}"><i class="fas fa-id-card"></i> {% trans "Profiles" %}</a>
                     <a href="{% url 'run_create_approval_requests' %}" target="_blank"><i class="fas fa-play-circle"></i> {% trans "Run Approvals" %}</a>
                     <a href="javascript:void(0)" data-link="/approval-control/"><i class="fas fa-user-secret"></i> {% trans "Status Per User" %}</a>
@@ -417,6 +420,9 @@
                     <a href="javascript:void(0)" data-link="/upload/"><i class="fas fa-users"></i> {% trans "Photo Verification" %}</a>
                     <a href="javascript:void(0)" data-link="/loan-checker/"><i class="fas fa-users"></i> {% trans "Loan" %}</a>
                     <a href="javascript:void(0)" data-link="/agent-explorer/"><i class="fas fa-users"></i> {% trans "AGENT" %}</a>
+          
+          
+          
                 </div>
             </div>
             {% endif %}
