@@ -6,37 +6,53 @@
     <title>AVAX Build: Risk & Reward</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: linear-gradient(to bottom, #d9e4dd, #a3bffa); color: #333; text-align: center; }
-        .container { max-width: 900px; margin: 0 auto; background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); }
+        .container { max-width: 1000px; margin: 0 auto; background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); }
+        #startScreen, #gameScreen { display: none; }
+        #startScreen.active, #gameScreen.active { display: block; }
         #gameArea { display: flex; justify-content: space-between; gap: 20px; }
-        #stats, #actions { flex: 1; padding: 10px; }
-        #progress { width: 100%; height: 20px; background: #ccc; border-radius: 5px; }
+        #stats, #actions { flex: 1; padding: 15px; }
+        #progress { width: 100%; height: 25px; background: #ccc; border-radius: 5px; }
         #progressBar { height: 100%; background: #2ecc71; width: 0; transition: width 0.5s; }
-        button { padding: 10px 20px; background: #3498db; border: none; color: white; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button { padding: 12px 25px; background: #3498db; border: none; color: white; border-radius: 5px; cursor: pointer; margin: 5px; }
         button:hover { background: #2980b9; }
-        #eventLog { font-size: 1.1em; margin-top: 10px; color: #e74c3c; }
-        canvas { width: 100%; max-height: 200px; background: #ecf0f1; }
+        #eventLog { font-size: 1.2em; margin-top: 15px; color: #e74c3c; }
+        canvas { width: 100%; height: 250px; background: #ecf0f1; border: 2px solid #34495e; }
+        select { padding: 10px; margin: 10px; font-size: 1em; }
+        #score { font-weight: bold; color: #27ae60; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>AVAX Build: Risk & Reward</h1>
-        <p>Budget: <span id="budget">€1,000,000</span> | Risk: <span id="risk">0%</span> | Week: <span id="week">1/10</span></p>
-        <canvas id="siteCanvas" width="800" height="200"></canvas>
-        <div id="gameArea">
-            <div id="stats">
-                <h2>Project Progress</h2>
-                <div id="progress"><div id="progressBar"></div></div>
-                <p id="status">Begin your AVAX.gr project!</p>
-            </div>
-            <div id="actions">
-                <h2>Actions</h2>
-                <button onclick="rushWork()">Rush Work (€100,000)</button>
-                <button onclick="safetyChecks()">Safety Checks (€50,000)</button>
-                <button onclick="delayQuality()">Delay for Quality</button>
-                <button onclick="nextWeek()">Next Week</button>
-            </div>
+        <div id="startScreen" class="active">
+            <h1>AVAX Build: Risk & Reward</h1>
+            <p>Select Your Project:</p>
+            <select id="projectSelect">
+                <option value="bridge">Patras Coastal Bridge</option>
+                <option value="dam">Pindos Mountain Dam</option>
+                <option value="highway">Athenian Highway</option>
+            </select>
+            <button onclick="startGame()">Start Construction</button>
         </div>
-        <p id="eventLog"></p>
+        <div id="gameScreen">
+            <h1>AVAX Build: Risk & Reward</h1>
+            <p>Budget: <span id="budget">€1,000,000</span> | Risk: <span id="risk">0%</span> | Week: <span id="week">1/10</span> | Score: <span id="score">0</span></p>
+            <canvas id="siteCanvas" width="800" height="250"></canvas>
+            <div id="gameArea">
+                <div id="stats">
+                    <h2>Project Progress</h2>
+                    <div id="progress"><div id="progressBar"></div></div>
+                    <p id="status">Begin construction!</p>
+                </div>
+                <div id="actions">
+                    <h2>Actions</h2>
+                    <button onclick="rushWork()">Rush Work (€100,000)</button>
+                    <button onclick="safetyChecks()">Safety Checks (€50,000)</button>
+                    <button onclick="reinforceMaterials()">Reinforce Materials (€75,000)</button>
+                    <button onclick="nextWeek()">Next Week</button>
+                </div>
+            </div>
+            <p id="eventLog"></p>
+        </div>
     </div>
 
     <script>
@@ -44,35 +60,82 @@
         let risk = 0;
         let week = 1;
         let progress = 0;
+        let score = 0;
         const maxWeeks = 10;
+        let projectType = '';
         const canvas = document.getElementById('siteCanvas');
         const ctx = canvas.getContext('2d');
 
-        const events = [
-            { text: "Rain floods site! Delay risk up.", risk: 0.2 },
-            { text: "Steel shortage. Costs increase.", cost: 50000 },
-            { text: "Sunny week! Progress boost.", progress: 15 },
-            { text: "Worker strike. Extra costs.", cost: 30000 }
-        ];
+        const projects = {
+            bridge: {
+                events: [
+                    { text: "Storm surge! Risk up.", risk: 0.25 },
+                    { text: "Concrete delay. Costs rise.", cost: 60000 },
+                    { text: "Calm seas. Progress boost.", progress: 20 },
+                    { text: "Crane breakdown. Extra cost.", cost: 40000 }
+                ],
+                draw: () => {
+                    ctx.fillStyle = '#3498db'; // Water
+                    ctx.fillRect(0, 150, canvas.width, 100);
+                    ctx.fillStyle = '#95a5a6'; // Bridge
+                    ctx.fillRect(50, 100, progress * 7, 20);
+                    ctx.fillStyle = '#e67e22'; // Crane
+                    ctx.fillRect(canvas.width - 50, 50, 20, 70);
+                }
+            },
+            dam: {
+                events: [
+                    { text: "Landslide! Risk spikes.", risk: 0.3 },
+                    { text: "Rock shortage. Costs up.", cost: 70000 },
+                    { text: "Dry week. Progress up.", progress: 15 },
+                    { text: "Equipment jam. Extra cost.", cost: 50000 }
+                ],
+                draw: () => {
+                    ctx.fillStyle = '#8d5524'; // Mountain
+                    ctx.fillRect(0, 100, canvas.width, 150);
+                    ctx.fillStyle = '#95a5a6'; // Dam
+                    ctx.fillRect(100, 100, progress * 6, 100);
+                    ctx.fillStyle = '#e67e22'; // Crane
+                    ctx.fillRect(50, 50, 20, 50);
+                }
+            },
+            highway: {
+                events: [
+                    { text: "Traffic jam! Delay risk up.", risk: 0.2 },
+                    { text: "Asphalt delay. Costs rise.", cost: 50000 },
+                    { text: "Good weather. Progress boost.", progress: 20 },
+                    { text: "Worker strike. Extra cost.", cost: 30000 }
+                ],
+                draw: () => {
+                    ctx.fillStyle = '#7f8c8d'; // Road base
+                    ctx.fillRect(0, 150, canvas.width, 100);
+                    ctx.fillStyle = '#2c3e50'; // Asphalt
+                    ctx.fillRect(50, 160, progress * 7, 40);
+                    ctx.fillStyle = '#e67e22'; // Truck
+                    ctx.fillRect(canvas.width - 60, 140, 40, 20);
+                }
+            }
+        };
+
+        function startGame() {
+            projectType = document.getElementById('projectSelect').value;
+            document.getElementById('startScreen').classList.remove('active');
+            document.getElementById('gameScreen').classList.add('active');
+            drawSite();
+            updateUI("Construction begins!");
+        }
 
         function drawSite() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Ground
-            ctx.fillStyle = '#8d5524';
-            ctx.fillRect(0, 150, canvas.width, 50);
-            // Structure
-            ctx.fillStyle = '#95a5a6';
-            ctx.fillRect(50, 100, progress * 7, 50);
-            // Crane
-            ctx.fillStyle = '#e67e22';
-            ctx.fillRect(canvas.width - 50, 50, 20, 100);
+            projects[projectType].draw();
         }
 
         function rushWork() {
             if (budget >= 100000) {
                 budget -= 100000;
                 progress += 20;
-                risk += 0.1;
+                risk += 0.15;
+                score += 10;
                 updateUI("Work rushed! Progress up, risk up.");
                 drawSite();
             } else {
@@ -83,18 +146,25 @@
         function safetyChecks() {
             if (budget >= 50000) {
                 budget -= 50000;
-                risk -= 0.15;
-                updateUI("Safety checks done! Risk reduced.");
+                risk -= 0.2;
+                score += 20;
+                updateUI("Safety checks completed! Risk down.");
             } else {
                 updateUI("Insufficient budget!");
             }
         }
 
-        function delayQuality() {
-            progress -= 10;
-            risk -= 0.2;
-            updateUI("Delayed for quality! Progress down, risk down.");
-            drawSite();
+        function reinforceMaterials() {
+            if (budget >= 75000) {
+                budget -= 75000;
+                risk -= 0.25;
+                progress += 10;
+                score += 15;
+                updateUI("Materials reinforced! Risk down, progress up.");
+                drawSite();
+            } else {
+                updateUI("Insufficient budget!");
+            }
         }
 
         function nextWeek() {
@@ -104,22 +174,24 @@
             }
             week++;
             progress += 10; // Base progress
-            const event = events[Math.floor(Math.random() * events.length)];
+            score += 5;
+            const event = projects[projectType].events[Math.floor(Math.random() * projects[projectType].events.length)];
             if (event.risk) risk += event.risk;
             if (event.cost) budget -= event.cost;
             if (event.progress) progress += event.progress;
             updateUI(event.text);
             drawSite();
-            if (Math.random() < risk) triggerCollapse();
+            if (Math.random() < risk) triggerFailure();
             checkProgress();
         }
 
-        function triggerCollapse() {
+        function triggerFailure() {
             ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
-            ctx.fillRect(50, 100, progress * 7, 50);
-            budget -= 200000;
-            progress -= 30;
-            updateUI("Structure collapsed! Major setback.");
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            budget -= 150000;
+            progress -= 25;
+            score -= 50;
+            updateUI("Failure detected! Major setback.");
             setTimeout(drawSite, 1000);
         }
 
@@ -133,26 +205,25 @@
 
         function endGame(success = false) {
             if (success || week >= maxWeeks) {
-                const outcome = success ? `Success! Project completed with €${budget.toLocaleString()} left!` : "Failed! Time ran out.";
+                const outcome = success ? `Success! Project completed with €${budget.toLocaleString()} left. Score: ${score}` : `Failed! Time ran out. Final Score: ${score}`;
                 updateUI(outcome);
                 document.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                setTimeout(() => alert(`Game Over\n${outcome}\nLessons: Balance speed, safety, and budget!`), 500);
             }
         }
 
         function updateUI(message) {
             risk = Math.max(0, Math.min(1, risk));
             progress = Math.min(100, progress);
+            budget = Math.max(0, budget);
             document.getElementById('budget').textContent = `€${budget.toLocaleString()}`;
             document.getElementById('risk').textContent = `${(risk * 100).toFixed(0)}%`;
             document.getElementById('week').textContent = `${week}/${maxWeeks}`;
+            document.getElementById('score').textContent = score;
             document.getElementById('progressBar').style.width = `${progress}%`;
             document.getElementById('status').textContent = message;
             document.getElementById('eventLog').textContent = `Event: ${message}`;
         }
-
-        // Initial setup
-        drawSite();
-        updateUI("Begin your AVAX.gr project!");
     </script>
 </body>
 </html>
