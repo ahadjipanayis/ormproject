@@ -222,3 +222,6 @@ Details:
 Port...
 [DEBUG] Exploit tests completed, returning response
 [2025-03-27 09:20:50 +0200] [270913] [INFO] Shutting down: Master
+Pgweb v0.16.2 (git: e63945ee7182435a729f22a4203e2f15d00f6350) (go: go1.22.1) (build time: 2024-11-02T16:20:00Z) (arch: linux/amd64)
+Connecting to server...
+Error: authentication failed
