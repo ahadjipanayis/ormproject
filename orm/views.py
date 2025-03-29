@@ -13122,21 +13122,25 @@ def risk_search(request):
 
 
 
-from django.shortcuts import render
-from django.utils import timezone
-from .models import UserActivityLog
+# orm/views.py
 from collections import defaultdict
+from django.utils import timezone
+from django.shortcuts import render
+from django.core.paginator import Paginator
+from orm.models import UserActivityLog
 
 def user_activity_dashboard(request):
     """
-    Display all user activity logs, including logins, logouts, page views, etc.
+    Display all user activities with pagination.
     """
-    # Fetch all activities with related user data
     activities = UserActivityLog.objects.select_related('user').order_by('-timestamp')
-    
-    # Group by user for initial template rendering
+    total_activities = activities.count()
+    paginator = Paginator(activities, 25)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     grouped_activities = defaultdict(list)
-    for activity in activities:
+    for activity in page_obj:
         user = activity.user.username if activity.user else 'Anonymous'
         grouped_activities[user].append({
             'activity_type': activity.activity_type,
@@ -13147,12 +13151,15 @@ def user_activity_dashboard(request):
             'session_key': activity.session_key,
             'referrer': activity.referrer,
         })
-    
+
     return render(request, 'user_activity_dashboard.html', {
         'activities': dict(grouped_activities),
-        'total_activities': activities.count(),
+        'total_activities': total_activities,
         'last_updated': timezone.now(),
+        'page_obj': page_obj,
     })
+
+
 
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404

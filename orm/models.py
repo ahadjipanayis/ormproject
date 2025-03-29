@@ -1077,32 +1077,26 @@ class LikelihoodImpactDescription(models.Model):
 
 
 
+# orm/models.py
 from django.db import models
 from django.contrib.auth.models import User
-
-from django.db import models
-from django.contrib.auth.models import User
-from django.utils.timezone import now
+from django.utils import timezone
 
 class UserActivityLog(models.Model):
-    ACTIVITY_CHOICES = [
-        ("login", "Login"),
-        ("logout", "Logout"),
-        ("page_view", "Page View"),
-    ]
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    activity_type = models.CharField(max_length=50)  # e.g., "login", "page_view"
+    timestamp = models.DateTimeField(default=timezone.now)
+    ip_address = models.CharField(max_length=45, blank=True, null=True)
+    page_accessed = models.CharField(max_length=255, blank=True, null=True)
+    user_agent = models.TextField(blank=True, null=True)
+    session_key = models.CharField(max_length=40, blank=True, null=True)
+    referrer = models.TextField(blank=True, null=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="activities")
-    activity_type = models.CharField(max_length=20, choices=ACTIVITY_CHOICES)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    ip_address = models.GenericIPAddressField(null=True, blank=True)
-    page_accessed = models.CharField(max_length=300, null=True, blank=True)
-    user_agent = models.TextField(null=True, blank=True)
-    session_key = models.CharField(max_length=40, null=True, blank=True)
-    referrer = models.CharField(max_length=500, null=True, blank=True)
+    class Meta:
+        ordering = ['-timestamp']
 
     def __str__(self):
-        return f"{self.user.username} {self.activity_type} at {self.timestamp}"
-    
+        return f"{self.user or 'Anonymous'} - {self.activity_type} - {self.timestamp}" 
 from django.db import models
 from django.contrib.auth.models import User
 

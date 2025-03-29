@@ -2,7 +2,9 @@
 from django import template
 
 register = template.Library()
-
+@register.filter
+def sum_list_lengths(dict_of_lists):
+    return sum(len(lst) for lst in dict_of_lists.values())
 
 @register.filter
 def getattr(obj, attr_name):
@@ -109,3 +111,8 @@ def reverse(value):
 @register.filter
 def abs(value):
     return abs(int(value))
+
+
+
+
+

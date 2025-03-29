@@ -84,7 +84,7 @@ MIDDLEWARE = [
     'orm.middleware.Custom403Middleware',  # Custom middleware (ensure it works correctly)
     'orm.middleware.LicenseCheckMiddleware',  # Custom license check middleware
     # 'orm.middleware.UserActivityMiddleware',
-
+    'orm.middleware.UserActivityMiddleware'
 ]
 ROOT_URLCONF = 'ormproject.urls'
 import os

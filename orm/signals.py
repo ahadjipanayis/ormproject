@@ -83,40 +83,6 @@ from django.dispatch import receiver
 from django.utils.timezone import now
 from .models import UserActivityLog
 
-@receiver(user_logged_in)
-def log_user_login(sender, request, user, **kwargs):
-    """ Logs user login with detailed information """
-    UserActivityLog.objects.create(
-        user=user,
-        activity_type="login",
-        timestamp=now(),
-        ip_address=get_client_ip(request),
-        page_accessed=request.path,  # Logs the exact URL where login happened
-        user_agent=request.META.get("HTTP_USER_AGENT", "Unknown"),
-        session_key=request.session.session_key if hasattr(request, "session") else None,
-        referrer=request.META.get("HTTP_REFERER", "Direct Access"),
-    )
-
-@receiver(user_logged_out)
-def log_user_logout(sender, request, user, **kwargs):
-    """ Logs user logout with detailed information """
-    UserActivityLog.objects.create(
-        user=user,
-        activity_type="logout",
-        timestamp=now(),
-        ip_address=get_client_ip(request),
-        page_accessed=request.path,  # Logs the exact URL where logout happened
-        user_agent=request.META.get("HTTP_USER_AGENT", "Unknown"),
-        session_key=request.session.session_key if hasattr(request, "session") else None,
-        referrer=request.META.get("HTTP_REFERER", "Direct Access"),
-    )
-
-def get_client_ip(request):
-    """Helper to fetch user's IP address."""
-    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-    if x_forwarded_for:
-        return x_forwarded_for.split(",")[0]
-    return request.META.get("REMOTE_ADDR")
 
 # orm/signals.py
 from django.db.models.signals import m2m_changed
@@ -152,3 +118,37 @@ def update_approval_requests(sender, instance, action, pk_set, **kwargs):
     elif action == "post_clear":
         # All owners cleared: delete all approval requests for this risk
         ApprovalRequest.objects.filter(risk=risk).delete()
+        
+        
+# orm/signals.py
+from django.contrib.auth.signals import user_logged_in, user_logged_out
+from django.dispatch import receiver
+from django.utils import timezone
+from orm.models import UserActivityLog
+from orm.middleware import get_client_ip  # Reuse IP helper
+
+@receiver(user_logged_in)
+def log_user_login(sender, request, user, **kwargs):
+    UserActivityLog.objects.create(
+        user=user,
+        activity_type="login",
+        timestamp=timezone.now(),
+        ip_address=get_client_ip(request),
+        page_accessed=request.path,
+        user_agent=request.META.get("HTTP_USER_AGENT", "Unknown"),
+        session_key=request.session.session_key if hasattr(request, "session") else None,
+        referrer=request.META.get("HTTP_REFERER", "Direct Access"),
+    )
+
+@receiver(user_logged_out)
+def log_user_logout(sender, request, user, **kwargs):
+    UserActivityLog.objects.create(
+        user=user,
+        activity_type="logout",
+        timestamp=timezone.now(),
+        ip_address=get_client_ip(request),
+        page_accessed=request.path,
+        user_agent=request.META.get("HTTP_USER_AGENT", "Unknown"),
+        session_key=request.session.session_key if hasattr(request, "session") else None,
+        referrer=request.META.get("HTTP_REFERER", "Direct Access"),
+    )
