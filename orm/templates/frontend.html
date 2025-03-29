@@ -269,7 +269,7 @@
         <div class="nav-menu">
             <!-- ERM Manual (Moved to First Position) -->
             <a href="javascript:void(0)" data-link="{{ home_link }}" class="btn" title="{% trans 'ERM Manual' %}" aria-label="{% trans 'View ERM Manual' %}">
-                <i class="fas fa-book"></i> {% trans "ERM Manual" %}
+                <i class="fas fa-book"></i> {% trans "Manual" %}
             </a>
 
             <!-- Calendar -->
@@ -279,7 +279,7 @@
 
             <!-- Procedures -->
             <a href="javascript:void(0)" data-link="/procedures/" class="btn" title="{% trans 'Procedures' %}" aria-label="{% trans 'View Procedures' %}">
-                <i class="fas fa-diagram-project"></i> {% trans "Procedures" %}
+                <i class="fas fa-diagram-project"></i> {% trans "" %}
             </a>
 
             <!-- Documents -->
@@ -301,7 +301,9 @@
             <a href="javascript:void(0)" data-link="/risks_new/" class="btn btn-risk" title="{% trans 'Risk Registry' %}" aria-label="{% trans 'View Risk Registry' %}">
                 <i class="fas fa-briefcase"></i> {% trans "Risk Registry" %}
             </a>
-
+            <a href="javascript:void(0)" data-link="actions/" class="btn btn-action" title="{% trans 'Actions' %}" aria-label="{% trans 'View Actions' %}">
+                <i class="fas fa-tasks"></i> {% trans "Actions" %}
+            </a>
             <!-- Tools Dropdown -->
             <div class="dropdown">
                 <button class="dropdown-btn" aria-label="{% trans 'Tools Options' %}"><i class="fas fa-tools"></i> {% trans "" %}</button>
@@ -322,18 +324,16 @@
 
             <!-- Opportunities -->
             <a href="javascript:void(0)" data-link="/opportunities/" class="btn" title="{% trans 'Opportunities' %}" aria-label="{% trans 'View Opportunities' %}">
-                <i class="fas fa-lightbulb"></i> {% trans "Opportunities" %}
+                <i class="fas fa-lightbulb"></i> {% trans "" %}
             </a>
 
             <!-- KPIs/KRIs -->
             <a href="javascript:void(0)" data-link="indicators/" class="btn" title="{% trans 'KPIs/KRIs' %}" aria-label="{% trans 'View KPIs/KRIs' %}">
-                <i class="fas fa-chart-line"></i> {% trans "Indicators" %} (KPIs/KRIs)
+                <i class="fas fa-chart-line"></i> {% trans "" %} (KPIs/KRIs)
             </a>
 
             <!-- Actions -->
-            <a href="javascript:void(0)" data-link="actions/" class="btn btn-action" title="{% trans 'Actions' %}" aria-label="{% trans 'View Actions' %}">
-                <i class="fas fa-tasks"></i> {% trans "Actions" %}
-            </a>
+          
 
             {% if request.user.is_superuser or 'CTO' in request.user.userprofile.role or 'ALLIT' in request.user.userprofile.role or 'CFO' in request.user.userprofile.role or 'Internal Audit' in request.user.userprofile.role  %}
             <!-- IT Dropdown -->
